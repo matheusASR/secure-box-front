@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from "react-native";
 import { LoginContext } from "../../providers/loginContext"
+import { useNavigation } from '@react-navigation/native';
 
-const Menu = () => {
+const MainMenu = () => {
   const { setLogged } = useContext(LoginContext)
+  const navigation = useNavigation();
 
   const handleLogout = () => {
     setLogged(false)
@@ -20,7 +22,7 @@ const Menu = () => {
         <Text style={styles.email}>matheusau2004@gmail.com</Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MyAccount')}>
           <Image
             source={require("../../../assets/ProfileImage.png")}
             style={styles.buttonImage}
@@ -135,4 +137,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Menu;
+export default MainMenu;

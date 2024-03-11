@@ -10,7 +10,7 @@ import {
 import GlobalStyles from "../../styles";
 import styles from "./styles";
 
-export default function ScreenPattern({ children }) {
+export default function ScreenPatternTab({ children }) {
   return (
     <>
       <SafeAreaView style={styles.screenAdjustTop}>
