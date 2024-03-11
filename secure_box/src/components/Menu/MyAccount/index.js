@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import ScreenPattern from "../ScreenPatternTab";
+import { View, Text, Button, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const MyAccount = () => {
@@ -30,12 +22,12 @@ const MyAccount = () => {
   };
 
   return (
-    <ScreenPattern>
-      <Button
+    <>
+      <View style={styles.header}>
+        <Button
           title="< Menu"
           onPress={() => navigation.navigate("MainMenu")}
         />
-      <View style={styles.header}>
         <Text style={styles.title}>Minha Conta</Text>
       </View>
       <View style={styles.container}>
@@ -56,7 +48,7 @@ const MyAccount = () => {
           <Button title="Deletar Conta" onPress={handleDeleteAccount} />
         </View>
       </View>
-    </ScreenPattern>
+    </>
   );
 };
 
@@ -66,9 +58,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "white",
   },
   title: {
-    color: "white",
+    color: "black",
     fontSize: 20,
   },
   container: {

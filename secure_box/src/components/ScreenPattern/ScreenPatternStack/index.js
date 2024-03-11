@@ -7,7 +7,7 @@ import {
   Platform,
 } from "react-native";
 
-import GlobalStyles from "../../styles";
+import GlobalStyles from "../../../styles";
 import styles from "./styles";
 
 export default function ScreenPatternStack({ children }) {

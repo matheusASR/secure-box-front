@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoginScreen from "./src/screens/Login";
 import RegisterScreen from "./src/screens/Register";
-import HomeScreen from "./src/components/Home";
+import HomeScreen from "./src/screens/Home";
 import MenuScreen from "./src/screens/Menu";
 import { LoginProvider, LoginContext } from "./src/providers/loginContext";
 import ScreenPatternTab from "./src/components/ScreenPatternTab";
