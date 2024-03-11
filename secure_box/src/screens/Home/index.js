@@ -1,17 +1,32 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { HomeContext } from "../../providers/homeContext";
+import CageList from "../../components/Home/CageList";
 
 const HomeScreen = () => {
+  const { qrcode, setQrcode } = useContext(HomeContext);
+
+  const handleQrcode = () => {
+    // Implemente sua lógica de autenticação aqui
+    setQrcode(true);
+  };
+
   return (
-    <View style={styles.container}>
-      <Image
-          source={require("../../../assets/QRcode.png")}
-          style={styles.buttonImage}
-        />
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Acessar gaiola pelo QRcode</Text>
-      </TouchableOpacity>
-    </View>
+    <>
+      {qrcode ? (
+        <CageList/>
+      ) : (
+        <View style={styles.container}>
+          <Image
+            source={require("../../../assets/QRcode.png")}
+            style={styles.buttonImage}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleQrcode}>
+            <Text style={styles.buttonText}>Acessar gaiola pelo QRcode</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </>
   );
 };
 
@@ -22,7 +37,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     padding: 20,
-    gap: 20
+    gap: 20,
   },
   title: {
     fontSize: 24,
@@ -39,7 +54,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "blue",
     paddingHorizontal: 10,
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   buttonImage: {
     width: 120,

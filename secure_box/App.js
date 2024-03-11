@@ -7,19 +7,26 @@ import RegisterScreen from "./src/screens/Register";
 import HomeScreen from "./src/screens/Home";
 import MenuScreen from "./src/screens/Menu";
 import { LoginProvider, LoginContext } from "./src/providers/loginContext";
-import ScreenPatternTab from "./src/components/ScreenPatternTab";
-import ScreenPatternStack from "./src/components/ScreenPatternStack";
+import ScreenPatternTab from "./src/components/ScreenPattern/ScreenPatternTab";
+import ScreenPatternStack from "./src/components/ScreenPattern/ScreenPatternStack";
+import { HomeProvider } from "./src/providers/homeContext";
+import { RegisterProvider } from "./src/providers/registerContext";
+import InUse from "./src/screens/InUse";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const App = () => {
   return (
-    <LoginProvider>
-      <NavigationContainer>
-        <AppNavigation />
-      </NavigationContainer>
-    </LoginProvider>
+    <RegisterProvider>
+      <LoginProvider>
+        <HomeProvider>
+          <NavigationContainer>
+            <AppNavigation />
+          </NavigationContainer>
+        </HomeProvider>
+      </LoginProvider>
+    </RegisterProvider>
   );
 };
 
@@ -43,11 +50,12 @@ const AppNavigation = () => {
                 color: "#FFF",
               },
               tabBarHideOnKeyboard: true,
-              headerShown: false
+              headerShown: false,
             }}
           >
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Menu" component={MenuScreen} />
+            <Tab.Screen name="In Use" component={InUse} />
           </Tab.Navigator>
         </ScreenPatternTab>
       ) : (
