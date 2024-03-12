@@ -2,10 +2,12 @@ import React, { useContext } from "react";
 import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
 import { cages } from "./utils";
 import ScreenPatternStack from "../../ScreenPattern/ScreenPatternStack";
+import { InUseContext } from "../../../providers/inUseContext";
 import { HomeContext } from "../../../providers/homeContext";
 
 const CageList = () => {
-  const { setQrcode, setInUse, inUse } = useContext(HomeContext)
+  const { setQrcode } = useContext(HomeContext);
+  const { setInUse, inUse } = useContext(InUseContext);
 
   const renderCageCard = (cage) => {
     return (
@@ -25,19 +27,19 @@ const CageList = () => {
   };
 
   const handleStartAllocation = (cage) => {
-    setInUse([...inUse, cage])
-    cage.inUse = true
+    cage.initialTime = Date.now();
+    setInUse([...inUse, cage]);
+    cage.inUse = true;
   };
 
   return (
     <ScreenPatternStack>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
-          <Button
-            title="< Home"
-            onPress={() => setQrcode(false)}
-          />
-          <Text style={styles.title}>Selecione a gaiola que deseja utilizar:</Text>
+          <Button title="< Home" onPress={() => setQrcode(false)} />
+          <Text style={styles.title}>
+            Selecione a gaiola que deseja utilizar:
+          </Text>
         </View>
         <View style={styles.cardsContainer}>
           {cages.map((cage) => renderCageCard(cage))}
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 8,
     width: "47%",
-    height: 150
+    height: 150,
   },
   cardText: {
     fontSize: 16,

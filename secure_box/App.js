@@ -12,6 +12,7 @@ import ScreenPatternStack from "./src/components/ScreenPattern/ScreenPatternStac
 import { HomeProvider } from "./src/providers/homeContext";
 import { RegisterProvider } from "./src/providers/registerContext";
 import InUse from "./src/screens/InUse";
+import { InUseProvider } from "./src/providers/inUseContext";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -21,9 +22,11 @@ const App = () => {
     <RegisterProvider>
       <LoginProvider>
         <HomeProvider>
-          <NavigationContainer>
-            <AppNavigation />
-          </NavigationContainer>
+          <InUseProvider>
+            <NavigationContainer>
+              <AppNavigation />
+            </NavigationContainer>
+          </InUseProvider>
         </HomeProvider>
       </LoginProvider>
     </RegisterProvider>

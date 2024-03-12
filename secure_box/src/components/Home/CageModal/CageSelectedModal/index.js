@@ -1,7 +1,7 @@
 // import React from "react";
 // import { View, Text, Button, Modal, StyleSheet } from "react-native";
 
-// const CageModal = ({ visible, cage, onClose, onStartStop }) => {
+// const CageSelectedModal = ({ visible, cage, onClose, onStartStop }) => {
 //   return (
 //     <Modal
 //       animationType="slide"
@@ -44,4 +44,4 @@
 //   },
 // });
 
-// export default CageModal;
+// export default CageSelectedModal;
