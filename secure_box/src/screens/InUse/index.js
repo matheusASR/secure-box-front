@@ -49,11 +49,12 @@ const InUse = () => {
   return (
     <ScreenPatternStack>
       <ScrollView style={styles.container}>
-        <Text style={styles.title}>Gaiolas em Uso:</Text>
         {inUse.length === 0 ? (
-          <Text style={styles.noGaiolasText}>
-            Nenhuma gaiola em uso no momento.
-          </Text>
+          <View style={styles.noContent}>
+            <Text style={styles.noGaiolasText}>
+              Nenhuma gaiola em uso no momento.
+            </Text>
+          </View>
         ) : (
           <View style={styles.inUseCagesList}>
             {inUse.map((cage) => (
@@ -62,7 +63,10 @@ const InUse = () => {
                 {finishContent[cage.number]?.paymentConfirmed === true ? (
                   <TouchableOpacity style={styles.unlockBtn}>
                     <Text style={styles.buttonUnlockText}>Destravar</Text>
-                    <Image style={styles.padlock} source={require("../../../assets/OpenedPadlock.png")}/>
+                    <Image
+                      style={styles.padlock}
+                      source={require("../../../assets/OpenedPadlock.png")}
+                    />
                   </TouchableOpacity>
                 ) : (
                   <>
@@ -139,7 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   noGaiolasText: {
-    fontSize: 16,
+    fontSize: 17,
     color: "gray",
   },
   cageContainer: {
@@ -202,12 +206,17 @@ const styles = StyleSheet.create({
   },
   padlock: {
     width: 50,
-    height: 50
+    height: 50,
   },
   buttonUnlockText: {
     fontSize: 28,
     color: "white",
-    fontWeight: "bold"
+    fontWeight: "bold",
+  },
+  noContent: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 

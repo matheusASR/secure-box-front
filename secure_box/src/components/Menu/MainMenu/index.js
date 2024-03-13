@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { LoginContext } from "../../../providers/loginContext";
 import { useNavigation } from "@react-navigation/native";
+import { colors } from "../../../styles";
 
 const MainMenu = () => {
   const { setLogged } = useContext(LoginContext);
@@ -19,7 +20,7 @@ const MainMenu = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.userInfo}>
         <Image
           source={require("../../../../assets/ProfileImage.png")}
@@ -97,7 +98,7 @@ const MainMenu = () => {
           <Text style={styles.buttonText}>Sair</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -105,19 +106,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingVertical: 20,
-    paddingHorizontal: 15,
   },
   userInfo: {
-    backgroundColor: "blue",
-    paddingTop: 30,
-    paddingBottom: 30,
-    borderRadius: 5,
+    backgroundColor: colors.primary,
+    paddingVertical: "10%",
     marginBottom: 20,
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
+    height: "30%",
+    shadowColor: '#000', 
+    shadowOffset: {
+      width: 0, 
+      height: 2, 
+    },
+    shadowOpacity: 0.5, 
+    shadowRadius: 4, 
+    elevation: 5, 
   },
   fullName: {
     color: "#fff",
@@ -133,14 +139,15 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: "column",
-    marginBottom: 20,
+    height: "70%",
+    paddingHorizontal: 15
   },
   button: {
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
     marginBottom: 10,
-    borderBottomColor: "blue",
+    borderBottomColor: colors.primary,
     borderBottomWidth: 1,
     width: "100%",
     flexDirection: "row",
@@ -148,13 +155,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    color: "blue",
+    color: colors.primary,
     fontSize: 16,
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 30,
+    width: 80,
+    height: 80,
+    marginBottom: 20,
   },
   buttonImage: {
     width: 30,

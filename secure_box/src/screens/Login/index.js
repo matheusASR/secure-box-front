@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import {
   View,
   TextInput,
-  Button,
   StyleSheet,
   Platform,
   Text,
@@ -12,17 +11,19 @@ import {
   ScrollView,
   SafeAreaView,
   KeyboardAvoidingView,
+  Image,
 } from "react-native";
 import { LoginContext } from "../../providers/loginContext";
+import { colors } from "../../styles";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setLogged } = useContext(LoginContext)
+  const { setLogged } = useContext(LoginContext);
 
   const handleLogin = () => {
     // Implemente sua lógica de autenticação aqui
-    setLogged(true)
+    setLogged(true);
   };
 
   return (
@@ -34,6 +35,12 @@ const LoginScreen = ({ navigation }) => {
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={styles.container}
             >
+              <View style={styles.logoView}>
+                <Image
+                  style={styles.logo}
+                  source={require("../../../assets/ClosedPadlock.png")}
+                />
+              </View>
               <TextInput
                 placeholder="Email"
                 value={email}
@@ -51,7 +58,7 @@ const LoginScreen = ({ navigation }) => {
                 style={styles.loginButton}
                 onPress={handleLogin}
               >
-                <Text style={styles.buttonText}>Login</Text>
+                <Text style={styles.buttonText}>Entrar</Text>
               </TouchableOpacity>
               <Text style={styles.registerText}>
                 Ainda não possui cadastro?
@@ -88,7 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   loginButton: {
-    backgroundColor: "blue",
+    backgroundColor: colors.primary,
     paddingVertical: 12,
     borderRadius: 5,
     marginTop: 10,
@@ -104,10 +111,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   registerLink: {
-    color: "blue",
+    color: colors.primary,
     textDecorationLine: "underline",
     fontSize: 16,
     textAlign: "center",
+  },
+  logoView: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: -160
+  },
+  logo: {
+    width: 100,
+    height: 100,
   },
 });
 

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { HomeContext } from "../../providers/homeContext";
 import CageList from "../../components/Home/CageList";
+import { colors } from "../../styles"
 
 const HomeScreen = () => {
   const { qrcode, setQrcode } = useContext(HomeContext);
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "100%",
     alignItems: "center",
-    backgroundColor: "blue",
+    backgroundColor: colors.primary,
     paddingHorizontal: 10,
     paddingVertical: 10,
   },

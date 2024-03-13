@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from "react-native";
+import { colors } from "../../styles";
 
 const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   button: {
-    backgroundColor: "blue",
+    backgroundColor: colors.primary,
     width: "100%",
     paddingVertical: 12,
     paddingHorizontal: 30,
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
   },
   signInLink: {
     marginLeft: 5,
-    color: "blue",
+    color: colors.primary,
     textDecorationLine: "underline",
     fontSize: 15,
   },

@@ -1,12 +1,13 @@
 import { StyleSheet } from "react-native";
+import { colors } from "../../../styles";
 
 export default StyleSheet.create({
   screenAdjustTop: {
     flex: 1,
-    backgroundColor: 'blue'
+    backgroundColor: colors.primary
   },
   screenAdjustBottom: {
     flex: 0,
-    backgroundColor: 'blue'
+    backgroundColor: colors.primary
   },
 });
