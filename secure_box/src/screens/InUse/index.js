@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
+  Image,
 } from "react-native";
 import ScreenPatternStack from "../../components/ScreenPattern/ScreenPatternStack";
 import ModalPayment from "../../components/Home/CageModal/CagePaymentModal";
@@ -58,46 +59,51 @@ const InUse = () => {
             {inUse.map((cage) => (
               <View key={cage.number} style={styles.cageContainer}>
                 <Text style={styles.cageTitle}>Gaiola {cage.number}</Text>
-                <Text style={styles.cageText}>
-                  Horário de início: {formatDateTime(cage.initialTime)}
-                </Text>
-                {!finishContent[cage.number]?.pressed && (
-                  <TouchableOpacity
-                    style={styles.finishBtn}
-                    onPress={() => finishAllocation(cage)}
-                  >
-                    <Text style={styles.buttonText}>Finalizar</Text>
+                {finishContent[cage.number]?.paymentConfirmed === true ? (
+                  <TouchableOpacity style={styles.unlockBtn}>
+                    <Text style={styles.buttonUnlockText}>Destravar</Text>
+                    <Image style={styles.padlock} source={require("../../../assets/OpenedPadlock.png")}/>
                   </TouchableOpacity>
-                )}
-                {finishContent[cage.number]?.pressed && (
-                  <View style={styles.finishContent}>
+                ) : (
+                  <>
                     <Text style={styles.cageText}>
-                      Horário final:{" "}
-                      {finishContent[cage.number].finalTimeFormatted}
+                      Horário de início: {formatDateTime(cage.initialTime)}
                     </Text>
-                    <Text style={styles.cageText}>
-                      Tempo usado: {finishContent[cage.number].timeUsed} minutos
-                    </Text>
-                    <Text style={styles.cageText}>
-                      {finishContent[cage.number].paymentText}
-                    </Text>
-
-                    {/* <TouchableOpacity style={styles.paymentBtn}>
-                      <Text style={styles.buttonText}>Destravar</Text>
-                    </TouchableOpacity> */}
-
-                    <TouchableOpacity
-                      style={styles.paymentBtn}
-                      onPress={() =>
-                        handlePaymentModal(
-                          cage.number,
-                          finishContent[cage.number].paymentText
-                        )
-                      }
-                    >
-                      <Text style={styles.buttonText}>Pagar</Text>
-                    </TouchableOpacity>
-                  </View>
+                    {!finishContent[cage.number]?.pressed && (
+                      <TouchableOpacity
+                        style={styles.finishBtn}
+                        onPress={() => finishAllocation(cage)}
+                      >
+                        <Text style={styles.buttonText}>Finalizar</Text>
+                      </TouchableOpacity>
+                    )}
+                    {finishContent[cage.number]?.pressed && (
+                      <View style={styles.finishContent}>
+                        <Text style={styles.cageText}>
+                          Horário final:{" "}
+                          {finishContent[cage.number].finalTimeFormatted}
+                        </Text>
+                        <Text style={styles.cageText}>
+                          Tempo usado: {finishContent[cage.number].timeUsed}{" "}
+                          minutos
+                        </Text>
+                        <Text style={styles.cageText}>
+                          {finishContent[cage.number].paymentText}
+                        </Text>
+                        <TouchableOpacity
+                          style={styles.paymentBtn}
+                          onPress={() =>
+                            handlePaymentModal(
+                              cage.number,
+                              finishContent[cage.number].paymentText
+                            )
+                          }
+                        >
+                          <Text style={styles.buttonText}>Pagar</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </>
                 )}
               </View>
             ))}
@@ -113,6 +119,8 @@ const InUse = () => {
           cageNumber={selectedCage}
           paymentText={finishContent[selectedCage]?.paymentText}
           onClose={handleClosePaymentModal}
+          setFinishContent={setFinishContent}
+          finishContent={finishContent}
         />
       </Modal>
     </ScreenPatternStack>
@@ -181,6 +189,26 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
+  unlockBtn: {
+    marginBottom: "20%",
+    borderRadius: 5,
+    width: "100%",
+    alignItems: "center",
+    backgroundColor: "blue",
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  padlock: {
+    width: 50,
+    height: 50
+  },
+  buttonUnlockText: {
+    fontSize: 28,
+    color: "white",
+    fontWeight: "bold"
+  }
 });
 
 export default InUse;

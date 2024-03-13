@@ -21,14 +21,14 @@ const InUseProvider = ({ children }) => {
   }
 
   function handlePayment(timeUsed) {
-    if (timeUsed <= 30) {
-      return "Valor a pagar: R$ 5,00";
-    } else if (timeUsed >= 31 && timeUsed <= 119) {
-      return "Valor a pagar: R$ 7,50";
-    } else if (timeUsed >= 120 && timeUsed <= 179) {
-      return "Valor a pagar: R$ 10,00";
+    const baseValue = 5;
+    const taxAddHour = 2.5;
+
+    if (timeUsed <= 60) {
+        return `Valor a pagar: R$${baseValue}`;
     } else {
-      return "Valor a pagar: R$ 15,00";
+        const addHours = Math.ceil((timeUsed - 60) / 60); 
+        return `Valor a pagar: R$${baseValue + (addHours * taxAddHour)}`;
     }
   }
 
