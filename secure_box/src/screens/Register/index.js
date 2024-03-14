@@ -16,6 +16,7 @@ import styles from "./styles";
 const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [fullName, setFullName] = useState("");
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -42,6 +43,28 @@ const RegisterScreen = ({ navigation }) => {
                 style={styles.input}
               />
               <TextInput
+                placeholder="Data de Nascimento (XX/YY/ZZZZ)"
+                value={birthdate}
+                onChangeText={setBirthdate}
+                style={styles.input}
+                keyboardType="numeric"
+                maxLength={10}
+              />
+              <TextInput
+                placeholder="Telefone com DDD (XX) YYYYY-YYYY"
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                style={styles.input}
+                keyboardType="numeric"
+                maxLength={11}
+              />
+              <TextInput
+                placeholder="Endereço"
+                value={address}
+                onChangeText={setAddress}
+                style={styles.input}
+              />
+              <TextInput
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
@@ -55,26 +78,11 @@ const RegisterScreen = ({ navigation }) => {
                 style={styles.input}
               />
               <TextInput
-                placeholder="Endereço"
-                value={address}
-                onChangeText={setAddress}
+                placeholder="Repetir Senha"
+                value={passwordConfirm}
+                onChangeText={setPasswordConfirm}
+                secureTextEntry
                 style={styles.input}
-              />
-              <TextInput
-                placeholder="Telefone com DDD (XX) YYYYY-YYYY"
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                style={styles.input}
-                keyboardType="numeric"
-                maxLength={11}
-              />
-              <TextInput
-                placeholder="Data de Nascimento (XX/YY/ZZZZ)"
-                value={birthdate}
-                onChangeText={setBirthdate}
-                style={styles.input}
-                keyboardType="numeric"
-                maxLength={10}
               />
               <TouchableOpacity style={styles.button} onPress={handleSignUp}>
                 <Text style={styles.buttonText}>Cadastrar-se</Text>

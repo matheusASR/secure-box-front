@@ -65,17 +65,17 @@ const AppNavigation = () => {
                 fontSize: 18,
                 
               },
-              tabBarIcon: () => {
+              tabBarIcon: ({ focused }) => {
                 let iconName;
-
+              
                 if (route.name === "Home") {
-                  iconName = require("./assets/Home.png");
+                  iconName = focused ? require("./assets/HomeFocused.png") : require("./assets/Home.png");
                 } else if (route.name === "Menu") {
-                  iconName = require("./assets/Menu.png");
+                  iconName = focused ? require("./assets/MenuFocused.png") : require("./assets/Menu.png");
                 } else if (route.name === "Em uso") {
-                  iconName = require("./assets/Cage.png");
+                  iconName = focused ? require("./assets/CageFocused.png") : require("./assets/Cage.png");
                 }
-
+              
                 return (
                   <Image source={iconName} style={{ width: 30, height: 30 }} />
                 );
