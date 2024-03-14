@@ -1,8 +1,14 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from "react-native";
 import { HomeContext } from "../../providers/homeContext";
 import CageList from "../../components/Home/CageList";
-import { colors } from "../../styles";
+import styles from "./styles";
 
 const HomeScreen = () => {
   const { qrcode, setQrcode } = useContext(HomeContext);
@@ -12,12 +18,22 @@ const HomeScreen = () => {
     setQrcode(true);
   };
 
+  const backHome = () => {
+    setQrcode(false);
+  };
+
   return (
     <>
       {qrcode ? (
         <>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Selecione a gaiola que deseja utilizar:</Text>
+            <TouchableOpacity style={styles.backBtn} onPress={backHome}>
+              <Image
+                style={styles.backBtnImage}
+                source={require("../../../assets/BackBtn.png")}
+              />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Selecione a gaiola:</Text>
           </View>
           <CageList />
         </>
@@ -35,59 +51,30 @@ const HomeScreen = () => {
               <Text style={styles.buttonText}>Acessar gaiola pelo QRcode</Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.cageListRegistered}>
+            <Text style={styles.otherAccessText}>- - - - - Ou - - - - -</Text>
+            <Text style={styles.accessText}>
+              Acessar local já cadastrado:
+            </Text>
+            <ScrollView style={styles.cageListScroll}>
+              <TouchableOpacity style={styles.cageListCard} onPress={handleQrcode}>
+                <Image
+                  style={styles.cageCardImage}
+                  source={require("../../../assets/ShoppingCentro.jpg")}
+                />
+                <View style={styles.textCardView}>
+                  <Text style={styles.titleCageCard}>Shopping Centro</Text>
+                  <Text>
+                    Rua Rubião Júnior, 84 Centro - São José dos Campos - SP
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
         </>
       )}
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    width: "100%",
-    paddingVertical: 11,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    flexDirection: "row",
-  },
-  headerTitle: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 20,
-    gap: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: "#666",
-  },
-  button: {
-    borderRadius: 5,
-    width: "100%",
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-  },
-  buttonImage: {
-    width: 120,
-    height: 120,
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 20,
-  },
-});
 
 export default HomeScreen;

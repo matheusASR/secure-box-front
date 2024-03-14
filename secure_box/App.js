@@ -50,7 +50,6 @@ const AppNavigation = () => {
                 height: 60,
                 backgroundColor: colors.primary,
                 paddingTop: 5,
-                backgroundColor: colors.primary,
               },
               tabBarLabelStyle: {
                 fontSize: 14,

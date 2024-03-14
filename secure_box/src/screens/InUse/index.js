@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   Modal,
@@ -11,7 +10,7 @@ import {
 import ScreenPatternStack from "../../components/ScreenPattern/ScreenPatternStack";
 import ModalPayment from "../../components/Home/CageModal/CagePaymentModal";
 import { InUseContext } from "../../providers/inUseContext";
-import { colors } from "../../styles";
+import styles from "./styles";
 
 const InUse = () => {
   const { inUse, formatDateTime, handlePayment } = useContext(InUseContext);
@@ -131,96 +130,5 @@ const InUse = () => {
     </ScreenPatternStack>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    padding: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  noGaiolasText: {
-    fontSize: 17,
-    color: "gray",
-  },
-  cageContainer: {
-    width: "100%",
-    borderRadius: 5,
-    padding: 20,
-    alignItems: "center",
-    height: 300,
-    backgroundColor: "#f0f0f0",
-    justifyContent: "space-between",
-  },
-  cageTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-  },
-  cageText: {
-    fontSize: 15,
-    fontWeight: "bold",
-  },
-  inUseCagesList: {
-    flexDirection: "column",
-    gap: 20,
-    paddingVertical: 20,
-    marginBottom: 30  
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  finishBtn: {
-    borderRadius: 5,
-    width: "100%",
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-  },
-  paymentBtn: {
-    borderRadius: 5,
-    width: "100%",
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    marginTop: 20,
-  },
-  finishContent: {
-    width: "100%",
-    alignItems: "center",
-  },
-  unlockBtn: {
-    marginBottom: "20%",
-    borderRadius: 5,
-    width: "100%",
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-  padlock: {
-    width: 30,
-    height: 30,
-  },
-  buttonUnlockText: {
-    fontSize: 20,
-    color: "white",
-    fontWeight: "bold",
-  },
-  noContent: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center"
-  }
-});
 
 export default InUse;

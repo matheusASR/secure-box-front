@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { colors } from "../../../styles";
+import styles from "./styles";
 
 const Notifications = () => {
   const navigation = useNavigation();
@@ -24,28 +24,5 @@ const Notifications = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    width: "100%",
-    paddingVertical: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    flexDirection: "row",
-  },
-  title: {
-    color: "white",
-    fontSize: 20,
-  },
-  backBtn: {
-    position: "absolute",
-    left: 20,
-  },
-  backBtnImage: {
-    width: 40,
-    height: 40,
-  },
-});
 
 export default Notifications;

@@ -4,10 +4,10 @@
     "slug": "secure_box",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/ClosedPadlock.png",
+    "icon": "./assets/Logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/ClosedPadlock.png",
+      "image": "./assets/Logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,12 +19,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/ClosedPadlock.png",
+        "foregroundImage": "./assets/Logo.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/ClosedPadlock.png"
+      "favicon": "./assets/Logo.png"
     }
   }
 }
