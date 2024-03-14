@@ -4,12 +4,12 @@
     "slug": "secure_box",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Logo.png",
+    "icon": "./assets/LogoAlt.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/Logo.png",
+      "image": "./assets/LogoAlt.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#007bff"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,8 +19,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/Logo.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/LogoAlt.png",
+        "backgroundColor": "#007bff"
       }
     },
     "web": {
