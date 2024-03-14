@@ -59,18 +59,12 @@ const AppNavigation = () => {
               tabBarHideOnKeyboard: true,
               headerStyle: {
                 backgroundColor: colors.primary,
-                shadowColor: "#000", 
-                shadowOffset: {
-                  width: 0, 
-                  height: 2, 
-                },
-                shadowOpacity: 0.5, 
-                shadowRadius: 4, 
-                elevation: 5, 
               },
               headerTintColor: "white",
               headerTitleStyle: {
                 fontWeight: "bold",
+                fontSize: 18,
+                
               },
               tabBarIcon: () => {
                 let iconName;

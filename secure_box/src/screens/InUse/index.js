@@ -11,6 +11,7 @@ import {
 import ScreenPatternStack from "../../components/ScreenPattern/ScreenPatternStack";
 import ModalPayment from "../../components/Home/CageModal/CagePaymentModal";
 import { InUseContext } from "../../providers/inUseContext";
+import { colors } from "../../styles";
 
 const InUse = () => {
   const { inUse, formatDateTime, handlePayment } = useContext(InUseContext);
@@ -148,12 +149,11 @@ const styles = StyleSheet.create({
   },
   cageContainer: {
     width: "100%",
-    borderWidth: 1,
     borderRadius: 5,
     padding: 20,
     alignItems: "center",
     height: 300,
-    borderColor: "black",
+    backgroundColor: "#f0f0f0",
     justifyContent: "space-between",
   },
   cageTitle: {
@@ -161,22 +161,25 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   cageText: {
-    fontSize: 16,
+    fontSize: 15,
+    fontWeight: "bold",
   },
   inUseCagesList: {
     flexDirection: "column",
     gap: 20,
-    paddingVertical: 50,
+    paddingVertical: 20,
+    marginBottom: 30  
   },
   buttonText: {
     color: "#FFF",
     fontSize: 20,
+    fontWeight: "bold",
   },
   finishBtn: {
     borderRadius: 5,
     width: "100%",
     alignItems: "center",
-    backgroundColor: "blue",
+    backgroundColor: colors.primary,
     paddingHorizontal: 10,
     paddingVertical: 10,
   },
@@ -184,7 +187,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "100%",
     alignItems: "center",
-    backgroundColor: "blue",
+    backgroundColor: colors.primary,
     paddingHorizontal: 10,
     paddingVertical: 10,
     marginTop: 20,
@@ -198,18 +201,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "100%",
     alignItems: "center",
-    backgroundColor: "blue",
+    backgroundColor: colors.primary,
     paddingHorizontal: 10,
-    paddingVertical: 15,
+    paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "space-around",
   },
   padlock: {
-    width: 50,
-    height: 50,
+    width: 30,
+    height: 30,
   },
   buttonUnlockText: {
-    fontSize: 28,
+    fontSize: 20,
     color: "white",
     fontWeight: "bold",
   },

@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, Button, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { colors } from "../../../styles";
 
 const Support = () => {
   const navigation = useNavigation();
@@ -8,14 +9,19 @@ const Support = () => {
   return (
     <>
       <View style={styles.header}>
-        <Button
-          title="< Menu"
+        <TouchableOpacity
+          style={styles.backBtn}
           onPress={() => navigation.navigate("MainMenu")}
-        />
+        >
+          <Image
+            style={styles.backBtnImage}
+            source={require("../../../../assets/BackBtn.png")}
+          />
+        </TouchableOpacity>
         <Text style={styles.title}>Suporte</Text>
       </View>
       <View style={styles.btnView}>
-        <Text style={styles.title}>Como deseja nos contatar?</Text>
+        <Text style={styles.titleContact}>Como deseja nos contatar?</Text>
         <TouchableOpacity style={styles.button}>
           <Image
             source={require("../../../../assets/Email.png")}
@@ -38,14 +44,23 @@ const Support = () => {
 const styles = StyleSheet.create({
   header: {
     width: "100%",
-    paddingVertical: 10,
+    paddingVertical: 15,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: colors.primary,
+    flexDirection: "row",
   },
   title: {
-    color: "black",
+    color: "white",
     fontSize: 20,
-    textAlign: "center"
+  },
+  backBtn: {
+    position: "absolute",
+    left: 20,
+  },
+  backBtnImage: {
+    width: 40,
+    height: 40,
   },
   button: {
     paddingVertical: 10,
@@ -69,6 +84,11 @@ const styles = StyleSheet.create({
   },
   btnView: {
     marginTop: 60
+  },
+  titleContact: {
+    fontSize: 20,
+    width: "100%",
+    textAlign: "center",
   }
 });
 

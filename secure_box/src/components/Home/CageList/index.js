@@ -1,9 +1,16 @@
 import React, { useContext } from "react";
-import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { cages } from "./utils";
 import ScreenPatternStack from "../../ScreenPattern/ScreenPatternStack";
 import { InUseContext } from "../../../providers/inUseContext";
 import { HomeContext } from "../../../providers/homeContext";
+import { colors } from "../../../styles";
 
 const CageList = () => {
   const { setQrcode } = useContext(HomeContext);
@@ -17,10 +24,12 @@ const CageList = () => {
           {cage.inUse ? "Em uso" : "Disponível"}
         </Text>
         {!cage.inUse && (
-          <Button
-            title="Iniciar Alocação"
+          <TouchableOpacity
+            style={styles.startAllocationBtn}
             onPress={() => handleStartAllocation(cage)}
-          />
+          >
+            <Text style={styles.buttonText}>Iniciar Alocação</Text>
+          </TouchableOpacity>
         )}
       </View>
     );
@@ -35,12 +44,6 @@ const CageList = () => {
   return (
     <ScreenPatternStack>
       <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <Button title="< Home" onPress={() => setQrcode(false)} />
-          <Text style={styles.title}>
-            Selecione a gaiola que deseja utilizar:
-          </Text>
-        </View>
         <View style={styles.cardsContainer}>
           {cages.map((cage) => renderCageCard(cage))}
         </View>
@@ -50,17 +53,6 @@ const CageList = () => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    width: "100%",
-    paddingVertical: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-  },
-  title: {
-    color: "black",
-    fontSize: 20,
-  },
   container: {
     flex: 1,
     backgroundColor: "white",
@@ -68,7 +60,7 @@ const styles = StyleSheet.create({
   cardsContainer: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 30,
     flexWrap: "wrap",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -80,10 +72,25 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: "47%",
     height: 150,
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   cardText: {
     fontSize: 16,
     marginBottom: 5,
+    fontWeight: "bold"
+  },
+  startAllocationBtn: {
+    backgroundColor: colors.primary,
+    paddingVertical: 12,
+    borderRadius: 5,
+    width: "100%",
+    alignItems: "center"
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "bold",
   },
 });
 

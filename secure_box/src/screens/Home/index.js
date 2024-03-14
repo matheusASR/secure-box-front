@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { HomeContext } from "../../providers/homeContext";
 import CageList from "../../components/Home/CageList";
-import { colors } from "../../styles"
+import { colors } from "../../styles";
 
 const HomeScreen = () => {
   const { qrcode, setQrcode } = useContext(HomeContext);
@@ -15,23 +15,46 @@ const HomeScreen = () => {
   return (
     <>
       {qrcode ? (
-        <CageList/>
+        <>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Selecione a gaiola que deseja utilizar:</Text>
+          </View>
+          <CageList />
+        </>
       ) : (
-        <View style={styles.container}>
-          <Image
-            source={require("../../../assets/QRcode.png")}
-            style={styles.buttonImage}
-          />
-          <TouchableOpacity style={styles.button} onPress={handleQrcode}>
-            <Text style={styles.buttonText}>Acessar gaiola pelo QRcode</Text>
-          </TouchableOpacity>
-        </View>
+        <>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Home</Text>
+          </View>
+          <View style={styles.container}>
+            <Image
+              source={require("../../../assets/QRcode.png")}
+              style={styles.buttonImage}
+            />
+            <TouchableOpacity style={styles.button} onPress={handleQrcode}>
+              <Text style={styles.buttonText}>Acessar gaiola pelo QRcode</Text>
+            </TouchableOpacity>
+          </View>
+        </>
       )}
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  header: {
+    width: "100%",
+    paddingVertical: 11,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.primary,
+    flexDirection: "row",
+  },
+  headerTitle: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
   container: {
     flex: 1,
     justifyContent: "center",

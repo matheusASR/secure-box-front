@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { colors } from "../../../styles";
 
 const Policies = () => {
   const navigation = useNavigation();
@@ -8,11 +9,16 @@ const Policies = () => {
   return (
     <>
       <View style={styles.header}>
-        <Button
-          title="< Menu"
+        <TouchableOpacity
+          style={styles.backBtn}
           onPress={() => navigation.navigate("MainMenu")}
-        />
-        <Text style={styles.title}>Política de Privacidade</Text>
+        >
+          <Image
+            style={styles.backBtnImage}
+            source={require("../../../../assets/BackBtn.png")}
+          />
+        </TouchableOpacity>
+        <Text style={styles.title}>Políticas de Privacidade</Text>
       </View>
       <View></View>
     </>
@@ -22,13 +28,24 @@ const Policies = () => {
 const styles = StyleSheet.create({
   header: {
     width: "100%",
-    paddingVertical: 10,
+    paddingVertical: 15,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: colors.primary,
+    flexDirection: "row",
   },
   title: {
-    color: "black",
+    color: "white",
     fontSize: 20,
   },
+  backBtn: {
+    position: "absolute",
+    left: 20,
+  },
+  backBtnImage: {
+    width: 40,
+    height: 40,
+  },
 });
+
 export default Policies;

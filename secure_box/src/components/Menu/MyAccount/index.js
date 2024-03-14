@@ -68,10 +68,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    marginBottom: 10,
     width: "100%",
-    backgroundColor: "gray",
-    textAlign: "center"
+    textAlign: "start",
+    backgroundColor: colors.primary,
+    paddingLeft: 20,
+    color: "white",
+    fontWeight: "bold",
+    paddingVertical: 10
   },
   backBtn: {
     position: "absolute",
@@ -89,25 +92,26 @@ const styles = StyleSheet.create({
   },
   updateBtnText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: "bold",
     textAlign: "center",
   },
   dataContainer: {
-    borderWidth: 1,
     padding: 20,
     width: "90%",
-    height: 400,
+    height: 450,
     justifyContent: "space-between",
-    borderRadius: 5,
-    borderColor: colors.primary
   },
   dataContainerTop: {
     justifyContent: "center",
     alignItems: "center",
-    gap: 15
   },
   data: {
-    fontSize: 16
+    fontSize: 16,
+    backgroundColor: "#E0E0E0",
+    width: "100%",
+    paddingVertical: 10,
+    textAlign: "center",
   }
 });
 

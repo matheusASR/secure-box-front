@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { colors } from "../../../../styles";
 
 const CagePaymentModal = ({
   cageNumber,
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   modalCloseBtn: {
-    backgroundColor: "blue",
+    backgroundColor: colors.primary,
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
