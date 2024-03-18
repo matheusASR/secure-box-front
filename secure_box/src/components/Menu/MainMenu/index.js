@@ -1,20 +1,26 @@
-import React, { useContext } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import React, { useContext, useState } from "react";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { LoginContext } from "../../../providers/loginContext";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
+import ExitModal from "../ExitModal";
 
 const MainMenu = () => {
   const { setLogged } = useContext(LoginContext);
   const navigation = useNavigation();
+  const [isExitModalVisible, setIsExitModalVisible] = useState(false);
 
   const handleLogout = () => {
+    setIsExitModalVisible(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setIsExitModalVisible(false);
     setLogged(false);
+  };
+
+  const handleCloseModal = () => {
+    setIsExitModalVisible(false);
   };
 
   return (
@@ -96,6 +102,13 @@ const MainMenu = () => {
           <Text style={styles.buttonText}>Sair</Text>
         </TouchableOpacity>
       </View>
+      {isExitModalVisible && (
+        <ExitModal
+          isVisible={isExitModalVisible}
+          onClose={handleCloseModal}
+          onConfirm={handleConfirmLogout}
+        />
+      )}
     </View>
   );
 };

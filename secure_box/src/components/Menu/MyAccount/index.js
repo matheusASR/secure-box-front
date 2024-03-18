@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
+import EditProfileModal from "./EditProfileModal";
 
 const MyAccount = () => {
   const navigation = useNavigation();
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
   const editProfile = () => {
-    // Lógica para alterar a senha
+    setIsEditModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsEditModalVisible(false);
   };
 
   return (
@@ -43,8 +49,15 @@ const MyAccount = () => {
           </View>
         </View>
       </View>
+      {isEditModalVisible && (
+        <EditProfileModal
+          isVisible={isEditModalVisible}
+          onClose={handleCloseModal}
+        />
+      )}
     </>
   );
 };
 
 export default MyAccount;
+

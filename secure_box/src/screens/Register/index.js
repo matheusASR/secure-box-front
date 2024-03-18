@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   View,
   TextInput,
@@ -18,12 +18,33 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [fullName, setFullName] = useState("");
-  const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [birthdate, setBirthdate] = useState("");
+  const [street, setStreet] = useState("");
+  const [number, setNumber] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [complement, setComplement] = useState("");
 
   const handleSignUp = () => {
-    // Implemente sua lógica de cadastro aqui
+    const userData = {
+      fullName,
+      birthdate,
+      phoneNumber,
+      email,
+      password,
+      passwordConfirm,
+      address: {
+        street,
+        number,
+        city,
+        state,
+        complement,
+      },
+    };
+
+    console.log(userData);
+
     navigation.navigate("Login");
   };
 
@@ -36,14 +57,15 @@ const RegisterScreen = ({ navigation }) => {
         >
           <ScrollView contentContainerStyle={styles.contentContainer}>
             <View style={styles.inputContainer}>
+              <Text style={styles.sectionText}>Dados Pessoais:</Text>
               <TextInput
-                placeholder="Nome Completo"
+                placeholder="Nome Completo*"
                 value={fullName}
                 onChangeText={setFullName}
                 style={styles.input}
               />
               <TextInput
-                placeholder="Data de Nascimento (XX/YY/ZZZZ)"
+                placeholder="Data de Nascimento (XX/YY/ZZZZ)*"
                 value={birthdate}
                 onChangeText={setBirthdate}
                 style={styles.input}
@@ -51,7 +73,7 @@ const RegisterScreen = ({ navigation }) => {
                 maxLength={10}
               />
               <TextInput
-                placeholder="Telefone com DDD (XX) YYYYY-YYYY"
+                placeholder="Telefone com DDD"
                 value={phoneNumber}
                 onChangeText={setPhoneNumber}
                 style={styles.input}
@@ -59,29 +81,54 @@ const RegisterScreen = ({ navigation }) => {
                 maxLength={11}
               />
               <TextInput
-                placeholder="Endereço"
-                value={address}
-                onChangeText={setAddress}
-                style={styles.input}
-              />
-              <TextInput
-                placeholder="Email"
+                placeholder="Email*"
                 value={email}
                 onChangeText={setEmail}
                 style={styles.input}
               />
               <TextInput
-                placeholder="Senha"
+                placeholder="Senha*"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
                 style={styles.input}
               />
               <TextInput
-                placeholder="Repetir Senha"
+                placeholder="Repetir Senha*"
                 value={passwordConfirm}
                 onChangeText={setPasswordConfirm}
                 secureTextEntry
+                style={styles.input}
+              />
+              <Text style={styles.sectionText}>Endereço:</Text>
+              <TextInput
+                placeholder="Rua*"
+                value={street}
+                onChangeText={setStreet}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Número*"
+                value={number}
+                onChangeText={setNumber}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Cidade*"
+                value={city}
+                onChangeText={setCity}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Estado*"
+                value={state}
+                onChangeText={setState}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Complemento"
+                value={complement}
+                onChangeText={setComplement}
                 style={styles.input}
               />
               <TouchableOpacity style={styles.button} onPress={handleSignUp}>
@@ -103,3 +150,4 @@ const RegisterScreen = ({ navigation }) => {
 };
 
 export default RegisterScreen;
+

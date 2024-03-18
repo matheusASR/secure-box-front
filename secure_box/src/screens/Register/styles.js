@@ -51,4 +51,9 @@ export default styles = StyleSheet.create({
     accountText: {
       fontSize: 15,
     },
+    sectionText: {
+      fontSize: 18,
+      fontWeight: "bold",
+      marginBottom: 20
+    }
   });
