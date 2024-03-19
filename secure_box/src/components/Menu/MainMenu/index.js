@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import ExitModal from "../ExitModal";
 
-const MainMenu = () => {
+const MainMenu = ({ user }) => {
   const { setLogged } = useContext(LoginContext);
   const navigation = useNavigation();
   const [isExitModalVisible, setIsExitModalVisible] = useState(false);
@@ -30,8 +30,8 @@ const MainMenu = () => {
           source={require("../../../../assets/ProfileImage.png")}
           style={styles.profileImage}
         />
-        <Text style={styles.fullName}>MATHEUS AUGUSTO SANTOS REGO</Text>
-        <Text style={styles.email}>matheusau2004@gmail.com</Text>
+        <Text style={styles.fullName}>{user.name}</Text>
+        <Text style={styles.email}>{user.email}</Text>
       </View>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity

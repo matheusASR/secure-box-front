@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Modal, TouchableOpacity, Image } from "react-native";
 import styles from "./styles";
-import { updateCageInUse } from "../../CageList/utils";
 
 const CageAllocationModal = ({
   isVisible,
@@ -20,7 +19,7 @@ const CageAllocationModal = ({
     >
       <View style={styles.container}>
         <View style={styles.modalView}>
-          <Text style={styles.title}>Gaiola {cage.number}</Text>
+          <Text style={styles.title}>Gaiola {cage.id}</Text>
           {allocationStarted ? (
             <>
               <View style={styles.allocationStartedView}>
@@ -52,7 +51,6 @@ const CageAllocationModal = ({
                   onPress={() => {
                     setAllocationStarted(true);
                     onStartAllocation(cage);
-                    updateCageInUse(cage.number, true);
                   }}
                 >
                   <Text style={styles.startBtnText}>Iniciar</Text>

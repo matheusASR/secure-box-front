@@ -1,15 +1,33 @@
 import React, { useContext, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import { cages } from "./utils";
 import ScreenPatternStack from "../../ScreenPattern/ScreenPatternStack";
 import { InUseContext } from "../../../providers/inUseContext";
 import styles from "./styles";
 import CageAllocationModal from "../CageModal/CageAllocationModal";
+import { api } from "../../../services/api";
 
 const CageList = () => {
   const { setInUse, inUse } = useContext(InUseContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCage, setSelectedCage] = useState({});
+  const [cages, setCages] = useState([]);
+
+  useEffect(() => {
+    const getCages = async () => {
+      try {
+        const response = await api.get("/cages");
+        if (response && response.data && response.statusText === "OK") {
+          // toast
+          setCages(response.data);
+        }
+      } catch (error) {
+        // toast
+        console.log("busca cages erro:", error.response.data.message);
+      }
+    };
+
+    getCages();
+  }, []);
 
   const handleCloseModal = () => {
     setIsModalVisible(false);
@@ -17,16 +35,16 @@ const CageList = () => {
 
   const renderCageCard = (cage) => {
     return (
-      <View key={cage.number} style={styles.card}>
-        <Text style={styles.cardText}>Gaiola {cage.number}</Text>
+      <View key={cage.id} style={styles.card}>
+        <Text style={styles.cardText}>Gaiola {cage.id}</Text>
         <Text style={styles.cardText}>
-          {cage.inUse ? "Em uso" : "Disponível"}
+          {cage.availability ? "Disponível" : "Em uso"}
         </Text>
-        {!cage.inUse && (
+        {cage.availability && (
           <TouchableOpacity
             style={styles.startAllocationBtn}
             onPress={() => {
-              setSelectedCage({...cage});
+              setSelectedCage({ ...cage });
               setIsModalVisible(true);
             }}
           >

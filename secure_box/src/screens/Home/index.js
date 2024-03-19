@@ -10,21 +10,21 @@ const HomeScreen = ({ navigation }) => {
   const { qrcode, setQrcode } = useContext(HomeContext);
   const { setLogged } = useContext(LoginContext)
 
-  useEffect(() => {
-    const checkToken = async () => {
-      try {
-        // const token = await AsyncStorage.getItem('@secbox:TOKEN');
-        // if (!token) {
-        //   setLogged(false)
-        // }
-      } catch (error) {
-        console.error('Erro ao verificar o token do usuário.');
-        setLogged(false)
-      }
-    };
+  // useEffect(() => {
+  //   const checkToken = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem('@secbox:TOKEN');
+  //       if (!token) {
+  //         setLogged(false)
+  //       }
+  //     } catch (error) {
+  //       console.error('Erro ao verificar o token do usuário.');
+  //       setLogged(false)
+  //     }
+  //   };
 
-    checkToken();
-  }, []);
+  //   checkToken();
+  // }, []);
 
   const handleQrcode = () => {
     setQrcode(true);

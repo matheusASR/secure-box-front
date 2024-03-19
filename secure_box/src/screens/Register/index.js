@@ -43,7 +43,7 @@ const RegisterScreen = ({ navigation }) => {
       }
     } catch (error) {
      // toast
-     console.log("cadastro erro:")
+     console.log("cadastro erro:", error)
     }
   };
 

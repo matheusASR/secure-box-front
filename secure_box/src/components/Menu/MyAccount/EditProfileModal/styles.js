@@ -58,5 +58,8 @@ export default styles = StyleSheet.create({
   viewBtns: {
     flexDirection: "row",
     justifyContent: "space-between"
+  },
+  label: {
+    marginBottom: 10
   }
 });

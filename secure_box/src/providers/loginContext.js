@@ -18,7 +18,7 @@ const LoginProvider = ({ children }) => {
     //   }
     // } catch (error) {
     //   // toast
-    //   console.log("login erro:", error.response.data.message)
+    //   console.log("login erro:", error)
     // }
     setLogged(true)
   };
