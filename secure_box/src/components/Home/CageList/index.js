@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import ScreenPatternStack from "../../ScreenPattern/ScreenPatternStack";
 import { InUseContext } from "../../../providers/inUseContext";
@@ -16,13 +16,18 @@ const CageList = () => {
     const getCages = async () => {
       try {
         const response = await api.get("/cages");
-        if (response && response.data && response.statusText === "OK") {
-          // toast
+        if (response.status === 200) {
           setCages(response.data);
         }
       } catch (error) {
-        // toast
-        console.log("busca cages erro:", error.response.data.message);
+        Toast.show(`Erro ao buscar gaiolas do local: ${error}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
       }
     };
 

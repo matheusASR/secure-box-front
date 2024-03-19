@@ -15,28 +15,31 @@ import InUse from "./src/screens/InUse";
 import { InUseProvider } from "./src/providers/inUseContext";
 import { colors } from "./src/styles";
 import { Image } from "react-native";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const App = () => {
   return (
-    <RegisterProvider>
-      <LoginProvider>
-        <HomeProvider>
-          <InUseProvider>
-            <NavigationContainer>
-              <AppNavigation />
-            </NavigationContainer>
-          </InUseProvider>
-        </HomeProvider>
-      </LoginProvider>
-    </RegisterProvider>
+    <RootSiblingParent>
+      <RegisterProvider>
+        <LoginProvider>
+          <HomeProvider>
+            <InUseProvider>
+              <NavigationContainer>
+                <AppNavigation />
+              </NavigationContainer>
+            </InUseProvider>
+          </HomeProvider>
+        </LoginProvider>
+      </RegisterProvider>
+    </RootSiblingParent>
   );
 };
 
 const AppNavigation = () => {
-  const { logged } = useContext(LoginContext)
+  const { logged } = useContext(LoginContext);
 
   return (
     <>
@@ -63,19 +66,24 @@ const AppNavigation = () => {
               headerTitleStyle: {
                 fontWeight: "bold",
                 fontSize: 18,
-                
               },
               tabBarIcon: ({ focused }) => {
                 let iconName;
-              
+
                 if (route.name === "Home") {
-                  iconName = focused ? require("./assets/HomeFocused.png") : require("./assets/Home.png");
+                  iconName = focused
+                    ? require("./assets/HomeFocused.png")
+                    : require("./assets/Home.png");
                 } else if (route.name === "Menu") {
-                  iconName = focused ? require("./assets/MenuFocused.png") : require("./assets/Menu.png");
+                  iconName = focused
+                    ? require("./assets/MenuFocused.png")
+                    : require("./assets/Menu.png");
                 } else if (route.name === "Em uso") {
-                  iconName = focused ? require("./assets/CageFocused.png") : require("./assets/Cage.png");
+                  iconName = focused
+                    ? require("./assets/CageFocused.png")
+                    : require("./assets/Cage.png");
                 }
-              
+
                 return (
                   <Image source={iconName} style={{ width: 30, height: 30 }} />
                 );
@@ -110,10 +118,7 @@ const AppNavigation = () => {
             }}
           >
             <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen
-              name="Cadastro"
-              component={RegisterScreen}
-            />
+            <Stack.Screen name="Cadastro" component={RegisterScreen} />
           </Stack.Navigator>
         </ScreenPatternStack>
       )}

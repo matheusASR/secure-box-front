@@ -1,12 +1,43 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { LoginContext } from "../../../providers/loginContext";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import ExitModal from "../ExitModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { api } from "../../../services/api";
 
-const MainMenu = ({ user }) => {
-  const { setLogged } = useContext(LoginContext);
+const MainMenu = () => {
+  const [ user, setUser ] = useState({});
+  const { setLogged } = useContext(LoginContext)
+
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem("@secbox:TOKEN");
+        const response = await api.get("/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          setUser(response.data);
+        }
+      } catch (error) {
+        Toast.show(`Erro ao buscar dados do usuário: ${error}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+        setLogged(false)
+      }
+    };
+
+    getProfile();
+  }, []);
   const navigation = useNavigation();
   const [isExitModalVisible, setIsExitModalVisible] = useState(false);
 
@@ -14,8 +45,9 @@ const MainMenu = ({ user }) => {
     setIsExitModalVisible(true);
   };
 
-  const handleConfirmLogout = () => {
+  const handleConfirmLogout = async () => {
     setIsExitModalVisible(false);
+    await AsyncStorage.removeItem("@secbox:TOKEN");
     setLogged(false);
   };
 

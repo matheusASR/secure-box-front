@@ -1,12 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import EditProfileModal from "./EditProfileModal";
+import { api } from "../../../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const MyAccount = ({ user }) => {
+const MyAccount = () => {
   const navigation = useNavigation();
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [ user, setUser ] = useState({})
+
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem("@secbox:TOKEN");
+        const response = await api.get("/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          setUser(response.data);
+        }
+      } catch (error) {
+        Toast.show(`Erro ao buscar dados do usuário: ${error}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+      }
+    };
+
+    getProfile();
+  }, [user]);
 
   const editProfile = () => {
     setIsEditModalVisible(true);

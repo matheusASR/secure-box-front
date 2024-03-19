@@ -10,21 +10,28 @@ const HomeScreen = ({ navigation }) => {
   const { qrcode, setQrcode } = useContext(HomeContext);
   const { setLogged } = useContext(LoginContext)
 
-  // useEffect(() => {
-  //   const checkToken = async () => {
-  //     try {
-  //       const token = await AsyncStorage.getItem('@secbox:TOKEN');
-  //       if (!token) {
-  //         setLogged(false)
-  //       }
-  //     } catch (error) {
-  //       console.error('Erro ao verificar o token do usuário.');
-  //       setLogged(false)
-  //     }
-  //   };
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('@secbox:TOKEN');
+        if (!token) {
+          setLogged(false)
+        }
+      } catch (error) {
+        Toast.show(`Erro ao verificar token do usuário: ${error}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+        setLogged(false)
+      }
+    };
 
-  //   checkToken();
-  // }, []);
+    checkToken();
+  }, []);
 
   const handleQrcode = () => {
     setQrcode(true);
@@ -63,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
               <Text style={styles.buttonText}>Acessar gaiola pelo QRcode</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.cageListRegistered}>
+          {/* <View style={styles.cageListRegistered}>
             <Text style={styles.otherAccessText}>- - - - - Ou - - - - -</Text>
             <Text style={styles.accessText}>
               Acessar local já cadastrado:
@@ -82,7 +89,7 @@ const HomeScreen = ({ navigation }) => {
                 </View>
               </TouchableOpacity>
             </ScrollView>
-          </View>
+          </View> */}
         </>
       )}
     </>

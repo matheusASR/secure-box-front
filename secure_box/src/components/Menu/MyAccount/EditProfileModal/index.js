@@ -13,6 +13,7 @@ import {
 import styles from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "../../../../services/api";
+import Toast from "react-native-root-toast";
 
 const EditProfileModal = ({ isVisible, onClose, user }) => {
   const [name, setName] = useState(user.name);
@@ -34,15 +35,26 @@ const EditProfileModal = ({ isVisible, onClose, user }) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      if (response.statusText === "OK") {
-        console.log("Usuário atualizado com sucesso!")
-        // setTimeout(() => {
-        //   window.location.reload()
-        // }, 1500)
+      if (response.status === 200) {
+        Toast.show("Usuário atualizado com sucesso!", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
         onClose();
       }
     } catch (error) {
-      toast.error(`Erro ao atualizar usuário: ${error}`)
+      Toast.show(`Erro na atualização dos dados: ${error}`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      });
     }
   };
 

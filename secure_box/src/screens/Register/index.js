@@ -16,6 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import { registerFormSchema } from "./registerFormSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
+import Toast from "react-native-root-toast";
 
 const RegisterScreen = ({ navigation }) => {
   const {
@@ -28,22 +29,40 @@ const RegisterScreen = ({ navigation }) => {
 
   const onSubmit = async (data) => {
     delete data.confirmPassword;
-  
+
     try {
       const response = await api.post("/users", data);
-      if (response && response.data && response.statusText === "Created") {
-        // toast
-        console.log("cadastro sucesso")
+      if (response.status === 201) {
+        Toast.show("Cadastro realizado com sucesso! Você será redirecionado.", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
         setTimeout(() => {
           navigation.navigate("Login");
         }, 2000);
       } else {
-        // toast
-        console.log("cadastro erro")
+        Toast.show("Erro ao cadastrar usuário. Verifique os dados e tente novamente.", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
       }
     } catch (error) {
-     // toast
-     console.log("cadastro erro:", error)
+      Toast.show(`Ocorreu um erro ao cadastrar o usuário: ${error}`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      });
     }
   };
 
