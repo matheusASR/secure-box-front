@@ -55,5 +55,10 @@ export default styles = StyleSheet.create({
       fontSize: 18,
       fontWeight: "bold",
       marginBottom: 20
+    },
+    errorText: {
+      fontSize: 14,
+      color: "red",
+      marginBottom: 15
     }
   });

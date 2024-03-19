@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   TextInput,
@@ -12,40 +12,59 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import styles from "./styles";
+import { useForm, Controller } from "react-hook-form";
+import { registerFormSchema } from "./registerFormSchema";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { api } from "../../services/api";
+import Toast from "react-native-toastify";
 
 const RegisterScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [birthdate, setBirthdate] = useState("");
-  const [street, setStreet] = useState("");
-  const [number, setNumber] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [complement, setComplement] = useState("");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(registerFormSchema),
+  });
 
-  const handleSignUp = () => {
-    const userData = {
-      fullName,
-      birthdate,
-      phoneNumber,
-      email,
-      password,
-      passwordConfirm,
-      address: {
-        street,
-        number,
-        city,
-        state,
-        complement,
-      },
-    };
+  const onSubmit = async (data) => {
+    delete data.confirmPassword;
 
-    console.log(userData);
-
-    navigation.navigate("Login");
+    try {
+      const response = await api.post("/users", data);
+      if (response && response.data && response.statusText === "Created") {
+        Toast.show({
+          type: "success",
+          position: "top",
+          text1: "Sucesso!",
+          text2: "Usuário cadastrado com sucesso!",
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+        setTimeout(() => {
+          navigation.navigate("Login");
+        }, 2000);
+      } else {
+        Toast.show({
+          type: "error",
+          position: "bottom",
+          text1: "Erro!",
+          text2:
+            "Erro ao cadastrar usuário. Verifique os dados e tente novamente.",
+          visibilityTime: 2000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Erro!",
+        text2: `Ocorreu um erro ao cadastrar o usuário: ${error.response.data.message}`,
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
   };
 
   return (
@@ -58,80 +77,234 @@ const RegisterScreen = ({ navigation }) => {
           <ScrollView contentContainerStyle={styles.contentContainer}>
             <View style={styles.inputContainer}>
               <Text style={styles.sectionText}>Dados Pessoais:</Text>
-              <TextInput
-                placeholder="Nome Completo*"
-                value={fullName}
-                onChangeText={setFullName}
-                style={styles.input}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Nome Completo*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                  />
+                )}
+                name="name"
+                rules={{ required: true }}
+                defaultValue=""
               />
-              <TextInput
-                placeholder="Data de Nascimento (XX/YY/ZZZZ)*"
-                value={birthdate}
-                onChangeText={setBirthdate}
-                style={styles.input}
-                keyboardType="numeric"
-                maxLength={10}
+              {errors.name && (
+                <Text style={styles.errorText}>{errors.name.message}</Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Data de Nascimento*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                  />
+                )}
+                name="birthdate"
+                rules={{ required: true }}
+                defaultValue=""
               />
-              <TextInput
-                placeholder="Telefone com DDD"
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                style={styles.input}
-                keyboardType="numeric"
-                maxLength={11}
+              {errors.birthdate && (
+                <Text style={styles.errorText}>{errors.birthdate.message}</Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Telefone com DDD*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                    keyboardType="numeric"
+                    maxLength={11}
+                  />
+                )}
+                name="cel"
+                rules={{ required: true }}
+                defaultValue=""
               />
-              <TextInput
-                placeholder="Email*"
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
+              {errors.cel && (
+                <Text style={styles.errorText}>{errors.cel.message}</Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Email*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                  />
+                )}
+                name="email"
+                rules={{ required: true }}
+                defaultValue=""
               />
-              <TextInput
-                placeholder="Senha*"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                style={styles.input}
+              {errors.email && (
+                <Text style={styles.errorText}>{errors.email.message}</Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="CPF*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                    keyboardType="numeric"
+                    maxLength={11}
+                  />
+                )}
+                name="cpf"
+                rules={{ required: true }}
+                defaultValue=""
               />
-              <TextInput
-                placeholder="Repetir Senha*"
-                value={passwordConfirm}
-                onChangeText={setPasswordConfirm}
-                secureTextEntry
-                style={styles.input}
+              {errors.cpf && (
+                <Text style={styles.errorText}>{errors.cpf.message}</Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Senha*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                    secureTextEntry
+                  />
+                )}
+                name="password"
+                rules={{ required: true }}
+                defaultValue=""
               />
+              {errors.password && (
+                <Text style={styles.errorText}>{errors.password.message}</Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Repetir Senha*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                    secureTextEntry
+                  />
+                )}
+                name="confirmPassword"
+                rules={{ required: true }}
+                defaultValue=""
+              />
+              {errors.confirmPassword && (
+                <Text style={styles.errorText}>
+                  {errors.confirmPassword.message}
+                </Text>
+              )}
               <Text style={styles.sectionText}>Endereço:</Text>
-              <TextInput
-                placeholder="Rua*"
-                value={street}
-                onChangeText={setStreet}
-                style={styles.input}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Rua/Avenida*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                  />
+                )}
+                name="address.street"
+                rules={{ required: true }}
+                defaultValue=""
               />
-              <TextInput
-                placeholder="Número*"
-                value={number}
-                onChangeText={setNumber}
-                style={styles.input}
+              {errors.address?.street && (
+                <Text style={styles.errorText}>
+                  {errors.address.street.message}
+                </Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Número*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                    keyboardType="numeric"
+                  />
+                )}
+                name="address.number"
+                rules={{ required: true }}
+                defaultValue=""
               />
-              <TextInput
-                placeholder="Cidade*"
-                value={city}
-                onChangeText={setCity}
-                style={styles.input}
+              {errors.address?.number && (
+                <Text style={styles.errorText}>
+                  {errors.address.number.message}
+                </Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Cidade*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                  />
+                )}
+                name="address.city"
+                rules={{ required: true }}
+                defaultValue=""
               />
-              <TextInput
-                placeholder="Estado*"
-                value={state}
-                onChangeText={setState}
-                style={styles.input}
+              {errors.address?.city && (
+                <Text style={styles.errorText}>
+                  {errors.address.city.message}
+                </Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Estado*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                  />
+                )}
+                name="address.state"
+                rules={{ required: true }}
+                defaultValue=""
               />
-              <TextInput
-                placeholder="Complemento"
-                value={complement}
-                onChangeText={setComplement}
-                style={styles.input}
+              {errors.address?.state && (
+                <Text style={styles.errorText}>
+                  {errors.address.state.message}
+                </Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    placeholder="Complemento"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                  />
+                )}
+                name="address.complement"
+                rules={{ required: false }}
+                defaultValue=""
               />
-              <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+              {errors.address?.complement && (
+                <Text style={styles.errorText}>
+                  {errors.address.complement.message}
+                </Text>
+              )}
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleSubmit(onSubmit)}
+              >
                 <Text style={styles.buttonText}>Cadastrar-se</Text>
               </TouchableOpacity>
 
@@ -142,6 +315,8 @@ const RegisterScreen = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
             </View>
+            <Toast config={{ success: { backgroundColor: "green" } }} />
+            <Toast config={{ error: { backgroundColor: "red" } }} />
           </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
@@ -150,4 +325,3 @@ const RegisterScreen = ({ navigation }) => {
 };
 
 export default RegisterScreen;
-
