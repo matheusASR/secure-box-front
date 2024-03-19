@@ -16,7 +16,6 @@ import { useForm, Controller } from "react-hook-form";
 import { registerFormSchema } from "./registerFormSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
-import Toast from "react-native-toastify";
 
 const RegisterScreen = ({ navigation }) => {
   const {
@@ -29,41 +28,22 @@ const RegisterScreen = ({ navigation }) => {
 
   const onSubmit = async (data) => {
     delete data.confirmPassword;
-
+  
     try {
       const response = await api.post("/users", data);
       if (response && response.data && response.statusText === "Created") {
-        Toast.show({
-          type: "success",
-          position: "top",
-          text1: "Sucesso!",
-          text2: "Usuário cadastrado com sucesso!",
-          visibilityTime: 2000,
-          autoHide: true,
-        });
+        // toast
+        console.log("cadastro sucesso")
         setTimeout(() => {
           navigation.navigate("Login");
         }, 2000);
       } else {
-        Toast.show({
-          type: "error",
-          position: "bottom",
-          text1: "Erro!",
-          text2:
-            "Erro ao cadastrar usuário. Verifique os dados e tente novamente.",
-          visibilityTime: 2000,
-          autoHide: true,
-        });
+        // toast
+        console.log("cadastro erro")
       }
     } catch (error) {
-      Toast.show({
-        type: "error",
-        position: "top",
-        text1: "Erro!",
-        text2: `Ocorreu um erro ao cadastrar o usuário: ${error.response.data.message}`,
-        visibilityTime: 2000,
-        autoHide: true,
-      });
+     // toast
+     console.log("cadastro erro:")
     }
   };
 
@@ -315,11 +295,10 @@ const RegisterScreen = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
             </View>
-            <Toast config={{ success: { backgroundColor: "green" } }} />
-            <Toast config={{ error: { backgroundColor: "red" } }} />
           </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
+      
     </SafeAreaView>
   );
 };

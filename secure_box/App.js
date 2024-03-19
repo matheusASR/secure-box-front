@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -6,7 +6,7 @@ import LoginScreen from "./src/screens/Login";
 import RegisterScreen from "./src/screens/Register";
 import HomeScreen from "./src/screens/Home";
 import MenuScreen from "./src/screens/Menu";
-import { LoginProvider, LoginContext } from "./src/providers/loginContext";
+import { LoginContext, LoginProvider } from "./src/providers/loginContext";
 import ScreenPatternTab from "./src/components/ScreenPattern/ScreenPatternTab";
 import ScreenPatternStack from "./src/components/ScreenPattern/ScreenPatternStack";
 import { HomeProvider } from "./src/providers/homeContext";
@@ -36,7 +36,7 @@ const App = () => {
 };
 
 const AppNavigation = () => {
-  const { logged } = React.useContext(LoginContext);
+  const { logged } = useContext(LoginContext)
 
   return (
     <>
@@ -113,7 +113,6 @@ const AppNavigation = () => {
             <Stack.Screen
               name="Cadastro"
               component={RegisterScreen}
-              options={{ headerLeft: null }}
             />
           </Stack.Navigator>
         </ScreenPatternStack>

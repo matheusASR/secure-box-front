@@ -1,10 +1,9 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext } from 'react';
 
 const RegisterContext = createContext();
 
 const RegisterProvider = ({ children }) => {
   
-
   return (
     <RegisterContext.Provider value={{  }}>
       {children}

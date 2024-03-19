@@ -18,7 +18,7 @@ const Terms = () => {
             source={require("../../../../assets/BackBtn.png")}
           />
         </TouchableOpacity>
-        <Text style={styles.title}>Termos e Condições de Uso</Text>
+        <Text style={styles.title}>Termos e Condições</Text>
       </View>
       <View></View>
     </>

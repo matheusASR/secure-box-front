@@ -1,20 +1,32 @@
-import React, { useContext } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-} from "react-native";
+import React, { useContext, useEffect } from "react";
+import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { HomeContext } from "../../providers/homeContext";
 import CageList from "../../components/Home/CageList";
 import styles from "./styles";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LoginContext } from "../../providers/loginContext";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const { qrcode, setQrcode } = useContext(HomeContext);
+  const { setLogged } = useContext(LoginContext)
+
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        // const token = await AsyncStorage.getItem('@secbox:TOKEN');
+        // if (!token) {
+        //   setLogged(false)
+        // }
+      } catch (error) {
+        console.error('Erro ao verificar o token do usuário.');
+        setLogged(false)
+      }
+    };
+
+    checkToken();
+  }, []);
 
   const handleQrcode = () => {
-    // Implemente sua lógica de autenticação aqui
     setQrcode(true);
   };
 
@@ -78,3 +90,4 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
+
