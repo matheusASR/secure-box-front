@@ -3,26 +3,33 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "./styles";
 
 const CagePaymentModal = ({
-  cageNumber,
-  paymentText,
+  allocation,
   onClose,
-  setFinishContent,
-  finishContent,
 }) => {
-  const handlePaymentConfirmed = () => {
-    setFinishContent((prevFinishContent) => ({
-      ...prevFinishContent,
-      [cageNumber]: {
-        ...prevFinishContent[cageNumber],
-        paymentConfirmed: true,
-      },
-    }));
+  const handlePaymentConfirmed = async () => {
+    const formData = {
+      paymentStatus: true
+    }
+
+    try {
+      await api.patch(`/allocations/${allocation.id}/`, formData);
+      
+    } catch (error) {
+      Toast.show(`Erro no pagamento da alocação: ${error}`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      });
+    }
   };
 
   return (
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
-        {finishContent[cageNumber]?.paymentConfirmed === true ? (
+        {allocation.paymentStatus === true ? (
           <>
             <View style={styles.paymentConfirmedView}>
               <Text style={styles.modalText}>Pagamento concluído!</Text>
@@ -36,8 +43,8 @@ const CagePaymentModal = ({
           </>
         ) : (
           <>
-            <Text style={styles.modalTitle}>Gaiola {cageNumber}</Text>
-            <Text style={styles.modalText}>{paymentText}</Text>
+            <Text style={styles.modalTitle}>Gaiola {allocation.cageId}</Text>
+            <Text style={styles.modalText}>{allocation.price}</Text>
             <Image
               source={require("../../../../../assets/QRcode.png")}
               style={styles.qrcode}

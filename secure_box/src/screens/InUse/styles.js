@@ -16,7 +16,7 @@ export default styles = StyleSheet.create({
       fontSize: 17,
       color: "gray",
     },
-    cageContainer: {
+    allocationContainer: {
       width: "100%",
       borderRadius: 5,
       padding: 20,
@@ -25,15 +25,15 @@ export default styles = StyleSheet.create({
       backgroundColor: "#f0f0f0",
       justifyContent: "space-between",
     },
-    cageTitle: {
+    allocationTitle: {
       fontSize: 22,
       fontWeight: "bold",
     },
-    cageText: {
+    allocationText: {
       fontSize: 15,
       fontWeight: "bold",
     },
-    inUseCagesList: {
+    inUseAllocationsList: {
       flexDirection: "column",
       gap: 20,
       paddingVertical: 20,

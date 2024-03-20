@@ -1,21 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import ScreenPatternStack from "../../ScreenPattern/ScreenPatternStack";
-import { InUseContext } from "../../../providers/inUseContext";
 import styles from "./styles";
 import CageAllocationModal from "../CageModal/CageAllocationModal";
 import { api } from "../../../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { InUseContext } from "../../../providers/inUseContext";
 
 const CageList = () => {
-  const { setInUse, inUse } = useContext(InUseContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCage, setSelectedCage] = useState({});
   const [cages, setCages] = useState([]);
+  const [allocationStarted, setAllocationStarted] = useState(false);
+  const { formatDateTime } = useContext(InUseContext);
 
   useEffect(() => {
     const getCages = async () => {
       try {
-        const response = await api.get("/cages");
+        const response = await api.get("/cages/shoppingCentro");
         if (response.status === 200) {
           setCages(response.data);
         }
@@ -60,9 +62,30 @@ const CageList = () => {
     );
   };
 
-  const handleStartAllocation = (cage) => {
-    cage.initialTime = Date.now();
-    setInUse([...inUse, cage]);
+  const handleStartAllocation = async (cageId) => {
+    const payload = {
+      initialDatetime: formatDateTime(Date.now())
+    }
+    try {
+      const token = await AsyncStorage.getItem("@secbox:TOKEN");
+      const response = await api.post(`/allocations/${cageId}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 201) {
+        setAllocationStarted(true)
+      }
+    } catch (error) {
+      Toast.show(`Erro ao buscar gaiolas do local: ${error}`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      });
+    }
   };
 
   return (
@@ -77,6 +100,7 @@ const CageList = () => {
         onClose={handleCloseModal}
         cage={selectedCage}
         onStartAllocation={handleStartAllocation}
+        allocationStarted={allocationStarted}
       />
     </ScreenPatternStack>
   );

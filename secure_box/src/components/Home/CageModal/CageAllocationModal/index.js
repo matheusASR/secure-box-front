@@ -7,9 +7,8 @@ const CageAllocationModal = ({
   cage,
   onClose,
   onStartAllocation,
+  allocationStarted
 }) => {
-  const [allocationStarted, setAllocationStarted] = useState(false);
-
   return (
     <Modal
       animationType="slide"
@@ -29,7 +28,6 @@ const CageAllocationModal = ({
                   direito.
                 </Text>
                 <TouchableOpacity style={styles.closeBtnAlt} onPress={() => {
-                  setAllocationStarted(false)
                   onClose()
                 }}>
                   <Text style={styles.closeBtnText}>Fechar</Text>
@@ -49,8 +47,7 @@ const CageAllocationModal = ({
                 <TouchableOpacity
                   style={styles.startBtn}
                   onPress={() => {
-                    setAllocationStarted(true);
-                    onStartAllocation(cage);
+                    onStartAllocation(cage.id);
                   }}
                 >
                   <Text style={styles.startBtnText}>Iniciar</Text>

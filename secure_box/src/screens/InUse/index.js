@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,56 +11,108 @@ import ScreenPatternStack from "../../components/ScreenPattern/ScreenPatternStac
 import ModalPayment from "../../components/Home/CageModal/CagePaymentModal";
 import { InUseContext } from "../../providers/inUseContext";
 import styles from "./styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const InUse = () => {
-  const { inUse, formatDateTime, handlePayment } = useContext(InUseContext);
-  const [finishContent, setFinishContent] = useState({});
+  const { formatDateTime, handlePayment } = useContext(InUseContext);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [selectedCage, setSelectedCage] = useState(null);
+  const [allocationsNotFinished, setAllocationsNotFinished] = useState([]);
+  const [allocationSelected, setAllocationSelected] = useState({});
 
-  const finishAllocation = (cage) => {
-    const finalTime = Date.now();
-    const timeUsed = Math.floor((finalTime - cage.initialTime) / (1000 * 60));
-    const finalTimeFormatted = formatDateTime(finalTime);
+  useEffect(() => {
+    const getAllocationsNotFinished = async () => {
+      try {
+        const token = await AsyncStorage.getItem("@secbox:TOKEN");
+        const responseProfile = await api.get("/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (responseProfile.status === 200) {
+          try {
+            const responseAllocations = await api.get(
+              `/allocations/${responseProfile.data.id}/userNotFinished`
+            );
+            if (responseAllocations.status === 200) {
+              setAllocationsNotFinished(responseAllocations.data);
+            }
+          } catch (error) {
+            Toast.show(`Erro ao buscar alocações em uso: ${error}`, {
+              duration: Toast.durations.SHORT,
+              position: Toast.positions.TOP,
+              shadow: true,
+              animation: true,
+              hideOnPress: true,
+              delay: 0,
+            });
+          }
+        }
+      } catch (error) {
+        Toast.show(`Erro ao buscar dados do usuário: ${error}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+      }
+    };
 
-    const paymentText = handlePayment(timeUsed);
+    getAllocationsNotFinished();
+  }, [allocationsNotFinished]);
 
-    setFinishContent((prevFinishContent) => ({
-      ...prevFinishContent,
-      [cage.number]: {
-        finalTimeFormatted,
-        timeUsed,
-        paymentText,
-        pressed: true,
-      },
-    }));
+  const finishAllocation = async (allocationId) => {
+    const finalDatetime = Date.now();
+    const finalDatetimeFormatted = formatDateTime(finalDatetime);
+    const price = handlePayment(timeUsed);
+    const formData = {
+      finalDatetime: finalDatetimeFormatted,
+      price: price,
+      pressed: true
+    }
+
+    try {
+      await api.patch(`/allocations/${allocationId}/`, formData);
+      
+    } catch (error) {
+      Toast.show(`Erro ao finalizar alocação: ${error}`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      });
+    }
   };
 
-  const handlePaymentModal = (cageNumber, paymentText) => {
-    setSelectedCage(cageNumber);
+  const handlePaymentModal = (allocation) => {
     setShowPaymentModal(true);
+    setAllocationSelected(allocation)
   };
 
   const handleClosePaymentModal = () => {
     setShowPaymentModal(false);
-    setSelectedCage(null);
   };
 
   return (
     <ScreenPatternStack>
       <ScrollView style={styles.container}>
-        {inUse.length === 0 ? (
+        {allocationsNotFinished.length === 0 ? (
           <View style={styles.noContent}>
             <Text style={styles.noGaiolasText}>
               Nenhuma gaiola em uso no momento.
             </Text>
           </View>
         ) : (
-          <View style={styles.inUseCagesList}>
-            {inUse.map((cage) => (
-              <View key={cage.number} style={styles.cageContainer}>
-                <Text style={styles.cageTitle}>Gaiola {cage.number}</Text>
-                {finishContent[cage.number]?.paymentConfirmed === true ? (
+          <View style={styles.inUseAllocationsList}>
+            {allocationsNotFinished.map((allocation) => (
+              <View key={allocation.id} style={styles.allocationContainer}>
+                <Text style={styles.allocationTitle}>
+                  Gaiola {allocation.cageId}
+                </Text>
+                {allocation.paymentStatus === true ? (
                   <TouchableOpacity style={styles.unlockBtn}>
                     <Text style={styles.buttonUnlockText}>Destravar</Text>
                     <Image
@@ -70,37 +122,29 @@ const InUse = () => {
                   </TouchableOpacity>
                 ) : (
                   <>
-                    <Text style={styles.cageText}>
-                      Horário de início: {formatDateTime(cage.initialTime)}
+                    <Text style={styles.allocationText}>
+                      Horário de início: {allocation.initialDatetime}
                     </Text>
-                    {!finishContent[cage.number]?.pressed && (
+                    {allocation.pressed && (
                       <TouchableOpacity
                         style={styles.finishBtn}
-                        onPress={() => finishAllocation(cage)}
+                        onPress={() => finishAllocation(allocation)}
                       >
                         <Text style={styles.buttonText}>Finalizar</Text>
                       </TouchableOpacity>
                     )}
-                    {finishContent[cage.number]?.pressed && (
+                    {allocation.pressed && (
                       <View style={styles.finishContent}>
-                        <Text style={styles.cageText}>
-                          Horário final:{" "}
-                          {finishContent[cage.number].finalTimeFormatted}
+                        <Text style={styles.allocationText}>
+                          Horário final: {allocation.finalDatetime}
                         </Text>
-                        <Text style={styles.cageText}>
-                          Tempo usado: {finishContent[cage.number].timeUsed}{" "}
-                          minutos
-                        </Text>
-                        <Text style={styles.cageText}>
-                          {finishContent[cage.number].paymentText}
+                        <Text style={styles.allocationText}>
+                          {allocation.price}
                         </Text>
                         <TouchableOpacity
                           style={styles.paymentBtn}
                           onPress={() =>
-                            handlePaymentModal(
-                              cage.number,
-                              finishContent[cage.number].paymentText
-                            )
+                            handlePaymentModal(allocation)
                           }
                         >
                           <Text style={styles.buttonText}>Pagar</Text>
@@ -120,11 +164,8 @@ const InUse = () => {
         transparent={true}
       >
         <ModalPayment
-          cageNumber={selectedCage}
-          paymentText={finishContent[selectedCage]?.paymentText}
+          allocation={allocationSelected}
           onClose={handleClosePaymentModal}
-          setFinishContent={setFinishContent}
-          finishContent={finishContent}
         />
       </Modal>
     </ScreenPatternStack>

@@ -3,7 +3,6 @@ import React, { createContext, useState } from "react";
 const InUseContext = createContext();
 
 const InUseProvider = ({ children }) => {
-  const [inUse, setInUse] = useState([]);
   const [showCageContent, setShowCageContent] = useState(true);
 
   function formatDateTime(timestamp) {
@@ -25,10 +24,10 @@ const InUseProvider = ({ children }) => {
     const taxAddHour = 2.5;
 
     if (timeUsed <= 60) {
-        return `Valor a pagar: R$${baseValue}`;
+        return `R$${baseValue}`;
     } else {
         const addHours = Math.ceil((timeUsed - 60) / 60); 
-        return `Valor a pagar: R$${baseValue + (addHours * taxAddHour)}`;
+        return `R$${baseValue + (addHours * taxAddHour)}`;
     }
   }
 
