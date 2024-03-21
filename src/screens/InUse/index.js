@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import ScreenPatternStack from "../../components/ScreenPattern/ScreenPatternStack";
-import ModalPayment from "../../components/Home/CageModal/CagePaymentModal";
+import ModalPayment from "../../components/InUse/CagePaymentModal";
 import { InUseContext } from "../../providers/inUseContext";
 import styles from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
