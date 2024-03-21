@@ -46,7 +46,7 @@ const CagePaymentModal = ({
             <Text style={styles.modalTitle}>Gaiola {allocation.cageId}</Text>
             <Text style={styles.modalText}>{allocation.price}</Text>
             <Image
-              source={require("../../../../../assets/QRcode.png")}
+              source={require("../../../../assets/QRcode.png")}
               style={styles.qrcode}
             />
             <TouchableOpacity

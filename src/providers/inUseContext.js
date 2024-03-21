@@ -34,8 +34,6 @@ const InUseProvider = ({ children }) => {
   return (
     <InUseContext.Provider
       value={{
-        inUse,
-        setInUse,
         formatDateTime,
         handlePayment,
         showCageContent,
