@@ -4,10 +4,9 @@ import styles from "./styles";
 
 const CageAllocationModal = ({
   isVisible,
-  cage,
+  allocation,
   onClose,
   onStartAllocation,
-  allocationStarted
 }) => {
   return (
     <Modal
@@ -18,8 +17,8 @@ const CageAllocationModal = ({
     >
       <View style={styles.container}>
         <View style={styles.modalView}>
-          <Text style={styles.title}>Gaiola {cage.id}</Text>
-          {allocationStarted ? (
+          <Text style={styles.title}>Gaiola {allocation.cageId}</Text>
+          {allocation ? (
             <>
               <View style={styles.allocationStartedView}>
                 <Text style={styles.detailsTitle}>Alocação Iniciada!</Text>
@@ -47,7 +46,7 @@ const CageAllocationModal = ({
                 <TouchableOpacity
                   style={styles.startBtn}
                   onPress={() => {
-                    onStartAllocation(cage.id);
+                    onStartAllocation(allocation.cageId);
                   }}
                 >
                   <Text style={styles.startBtnText}>Iniciar</Text>
