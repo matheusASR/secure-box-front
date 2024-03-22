@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   TextInput,
@@ -15,10 +15,11 @@ import styles from "./styles";
 import { useForm, Controller } from "react-hook-form";
 import { registerFormSchema } from "./registerFormSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { api } from "../../services/api";
-import Toast from "react-native-root-toast";
+import { RegisterContext } from "../../providers/registerContext";
 
 const RegisterScreen = ({ navigation }) => {
+  const { onSubmit } = useContext(RegisterContext);
+
   const {
     control,
     handleSubmit,
@@ -26,46 +27,6 @@ const RegisterScreen = ({ navigation }) => {
   } = useForm({
     resolver: yupResolver(registerFormSchema),
   });
-
-  const onSubmit = async (data) => {
-    data.email = data.email.toLowerCase();
-    delete data.confirmPassword;
-
-    try {
-      const response = await api.post("/users", data);
-      if (response.status === 201) {
-        Toast.show("Cadastro realizado com sucesso! Você será redirecionado.", {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
-        setTimeout(() => {
-          navigation.navigate("Login");
-        }, 2000);
-      } else {
-        Toast.show("Erro ao cadastrar usuário. Verifique os dados e tente novamente.", {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
-      }
-    } catch (error) {
-      Toast.show(`Ocorreu um erro ao cadastrar o usuário: ${error}`, {
-        duration: Toast.durations.SHORT,
-        position: Toast.positions.TOP,
-        shadow: true,
-        animation: true,
-        hideOnPress: true,
-        delay: 0,
-      });
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -318,7 +279,6 @@ const RegisterScreen = ({ navigation }) => {
           </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
-      
     </SafeAreaView>
   );
 };

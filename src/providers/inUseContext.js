@@ -1,11 +1,13 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-root-toast";
 import { api } from "../services/api";
+import { ToastContext } from "./toastContext";
 
 const InUseContext = createContext();
 
 const InUseProvider = ({ children }) => {
+  const { generateToastConfig } = useContext(ToastContext)
   const [showCageContent, setShowCageContent] = useState(true);
   const [allocationsNotFinished, setAllocationsNotFinished] = useState([]);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -64,25 +66,17 @@ const InUseProvider = ({ children }) => {
             setAllocationsNotFinished(responseAllocations.data);
           }
         } catch (error) {
-          Toast.show(`Erro ao buscar alocações em uso: ${error}`, {
-            duration: Toast.durations.SHORT,
-            position: Toast.positions.TOP,
-            shadow: true,
-            animation: true,
-            hideOnPress: true,
-            delay: 0,
-          });
+          const toastConfig = generateToastConfig(
+            `Erro ao buscar alocações em uso: ${error}`
+          );
+          Toast.show(toastConfig);
         }
       }
     } catch (error) {
-      Toast.show(`Erro ao buscar dados do usuário: ${error}`, {
-        duration: Toast.durations.SHORT,
-        position: Toast.positions.TOP,
-        shadow: true,
-        animation: true,
-        hideOnPress: true,
-        delay: 0,
-      });
+      const toastConfig = generateToastConfig(
+        `Erro ao buscar dados do usuário: ${error}`
+      );
+      Toast.show(toastConfig);
     }
   };
 
@@ -99,14 +93,10 @@ const InUseProvider = ({ children }) => {
     try {
       await api.patch(`/allocations/${allocation.id}/`, formData);
     } catch (error) {
-      Toast.show(`Erro ao finalizar alocação: ${error}`, {
-        duration: Toast.durations.SHORT,
-        position: Toast.positions.TOP,
-        shadow: true,
-        animation: true,
-        hideOnPress: true,
-        delay: 0,
-      });
+      const toastConfig = generateToastConfig(
+        `Erro ao finalizar alocação: ${error}`
+      );
+      Toast.show(toastConfig);
     }
   };
 
@@ -130,14 +120,10 @@ const InUseProvider = ({ children }) => {
       try {
         await api.patch(`/allocations/${allocation.id}/`, allocationData);
       } catch (error) {
-        Toast.show(`Erro ao finalizar alocação: ${error}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
+        const toastConfig = generateToastConfig(
+          `Erro ao finalizar alocação: ${error}`
+        );
+        Toast.show(toastConfig);
       }
 
       const cageData = {
@@ -147,14 +133,10 @@ const InUseProvider = ({ children }) => {
       try {
         await api.patch(`/cages/${allocation.cageId}/`, cageData);
       } catch (error) {
-        Toast.show(`Erro ao disponibilizar gaiola: ${error}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
+        const toastConfig = generateToastConfig(
+          `Erro ao disponibilizar gaiola: ${error}`
+        );
+        Toast.show(toastConfig);
       }
     }, 60000);
   };
@@ -167,14 +149,10 @@ const InUseProvider = ({ children }) => {
     try {
       await api.patch(`/allocations/${allocation.id}/`, formData);
     } catch (error) {
-      Toast.show(`Erro no pagamento da alocação: ${error}`, {
-        duration: Toast.durations.SHORT,
-        position: Toast.positions.TOP,
-        shadow: true,
-        animation: true,
-        hideOnPress: true,
-        delay: 0,
-      });
+      const toastConfig = generateToastConfig(
+        `Erro no pagamento da alocação: ${error}`
+      );
+      Toast.show(toastConfig);
     }
 
     setAllocationSelected({ ...allocationSelected, paymentStatus: true });
