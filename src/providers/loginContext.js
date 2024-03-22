@@ -2,13 +2,23 @@ import React, { createContext, useState } from "react";
 import { api } from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-root-toast";
-import { ToastContext } from "./toastContext";
 
 const LoginContext = createContext();
 
 const LoginProvider = ({ children }) => {
-  const { generateToastConfig } = useContext(ToastContext);
   const [logged, setLogged] = useState(false);
+
+  const generateToastConfig = (message) => {
+    return {
+      message: message,
+      duration: Toast.durations.SHORT,
+      position: Toast.positions.TOP,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 0,
+    };
+  };
 
   const onSubmit = async (formData) => {
     try {

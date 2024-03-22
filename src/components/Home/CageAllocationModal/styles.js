@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../../../../styles";
+import { colors } from "../../../styles";
 
 export default styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", 
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalView: {
     backgroundColor: "white",
@@ -14,7 +14,7 @@ export default styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     elevation: 5,
-    width: "90%"
+    width: "90%",
   },
   title: {
     fontSize: 20,
@@ -28,43 +28,43 @@ export default styles = StyleSheet.create({
     borderRadius: 5,
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "center"
+    alignItems: "center",
   },
   closeBtn: {
     padding: 10,
     backgroundColor: "#F0F0F0",
     width: "40%",
     borderRadius: 5,
-    alignItems: "center"
+    alignItems: "center",
   },
   startBtnText: {
     color: "white",
-    fontSize: 18
+    fontSize: 18,
   },
   closeBtnText: {
     color: "black",
-    fontSize: 18
+    fontSize: 18,
   },
   viewBtns: {
     flexDirection: "row",
-    gap: 20
+    gap: 20,
   },
   detailsView: {
     width: "100%",
     alignItems: "center",
-    marginVertical: 50
+    marginVertical: 50,
   },
   detailsTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 10
+    marginBottom: 10,
   },
   detailsText: {
-    fontSize: 16
+    fontSize: 16,
   },
   openedPadlock: {
     width: 20,
-    height: 20
+    height: 20,
   },
   allocationStartedView: {
     gap: 20,
@@ -77,9 +77,9 @@ export default styles = StyleSheet.create({
     backgroundColor: "#F0F0F0",
     width: "100%",
     borderRadius: 5,
-    alignItems: "center"
+    alignItems: "center",
   },
   detailsTextAlt: {
     textAlign: "center",
-  }
+  },
 });

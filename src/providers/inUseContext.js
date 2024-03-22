@@ -1,17 +1,27 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-root-toast";
 import { api } from "../services/api";
-import { ToastContext } from "./toastContext";
 
 const InUseContext = createContext();
 
 const InUseProvider = ({ children }) => {
-  const { generateToastConfig } = useContext(ToastContext)
   const [showCageContent, setShowCageContent] = useState(true);
   const [allocationsNotFinished, setAllocationsNotFinished] = useState([]);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [allocationSelected, setAllocationSelected] = useState({});
+
+  const generateToastConfig = (message) => {
+    return {
+      message: message,
+      duration: Toast.durations.SHORT,
+      position: Toast.positions.TOP,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 0,
+    };
+  };
 
   function formatDateTime(timestamp) {
     const date = new Date(timestamp);

@@ -2,23 +2,23 @@ import React, { useContext, useEffect } from "react";
 import { View, ScrollView } from "react-native";
 import ScreenPatternStack from "../../ScreenPattern/ScreenPatternStack";
 import styles from "./styles";
-import CageAllocationModal from "../CageModal/CageAllocationModal";
+import CageAllocationModal from "../CageAllocationModal";
 import { HomeContext } from "../../../providers/homeContext";
 
 const CageList = () => {
   const {
-    allocationSelected,
     renderCageCard,
     getCages,
     cages,
     isModalVisible,
     handleStartAllocation,
     handleCloseModal,
+    selectedCage
   } = useContext(HomeContext);
 
   useEffect(() => {
     getCages();
-  }, []);
+  }, [isModalVisible]);
 
   return (
     <ScreenPatternStack>
@@ -30,8 +30,8 @@ const CageList = () => {
       <CageAllocationModal
         isVisible={isModalVisible}
         onClose={handleCloseModal}
-        allocation={allocationSelected}
         onStartAllocation={handleStartAllocation}
+        cage={selectedCage}
       />
     </ScreenPatternStack>
   );

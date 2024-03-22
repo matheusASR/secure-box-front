@@ -1,12 +1,21 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext } from "react";
 import { api } from "../services/api";
 import Toast from "react-native-root-toast";
-import { ToastContext } from "./toastContext";
 
 const RegisterContext = createContext();
 
 const RegisterProvider = ({ children }) => {
-  const { generateToastConfig } = useContext(ToastContext);
+  const generateToastConfig = (message) => {
+    return {
+      message: message,
+      duration: Toast.durations.SHORT,
+      position: Toast.positions.TOP,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 0,
+    };
+  };
 
   const onSubmit = async (data) => {
     data.email = data.email.toLowerCase();

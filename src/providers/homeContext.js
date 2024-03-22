@@ -1,19 +1,41 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-root-toast";
 import { api } from "../services/api";
-import { InUseContext } from "./inUseContext";
-import { ToastContext } from "./toastContext";
 
 const HomeContext = createContext();
 
 const HomeProvider = ({ children }) => {
-  const { generateToastConfig } = useContext(ToastContext);
-  const { formatDateTime } = useContext(InUseContext);
   const [qrcode, setQrcode] = useState(false);
   const [cages, setCages] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [allocationSelected, setAllocationSelected] = useState({});
+  const [selectedCage, setSelectedCage] = useState({})
+
+  const generateToastConfig = (message) => {
+    return {
+      message: message,
+      duration: Toast.durations.SHORT,
+      position: Toast.positions.TOP,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 0,
+    };
+  };
+
+  function formatDateTime(timestamp) {
+    const date = new Date(timestamp);
+
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  }
 
   const renderCageCard = (cage) => {
     return (
@@ -61,15 +83,32 @@ const HomeProvider = ({ children }) => {
     };
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const allocation = await api.post(`/allocations/${cageId}`, payload, {
+      const responseAllocation = await api.post(`/allocations/${cageId}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setAllocationSelected(allocation);
+      if (responseAllocation.status === 201) {
+        try {
+          const payload = {
+            availability: false
+          }
+          await api.patch(`/cages/${cageId}`, payload)
+        } catch (error) {
+          const toastConfig = generateToastConfig(
+            `Erro ao atualizar disponibilidade da gaiola: ${error}`
+          );
+          Toast.show(toastConfig);
+        }
+      }
+      const toastConfig = generateToastConfig(
+        "Alocação iniciada! Acompanhe-a na seção 'Em uso'."
+      );
+      Toast.show(toastConfig);
+      handleCloseModal()
     } catch (error) {
       const toastConfig = generateToastConfig(
-        `Erro ao buscar gaiolas do local: ${error}`
+        `Erro ao iniciar alocação: ${error}`
       );
       Toast.show(toastConfig);
     }
@@ -88,7 +127,7 @@ const HomeProvider = ({ children }) => {
         setIsModalVisible,
         handleCloseModal,
         handleStartAllocation,
-        allocationSelected,
+        selectedCage
       }}
     >
       {children}
