@@ -1,60 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import { LoginContext } from "../../../providers/loginContext";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import ExitModal from "./ExitModal";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { api } from "../../../services/api";
-import Toast from "react-native-root-toast";
+import { MenuContext } from "../../../providers/menuContext";
 
 const MainMenu = () => {
-  const [ user, setUser ] = useState({});
-  const { setLogged } = useContext(LoginContext)
+  const navigation = useNavigation();
+  const {
+    getProfile,
+    user,
+    handleCloseExitModal,
+    handleLogout,
+    handleConfirmLogout,
+    isExitModalVisible,
+  } = useContext(MenuContext);
 
   useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const token = await AsyncStorage.getItem("@secbox:TOKEN");
-        const response = await api.get("/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.status === 200) {
-          setUser(response.data);
-        }
-      } catch (error) {
-        Toast.show(`Erro ao buscar dados do usuário: ${error}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
-        setLogged(false)
-      }
-    };
-
     getProfile();
   }, []);
-  const navigation = useNavigation();
-  const [isExitModalVisible, setIsExitModalVisible] = useState(false);
-
-  const handleLogout = () => {
-    setIsExitModalVisible(true);
-  };
-
-  const handleConfirmLogout = async () => {
-    setIsExitModalVisible(false);
-    await AsyncStorage.removeItem("@secbox:TOKEN");
-    setLogged(false);
-  };
-
-  const handleCloseModal = () => {
-    setIsExitModalVisible(false);
-  };
 
   return (
     <View style={styles.container}>
@@ -138,7 +102,7 @@ const MainMenu = () => {
       {isExitModalVisible && (
         <ExitModal
           isVisible={isExitModalVisible}
-          onClose={handleCloseModal}
+          onClose={handleCloseExitModal}
           onConfirm={handleConfirmLogout}
         />
       )}

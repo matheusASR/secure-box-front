@@ -89,5 +89,11 @@ export default styles = StyleSheet.create({
       width: "100%",
       justifyContent: "center",
       alignItems: "center"
+    },
+    unlockedCageView: {
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: "40%"
     }
   });

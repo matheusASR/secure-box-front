@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import {
   View,
   Modal,
@@ -11,52 +11,20 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import styles from "./styles";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { api } from "../../../../services/api";
-import Toast from "react-native-root-toast";
+import { MenuContext } from "../../../../providers/menuContext";
 
-const EditProfileModal = ({ isVisible, onClose, user }) => {
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
-  const [cel, setCel] = useState(user.cel);
-  const [birthdate, setBirthdate] = useState(user.birthdate);
-
-  const handleEditProfile = async () => {
-    const formData = {
-      name: name,
-      email: email,
-      cel: cel,
-      birthdate: birthdate,
-    };
-    const token = await AsyncStorage.getItem("@secbox:TOKEN");
-    try {
-      const response = await api.patch(`/users/${user.id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      if (response.status === 200) {
-        Toast.show("Usuário atualizado com sucesso!", {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
-        onClose();
-      }
-    } catch (error) {
-      Toast.show(`Erro na atualização dos dados: ${error}`, {
-        duration: Toast.durations.SHORT,
-        position: Toast.positions.TOP,
-        shadow: true,
-        animation: true,
-        hideOnPress: true,
-        delay: 0,
-      });
-    }
-  };
+const EditProfileModal = ({ isVisible, onClose }) => {
+  const {
+    handleEditProfile,
+    setBirthdate,
+    setCel,
+    setName,
+    setEmail,
+    name,
+    cel,
+    birthdate,
+    email,
+  } = useContext(MenuContext);
 
   return (
     <Modal

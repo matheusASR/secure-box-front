@@ -1,7 +1,10 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-root-toast";
 import { api } from "../services/api";
+import { Text, TouchableOpacity, View } from "react-native";
+import styles from "../components/Home/CageList/styles"
+import { LoginContext } from "./loginContext";
 
 const HomeContext = createContext();
 
@@ -10,17 +13,44 @@ const HomeProvider = ({ children }) => {
   const [cages, setCages] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCage, setSelectedCage] = useState({})
+  const { setLogged } = useContext(LoginContext)
+
+  const checkToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('@secbox:TOKEN');
+      if (!token) {
+        setLogged(false)
+      }
+    } catch (error) {
+      Toast.show(`Erro ao verificar token do usuário: ${error}`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      });
+      setLogged(false)
+    }
+  };
+
+  const handleQrcode = () => {
+    setQrcode(true);
+  };
+
+  const backHome = () => {
+    setQrcode(false);
+  };
 
   const generateToastConfig = (message) => {
-    return {
-      message: message,
+    return [message, {
       duration: Toast.durations.SHORT,
       position: Toast.positions.TOP,
       shadow: true,
       animation: true,
       hideOnPress: true,
       delay: 0,
-    };
+    }];
   };
 
   function formatDateTime(timestamp) {
@@ -66,10 +96,10 @@ const HomeProvider = ({ children }) => {
         setCages(response.data);
       }
     } catch (error) {
-      const toastConfig = generateToastConfig(
-        `Erro ao buscar gaiolas do local: ${error}`
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao buscar gaiolas do local: ${error}`
       );
-      Toast.show(toastConfig);
+      Toast.show(message, toastConfig);
     }
   };
 
@@ -95,22 +125,22 @@ const HomeProvider = ({ children }) => {
           }
           await api.patch(`/cages/${cageId}`, payload)
         } catch (error) {
-          const toastConfig = generateToastConfig(
-            `Erro ao atualizar disponibilidade da gaiola: ${error}`
+          const [message, toastConfig] = generateToastConfig(
+            `Ocorreu um erro ao atualizar gaiola: ${error}`
           );
-          Toast.show(toastConfig);
+          Toast.show(message, toastConfig);
         }
       }
-      const toastConfig = generateToastConfig(
+      const [message, toastConfig] = generateToastConfig(
         "Alocação iniciada! Acompanhe-a na seção 'Em uso'."
       );
-      Toast.show(toastConfig);
+      Toast.show(message, toastConfig);
       handleCloseModal()
     } catch (error) {
-      const toastConfig = generateToastConfig(
-        `Erro ao iniciar alocação: ${error}`
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao iniciar alocação: ${error}`
       );
-      Toast.show(toastConfig);
+      Toast.show(message, toastConfig);
     }
   };
 
@@ -127,7 +157,10 @@ const HomeProvider = ({ children }) => {
         setIsModalVisible,
         handleCloseModal,
         handleStartAllocation,
-        selectedCage
+        selectedCage,
+        checkToken,
+        handleQrcode,
+        backHome
       }}
     >
       {children}

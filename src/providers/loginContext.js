@@ -6,18 +6,17 @@ import Toast from "react-native-root-toast";
 const LoginContext = createContext();
 
 const LoginProvider = ({ children }) => {
-  const [logged, setLogged] = useState(false);
+  const [logged, setLogged] = useState(true);
 
   const generateToastConfig = (message) => {
-    return {
-      message: message,
+    return [message, {
       duration: Toast.durations.SHORT,
       position: Toast.positions.TOP,
       shadow: true,
       animation: true,
       hideOnPress: true,
       delay: 0,
-    };
+    }];
   };
 
   const onSubmit = async (formData) => {
@@ -27,14 +26,16 @@ const LoginProvider = ({ children }) => {
       if (response.status === 200) {
         await AsyncStorage.setItem("@secbox:TOKEN", response.data.token);
         setLogged(true);
-        const toastConfig = generateToastConfig(
+        const [message, toastConfig] = generateToastConfig(
           "Login realizado com sucesso! Você será redirecionado."
         );
-        Toast.show(toastConfig);
+        Toast.show(message, toastConfig);
       }
     } catch (error) {
-      const toastConfig = generateToastConfig(`Erro ao fazer login: ${error}`);
-      Toast.show(toastConfig);
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao fazer login: ${error}`
+      );
+      Toast.show(message, toastConfig);
     }
   };
 

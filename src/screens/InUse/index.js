@@ -10,7 +10,6 @@ import {
 import ScreenPatternStack from "../../components/ScreenPattern/ScreenPatternStack";
 import ModalPayment from "../../components/InUse/CagePaymentModal";
 import { InUseContext } from "../../providers/inUseContext";
-import { HomeContext } from "../../providers/homeContext";
 import styles from "./styles";
 
 const InUse = () => {
@@ -23,18 +22,12 @@ const InUse = () => {
     allocationSelected,
     handleClosePaymentModal,
     unlockCage,
-    handlePaymentConfirmed
+    handlePaymentConfirmed,
   } = useContext(InUseContext);
-  const { isModalVisible } = useContext(HomeContext);
 
   useEffect(() => {
     getAllocationsNotFinished();
-  }, [
-    isModalVisible,
-    finishAllocation,
-    handlePaymentModal,
-    handlePaymentConfirmed,
-  ]);
+  }, []);
 
   return (
     <ScreenPatternStack>
@@ -55,14 +48,14 @@ const InUse = () => {
                 {allocation.paymentStatus === true ? (
                   <>
                     {allocationSelected.unlocked === true ? (
-                      <>
+                      <View style={styles.unlockedCageView}>
                         <Text style={styles.allocationText}>
-                          Gaiola destravada com sucesso
+                          Gaiola destravada com sucesso.
                         </Text>
                         <Text style={styles.allocationText}>
                           Você já pode retirar seus pertences!
                         </Text>
-                      </>
+                      </View>
                     ) : (
                       <TouchableOpacity
                         style={styles.unlockBtn}

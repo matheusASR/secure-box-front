@@ -18,7 +18,7 @@ const CageList = () => {
 
   useEffect(() => {
     getCages();
-  }, [isModalVisible]);
+  }, []);
 
   return (
     <ScreenPatternStack>

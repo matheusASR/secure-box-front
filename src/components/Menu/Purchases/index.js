@@ -1,55 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Toast from "react-native-root-toast";
-import { api } from "../../../services/api";
+import { MenuContext } from "../../../providers/menuContext";
 
 const Purchases = () => {
-  const [allocationsFinished, setAllocationsFinished] = useState([]);
   const navigation = useNavigation();
+  const { getAllocationsFinished, allocationsFinished } = useContext(MenuContext)
 
   useEffect(() => {
-    const getAllocationsFinished = async () => {
-      try {
-        const token = await AsyncStorage.getItem("@secbox:TOKEN");
-        const responseProfile = await api.get("/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (responseProfile.status === 200) {
-          try {
-            const responseAllocations = await api.get(
-              `/allocations/${responseProfile.data.id}/userFinished`
-            );
-            if (responseAllocations.status === 200) {
-              setAllocationsFinished(responseAllocations.data);
-            } 
-          } catch (error) {
-            Toast.show(`Não foi possível buscar compras do usuário: ${error}`, {
-              duration: Toast.durations.SHORT,
-              position: Toast.positions.TOP,
-              shadow: true,
-              animation: true,
-              hideOnPress: true,
-              delay: 0,
-            });
-          }
-        }
-      } catch (error) {
-        Toast.show(`Erro ao buscar dados do usuário: ${error}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
-      }
-    };
-
     getAllocationsFinished();
   }, []);
 

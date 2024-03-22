@@ -6,15 +6,17 @@ const RegisterContext = createContext();
 
 const RegisterProvider = ({ children }) => {
   const generateToastConfig = (message) => {
-    return {
-      message: message,
-      duration: Toast.durations.SHORT,
-      position: Toast.positions.TOP,
-      shadow: true,
-      animation: true,
-      hideOnPress: true,
-      delay: 0,
-    };
+    return [
+      message,
+      {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      },
+    ];
   };
 
   const onSubmit = async (data) => {
@@ -24,25 +26,25 @@ const RegisterProvider = ({ children }) => {
     try {
       const response = await api.post("/users", data);
       if (response.status === 201) {
-        const toastConfig = generateToastConfig(
+        const [message, toastConfig] = generateToastConfig(
           "Cadastro realizado com sucesso! Você será redirecionado."
         );
-        Toast.show(toastConfig);
+        Toast.show(message, toastConfig);
 
         // setTimeout(() => {
         //   navigation.navigate("Login");
         // }, 2000);
       } else {
-        const toastConfig = generateToastConfig(
+        const [message, toastConfig] = generateToastConfig(
           "Erro ao cadastrar usuário. Verifique os dados e tente novamente."
         );
-        Toast.show(toastConfig);
+        Toast.show(message, toastConfig);
       }
     } catch (error) {
-      const toastConfig = generateToastConfig(
+      const [message, toastConfig] = generateToastConfig(
         `Ocorreu um erro ao cadastrar o usuário: ${error}`
       );
-      Toast.show(toastConfig);
+      Toast.show(message, toastConfig);
     }
   };
 

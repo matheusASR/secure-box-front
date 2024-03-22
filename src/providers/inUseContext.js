@@ -12,15 +12,14 @@ const InUseProvider = ({ children }) => {
   const [allocationSelected, setAllocationSelected] = useState({});
 
   const generateToastConfig = (message) => {
-    return {
-      message: message,
+    return [message, {
       duration: Toast.durations.SHORT,
       position: Toast.positions.TOP,
       shadow: true,
       animation: true,
       hideOnPress: true,
       delay: 0,
-    };
+    }];
   };
 
   function formatDateTime(timestamp) {
@@ -76,17 +75,17 @@ const InUseProvider = ({ children }) => {
             setAllocationsNotFinished(responseAllocations.data);
           }
         } catch (error) {
-          const toastConfig = generateToastConfig(
-            `Erro ao buscar alocações em uso: ${error}`
+          const [message, toastConfig] = generateToastConfig(
+            `Ocorreu um erro ao buscar alocações em uso: ${error}`
           );
-          Toast.show(toastConfig);
+          Toast.show(message, toastConfig);
         }
       }
     } catch (error) {
-      const toastConfig = generateToastConfig(
-        `Erro ao buscar dados do usuário: ${error}`
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao buscar dados do usuário: ${error}`
       );
-      Toast.show(toastConfig);
+      Toast.show(message, toastConfig);
     }
   };
 
@@ -103,10 +102,10 @@ const InUseProvider = ({ children }) => {
     try {
       await api.patch(`/allocations/${allocation.id}/`, formData);
     } catch (error) {
-      const toastConfig = generateToastConfig(
-        `Erro ao finalizar alocação: ${error}`
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao finalizar alocação: ${error}`
       );
-      Toast.show(toastConfig);
+      Toast.show(message, toastConfig);
     }
   };
 
@@ -130,10 +129,10 @@ const InUseProvider = ({ children }) => {
       try {
         await api.patch(`/allocations/${allocation.id}/`, allocationData);
       } catch (error) {
-        const toastConfig = generateToastConfig(
-          `Erro ao finalizar alocação: ${error}`
+        const [message, toastConfig] = generateToastConfig(
+          `Ocorreu um erro ao finalizar alocação: ${error}`
         );
-        Toast.show(toastConfig);
+        Toast.show(message, toastConfig);
       }
 
       const cageData = {
@@ -143,10 +142,10 @@ const InUseProvider = ({ children }) => {
       try {
         await api.patch(`/cages/${allocation.cageId}/`, cageData);
       } catch (error) {
-        const toastConfig = generateToastConfig(
-          `Erro ao disponibilizar gaiola: ${error}`
+        const [message, toastConfig] = generateToastConfig(
+          `Ocorreu um erro ao disponibilizar gaiola: ${error}`
         );
-        Toast.show(toastConfig);
+        Toast.show(message, toastConfig);
       }
     }, 60000);
   };
@@ -159,10 +158,10 @@ const InUseProvider = ({ children }) => {
     try {
       await api.patch(`/allocations/${allocation.id}/`, formData);
     } catch (error) {
-      const toastConfig = generateToastConfig(
-        `Erro no pagamento da alocação: ${error}`
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro no pagamento da alocação: ${error}`
       );
-      Toast.show(toastConfig);
+      Toast.show(message, toastConfig);
     }
 
     setAllocationSelected({ ...allocationSelected, paymentStatus: true });

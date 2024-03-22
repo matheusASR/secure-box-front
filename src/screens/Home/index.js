@@ -1,45 +1,15 @@
 import React, { useContext, useEffect } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { HomeContext } from "../../providers/homeContext";
 import CageList from "../../components/Home/CageList";
 import styles from "./styles";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LoginContext } from "../../providers/loginContext";
 
 const HomeScreen = ({ navigation }) => {
-  const { qrcode, setQrcode } = useContext(HomeContext);
-  const { setLogged } = useContext(LoginContext)
+  const { qrcode, checkToken, handleQrcode, backHome } = useContext(HomeContext);
 
   useEffect(() => {
-    const checkToken = async () => {
-      try {
-        const token = await AsyncStorage.getItem('@secbox:TOKEN');
-        if (!token) {
-          setLogged(false)
-        }
-      } catch (error) {
-        Toast.show(`Erro ao verificar token do usuário: ${error}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
-        setLogged(false)
-      }
-    };
-
     checkToken();
   }, []);
-
-  const handleQrcode = () => {
-    setQrcode(true);
-  };
-
-  const backHome = () => {
-    setQrcode(false);
-  };
 
   return (
     <>

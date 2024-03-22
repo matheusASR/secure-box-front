@@ -1,50 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import EditProfileModal from "./EditProfileModal";
-import { api } from "../../../services/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MenuContext } from "../../../providers/menuContext";
 
 const MyAccount = () => {
   const navigation = useNavigation();
-  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-  const [ user, setUser ] = useState({})
+  const { getProfile, user, handleModal, handleCloseModal, isEditModalVisible } = useContext(MenuContext)
 
   useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const token = await AsyncStorage.getItem("@secbox:TOKEN");
-        const response = await api.get("/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.status === 200) {
-          setUser(response.data);
-        }
-      } catch (error) {
-        Toast.show(`Erro ao buscar dados do usuário: ${error}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
-      }
-    };
-
     getProfile();
   }, [user]);
-
-  const editProfile = () => {
-    setIsEditModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsEditModalVisible(false);
-  };
 
   return (
     <>
@@ -73,7 +40,7 @@ const MyAccount = () => {
             <Text style={styles.data}>{user.birthdate}</Text>
           </View>
           <View>
-            <TouchableOpacity style={styles.updateBtn} onPress={editProfile}>
+            <TouchableOpacity style={styles.updateBtn} onPress={handleModal}>
               <Text style={styles.updateBtnText}>Editar Perfil</Text>
             </TouchableOpacity>
           </View>
