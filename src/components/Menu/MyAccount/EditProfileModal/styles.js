@@ -13,12 +13,17 @@ export default styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     elevation: 5,
-    width: "90%"
+    width: "90%",
+    maxHeight: "60%",
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
   },
   input: {
     marginBottom: 20,
@@ -57,9 +62,30 @@ export default styles = StyleSheet.create({
   },
   viewBtns: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    paddingBottom: 50
   },
   label: {
     marginBottom: 10
+  },
+  header: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 50,
+    marginBottom: 15
+  },
+  closeHeaderBtn: {
+    backgroundColor: colors.primary,
+    borderRadius: 10,
+    width: 35,
+    height: 35,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  closeHeaderBtnText: {
+    fontSize: 18,
+    color: "white"
   }
 });

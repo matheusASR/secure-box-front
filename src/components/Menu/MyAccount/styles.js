@@ -14,11 +14,21 @@ export default styles = StyleSheet.create({
       color: "white",
       fontSize: 20,
     },
+    titleData: {
+      color: "black",
+      fontWeight: "bold",
+      fontSize: 20,
+      paddingBottom: 20
+    },
+    titleDataAddress: {
+      color: "black",
+      fontWeight: "bold",
+      fontSize: 20,
+      paddingVertical: 20,
+    },
     container: {
       flex: 1,
       backgroundColor: "white",
-      justifyContent: "center",
-      alignItems: "center",
     },
     label: {
       fontSize: 16,
@@ -40,9 +50,10 @@ export default styles = StyleSheet.create({
     },
     updateBtn: {
       backgroundColor: colors.primary,
-      paddingVertical: 12,
+      marginBottom: 40,
       borderRadius: 5,
-      marginTop: 10,
+      paddingVertical: 12,
+      width: "90%"
     },
     updateBtnText: {
       color: "white",
@@ -52,9 +63,9 @@ export default styles = StyleSheet.create({
     },
     dataContainer: {
       padding: 20,
-      width: "90%",
-      height: 450,
-      justifyContent: "space-between",
+      width: "100%",
+      justifyContent: "center",
+      height: "100%"
     },
     dataContainerTop: {
       justifyContent: "center",
@@ -62,9 +73,14 @@ export default styles = StyleSheet.create({
     },
     data: {
       fontSize: 16,
-      backgroundColor: "#E0E0E0",
       width: "100%",
       paddingVertical: 10,
-      textAlign: "center",
+      textAlign: "left",
+      borderWidth: 1,
+      padding: 5
+    },
+    whiteBg: {
+      backgroundColor: "white",
+      alignItems: "center"
     }
   });

@@ -1,24 +1,55 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import ExitModal from "./ExitModal";
-import { MenuContext } from "../../../providers/menuContext";
+import { LoginContext } from "../../../providers/loginContext"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-root-toast";
+import { api } from "../../../services/api";
 
 const MainMenu = () => {
   const navigation = useNavigation();
-  const {
-    getProfile,
-    user,
-    handleCloseExitModal,
-    handleLogout,
-    handleConfirmLogout,
-    isExitModalVisible,
-  } = useContext(MenuContext);
+  const [isExitModalVisible, setIsExitModalVisible] = useState(false);
+  const { setLogged } = useContext(LoginContext);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem("@secbox:TOKEN");
+        const response = await api.get("/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          setUser(response.data);
+        }
+      } catch (error) {
+        Toast.show(`Erro ao buscar dados do usuário: ${error}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+      }
+    };
+
     getProfile();
   }, []);
+
+  const handleConfirmLogout = async () => {
+    setIsExitModalVisible(false);
+    await AsyncStorage.removeItem("@secbox:TOKEN");
+    setLogged(false);
+  };
+
+  const handleCloseExitModal = () => {
+    setIsExitModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -91,7 +122,7 @@ const MainMenu = () => {
           />
           <Text style={styles.buttonText}>Notificações</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleLogout}>
+        <TouchableOpacity style={styles.button} onPress={() => setIsExitModalVisible(true)}>
           <Image
             source={require("../../../../assets/Exit.png")}
             style={styles.buttonImage}

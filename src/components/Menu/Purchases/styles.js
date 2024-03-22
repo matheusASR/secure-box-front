@@ -69,5 +69,10 @@ export default styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     textAlign: "center",
+  },
+  loadingContainer: {
+    height: 500,
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
