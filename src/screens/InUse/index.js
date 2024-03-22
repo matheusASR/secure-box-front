@@ -12,9 +12,12 @@ import ModalPayment from "../../components/InUse/CagePaymentModal";
 import { InUseContext } from "../../providers/inUseContext";
 import styles from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-root-toast";
+import { api } from "../../services/api";
 
 const InUse = () => {
-  const { formatDateTime, handlePayment } = useContext(InUseContext);
+  const { formatDateTime, handlePayment, isModalVisible } =
+    useContext(InUseContext);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [allocationsNotFinished, setAllocationsNotFinished] = useState([]);
   const [allocationSelected, setAllocationSelected] = useState({});
@@ -60,21 +63,20 @@ const InUse = () => {
     };
 
     getAllocationsNotFinished();
-  }, [allocationsNotFinished]);
+  }, [isModalVisible, finishAllocation, handlePaymentModal, handlePaymentConfirmed]);
 
-  const finishAllocation = async (allocationId) => {
+  const finishAllocation = async (allocation) => {
     const finalDatetime = Date.now();
     const finalDatetimeFormatted = formatDateTime(finalDatetime);
-    const price = handlePayment(timeUsed);
+    const timeUsed = handlePayment(finalDatetimeFormatted, allocation.initialDatetime)
     const formData = {
       finalDatetime: finalDatetimeFormatted,
-      price: price,
-      pressed: true
-    }
+      price: timeUsed,
+      pressed: true,
+    };
 
     try {
-      await api.patch(`/allocations/${allocationId}/`, formData);
-      
+      await api.patch(`/allocations/${allocation.id}/`, formData);
     } catch (error) {
       Toast.show(`Erro ao finalizar alocação: ${error}`, {
         duration: Toast.durations.SHORT,
@@ -89,11 +91,73 @@ const InUse = () => {
 
   const handlePaymentModal = (allocation) => {
     setShowPaymentModal(true);
-    setAllocationSelected(allocation)
+    setAllocationSelected(allocation);
   };
 
   const handleClosePaymentModal = () => {
     setShowPaymentModal(false);
+  };
+
+  const unlockCage = (allocation) => {
+    setAllocationSelected({ ...allocationSelected, unlocked: true });
+
+    setTimeout(async () => {
+      const allocationData = {
+        finished: true,
+      };
+
+      try {
+        await api.patch(`/allocations/${allocation.id}/`, allocationData);
+      } catch (error) {
+        Toast.show(`Erro ao finalizar alocação: ${error}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+      }
+
+      const cageData = {
+        availability: true,
+      };
+
+      try {
+        await api.patch(`/cages/${allocation.cageId}/`, cageData);
+      } catch (error) {
+        Toast.show(`Erro ao disponibilizar gaiola: ${error}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+      }
+    }, 60000);
+  };
+
+  const handlePaymentConfirmed = async (allocation) => {
+    const formData = {
+      paymentStatus: true
+    }
+
+    try {
+      await api.patch(`/allocations/${allocation.id}/`, formData);
+      
+    } catch (error) {
+      Toast.show(`Erro no pagamento da alocação: ${error}`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      });
+    }
+
+    setAllocationSelected({...allocationSelected, paymentStatus: true})
   };
 
   return (
@@ -113,43 +177,57 @@ const InUse = () => {
                   Gaiola {allocation.cageId}
                 </Text>
                 {allocation.paymentStatus === true ? (
-                  <TouchableOpacity style={styles.unlockBtn}>
-                    <Text style={styles.buttonUnlockText}>Destravar</Text>
-                    <Image
-                      style={styles.padlock}
-                      source={require("../../../assets/OpenedPadlock.png")}
-                    />
-                  </TouchableOpacity>
-                ) : (
                   <>
-                    <Text style={styles.allocationText}>
-                      Horário de início: {allocation.initialDatetime}
-                    </Text>
-                    {allocation.pressed && (
+                    {allocationSelected.unlocked === true ? (
+                      <>
+                        <Text style={styles.allocationText}>Gaiola destravada com sucesso</Text>
+                        <Text style={styles.allocationText}>Você já pode retirar seus pertences!</Text>
+                      </>
+                    ) : (
                       <TouchableOpacity
-                        style={styles.finishBtn}
-                        onPress={() => finishAllocation(allocation)}
+                        style={styles.unlockBtn}
+                        onPress={() => unlockCage(allocation)}
                       >
-                        <Text style={styles.buttonText}>Finalizar</Text>
+                        <Text style={styles.buttonUnlockText}>Destravar</Text>
+                        <Image
+                          style={styles.padlock}
+                          source={require("../../../assets/OpenedPadlock.png")}
+                        />
                       </TouchableOpacity>
                     )}
-                    {allocation.pressed && (
+                  </>
+                ) : (
+                  <>
+                    {allocation.pressed ? (
                       <View style={styles.finishContent}>
+                        <Text style={styles.allocationText}>
+                          Horário de início: {allocation.initialDatetime}
+                        </Text>
                         <Text style={styles.allocationText}>
                           Horário final: {allocation.finalDatetime}
                         </Text>
                         <Text style={styles.allocationText}>
-                          {allocation.price}
+                          Preço a pagar: {allocation.price}
                         </Text>
                         <TouchableOpacity
                           style={styles.paymentBtn}
-                          onPress={() =>
-                            handlePaymentModal(allocation)
-                          }
+                          onPress={() => handlePaymentModal(allocation)}
                         >
                           <Text style={styles.buttonText}>Pagar</Text>
                         </TouchableOpacity>
                       </View>
+                    ) : (
+                      <>
+                        <Text style={styles.allocationText}>
+                          Horário de início: {allocation.initialDatetime}
+                        </Text>
+                        <TouchableOpacity
+                          style={styles.finishBtn}
+                          onPress={() => finishAllocation(allocation)}
+                        >
+                          <Text style={styles.buttonText}>Finalizar</Text>
+                        </TouchableOpacity>
+                      </>
                     )}
                   </>
                 )}
@@ -166,6 +244,7 @@ const InUse = () => {
         <ModalPayment
           allocation={allocationSelected}
           onClose={handleClosePaymentModal}
+          handlePaymentConfirmed={handlePaymentConfirmed}
         />
       </Modal>
     </ScreenPatternStack>

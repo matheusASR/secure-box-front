@@ -10,6 +10,7 @@ const LoginProvider = ({ children }) => {
 
   const onSubmit = async (formData) => {
     try {
+      formData.email = formData.email.toLowerCase();
       const response = await api.post("/login", formData);
       if (response.status === 200) {
         await AsyncStorage.setItem("@secbox:TOKEN", response.data.token);

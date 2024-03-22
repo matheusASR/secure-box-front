@@ -28,6 +28,7 @@ const RegisterScreen = ({ navigation }) => {
   });
 
   const onSubmit = async (data) => {
+    data.email = data.email.toLowerCase();
     delete data.confirmPassword;
 
     try {

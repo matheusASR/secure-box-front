@@ -5,26 +5,8 @@ import styles from "./styles";
 const CagePaymentModal = ({
   allocation,
   onClose,
+  handlePaymentConfirmed
 }) => {
-  const handlePaymentConfirmed = async () => {
-    const formData = {
-      paymentStatus: true
-    }
-
-    try {
-      await api.patch(`/allocations/${allocation.id}/`, formData);
-      
-    } catch (error) {
-      Toast.show(`Erro no pagamento da alocação: ${error}`, {
-        duration: Toast.durations.SHORT,
-        position: Toast.positions.TOP,
-        shadow: true,
-        animation: true,
-        hideOnPress: true,
-        delay: 0,
-      });
-    }
-  };
 
   return (
     <View style={styles.modalContainer}>
@@ -51,7 +33,7 @@ const CagePaymentModal = ({
             />
             <TouchableOpacity
               style={styles.modalCloseBtn}
-              onPress={handlePaymentConfirmed}
+              onPress={() => handlePaymentConfirmed(allocation)}
             >
               <Text style={styles.buttonText}>Copiar código PIX</Text>
             </TouchableOpacity>

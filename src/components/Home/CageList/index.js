@@ -6,18 +6,18 @@ import CageAllocationModal from "../CageModal/CageAllocationModal";
 import { api } from "../../../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { InUseContext } from "../../../providers/inUseContext";
+import Toast from "react-native-root-toast";
 
 const CageList = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCage, setSelectedCage] = useState({});
   const [cages, setCages] = useState([]);
   const [allocationStarted, setAllocationStarted] = useState(false);
-  const { formatDateTime } = useContext(InUseContext);
+  const { formatDateTime, isModalVisible, setIsModalVisible } = useContext(InUseContext);
 
   useEffect(() => {
     const getCages = async () => {
       try {
-        const response = await api.get("/cages/shoppingCentro");
+        const response = await api.get("/cages/");
         if (response.status === 200) {
           setCages(response.data);
         }
@@ -34,7 +34,7 @@ const CageList = () => {
     };
 
     getCages();
-  }, []);
+  }, [isModalVisible]);
 
   const handleCloseModal = () => {
     setIsModalVisible(false);

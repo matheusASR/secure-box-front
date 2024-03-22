@@ -4,6 +4,7 @@ const InUseContext = createContext();
 
 const InUseProvider = ({ children }) => {
   const [showCageContent, setShowCageContent] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   function formatDateTime(timestamp) {
     const date = new Date(timestamp);
@@ -19,17 +20,25 @@ const InUseProvider = ({ children }) => {
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
 
-  function handlePayment(timeUsed) {
-    const baseValue = 5;
-    const taxAddHour = 2.5;
+  function handlePayment(finalTime, initialTime) {
+    const parseDate = (dateTimeString) => {
+        const [day, month, year, hour, minute, second] = dateTimeString.split(/[\s/,:]+/);
+        return new Date(year, month - 1, day, hour, minute, second);
+    };
 
-    if (timeUsed <= 60) {
-        return `R$${baseValue}`;
+    const differenceInMinutes = Math.abs(parseDate(finalTime) - parseDate(initialTime)) / (1000 * 60);
+
+    const basePrice = 5;
+    const additionalHourPrice = 2.5;
+
+    if (differenceInMinutes <= 60) {
+        return `R$${basePrice.toFixed(2)}`;
     } else {
-        const addHours = Math.ceil((timeUsed - 60) / 60); 
-        return `R$${baseValue + (addHours * taxAddHour)}`;
+        const additionalHours = Math.ceil((differenceInMinutes - 60) / 60);
+        const totalPrice = basePrice + additionalHours * additionalHourPrice;
+        return `R$${totalPrice.toFixed(2)}`;
     }
-  }
+}
 
   return (
     <InUseContext.Provider
@@ -37,7 +46,9 @@ const InUseProvider = ({ children }) => {
         formatDateTime,
         handlePayment,
         showCageContent,
-        setShowCageContent
+        setShowCageContent,
+        setIsModalVisible,
+        isModalVisible,
       }}
     >
       {children}

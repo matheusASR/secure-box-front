@@ -3,9 +3,10 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { LoginContext } from "../../../providers/loginContext";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
-import ExitModal from "../ExitModal";
+import ExitModal from "./ExitModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "../../../services/api";
+import Toast from "react-native-root-toast";
 
 const MainMenu = () => {
   const [ user, setUser ] = useState({});

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-root-toast";
+import { api } from "../../../services/api";
 
 const Purchases = () => {
   const [allocationsFinished, setAllocationsFinished] = useState([]);
@@ -24,9 +26,9 @@ const Purchases = () => {
             );
             if (responseAllocations.status === 200) {
               setAllocationsFinished(responseAllocations.data);
-            }
+            } 
           } catch (error) {
-            Toast.show(`Erro ao buscar compras do usuário: ${error}`, {
+            Toast.show(`Não foi possível buscar compras do usuário: ${error}`, {
               duration: Toast.durations.SHORT,
               position: Toast.positions.TOP,
               shadow: true,
@@ -49,7 +51,7 @@ const Purchases = () => {
     };
 
     getAllocationsFinished();
-  }, [allocationsFinished]);
+  }, []);
 
   return (
     <>
@@ -80,6 +82,9 @@ const Purchases = () => {
                 <Text style={styles.allocationData}>Início: {allocation.initialDatetime}</Text>
                 <Text style={styles.allocationData}>Fim: {allocation.finalDatetime}</Text>
                 <Text style={styles.allocationData}>Preço: {allocation.price}</Text>
+                <TouchableOpacity style={styles.receiptBtn}>
+                  <Text style={styles.receiptText}>Comprovante</Text>
+                </TouchableOpacity>
               </View>
             ))}
           </View>
