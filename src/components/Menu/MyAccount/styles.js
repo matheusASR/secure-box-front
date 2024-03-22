@@ -65,11 +65,12 @@ export default styles = StyleSheet.create({
       padding: 20,
       width: "100%",
       justifyContent: "center",
-      height: "100%"
+      
     },
     dataContainerTop: {
       justifyContent: "center",
       alignItems: "center",
+      
     },
     data: {
       fontSize: 16,
@@ -82,5 +83,8 @@ export default styles = StyleSheet.create({
     whiteBg: {
       backgroundColor: "white",
       alignItems: "center"
+    },
+    myAccountView: {
+      height: "100%"
     }
   });

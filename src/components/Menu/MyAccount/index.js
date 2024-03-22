@@ -44,7 +44,7 @@ const MyAccount = () => {
   };
 
   return (
-    <>
+    <View style={styles.myAccountView}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backBtn}
@@ -101,7 +101,7 @@ const MyAccount = () => {
           user={user}
         />
       )}
-    </>
+    </View>
   );
 };
 
