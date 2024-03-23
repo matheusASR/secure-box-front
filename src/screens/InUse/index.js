@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,13 +6,17 @@ import {
   TouchableOpacity,
   Modal,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import ScreenPatternStack from "../../components/ScreenPattern/ScreenPatternStack";
 import ModalPayment from "../../components/InUse/CagePaymentModal";
 import { InUseContext } from "../../providers/inUseContext";
 import styles from "./styles";
+import { colors } from "../../styles";
+import { HomeContext } from "../../providers/homeContext"
 
 const InUse = () => {
+  const [loading, setLoading] = useState(false);
   const {
     getAllocationsNotFinished,
     allocationsNotFinished,
@@ -24,89 +28,104 @@ const InUse = () => {
     unlockCage,
     handlePaymentConfirmed,
   } = useContext(InUseContext);
+  const { handleStartAllocation } = useContext(HomeContext)
 
   useEffect(() => {
-    getAllocationsNotFinished();
-  }, []);
+    const fetchData = async () => {
+      setLoading(true); 
+      await getAllocationsNotFinished();
+      setLoading(false); 
+    };
+
+    fetchData();
+  }, [handleStartAllocation]);
 
   return (
     <ScreenPatternStack>
       <ScrollView style={styles.container}>
-        {allocationsNotFinished.length === 0 ? (
-          <View style={styles.noContent}>
-            <Text style={styles.noGaiolasText}>
-              Nenhuma gaiola em uso no momento.
-            </Text>
+        {loading ? (
+          <View style={styles.loadingView}>
+            <ActivityIndicator size="large" color={colors.primary} /> 
           </View>
         ) : (
-          <View style={styles.inUseAllocationsList}>
-            {allocationsNotFinished.map((allocation) => (
-              <View key={allocation.id} style={styles.allocationContainer}>
-                <Text style={styles.allocationTitle}>
-                  Gaiola {allocation.cageId}
+          <>
+            {allocationsNotFinished.length === 0 ? (
+              <View style={styles.noContent}>
+                <Text style={styles.noGaiolasText}>
+                  Nenhuma gaiola em uso no momento.
                 </Text>
-                {allocation.paymentStatus === true ? (
-                  <>
-                    {allocationSelected.unlocked === true ? (
-                      <View style={styles.unlockedCageView}>
-                        <Text style={styles.allocationText}>
-                          Gaiola destravada com sucesso.
-                        </Text>
-                        <Text style={styles.allocationText}>
-                          Você já pode retirar seus pertences!
-                        </Text>
-                      </View>
-                    ) : (
-                      <TouchableOpacity
-                        style={styles.unlockBtn}
-                        onPress={() => unlockCage(allocation)}
-                      >
-                        <Text style={styles.buttonUnlockText}>Destravar</Text>
-                        <Image
-                          style={styles.padlock}
-                          source={require("../../../assets/OpenedPadlock.png")}
-                        />
-                      </TouchableOpacity>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {allocation.pressed ? (
-                      <View style={styles.finishContent}>
-                        <Text style={styles.allocationText}>
-                          Horário de início: {allocation.initialDatetime}
-                        </Text>
-                        <Text style={styles.allocationText}>
-                          Horário final: {allocation.finalDatetime}
-                        </Text>
-                        <Text style={styles.allocationText}>
-                          Preço a pagar: {allocation.price}
-                        </Text>
-                        <TouchableOpacity
-                          style={styles.paymentBtn}
-                          onPress={() => handlePaymentModal(allocation)}
-                        >
-                          <Text style={styles.buttonText}>Pagar</Text>
-                        </TouchableOpacity>
-                      </View>
+              </View>
+            ) : (
+              <View style={styles.inUseAllocationsList}>
+                {allocationsNotFinished.map((allocation) => (
+                  <View key={allocation.id} style={styles.allocationContainer}>
+                    <Text style={styles.allocationTitle}>
+                      Gaiola {allocation.cageId}
+                    </Text>
+                    {allocation.paymentStatus === true ? (
+                      <>
+                        {allocation.unlocked === true ? (
+                          <View style={styles.unlockedCageView}>
+                            <Text style={styles.allocationText}>
+                              Gaiola destravada com sucesso.
+                            </Text>
+                            <Text style={styles.allocationText}>
+                              Você já pode retirar seus pertences!
+                            </Text>
+                          </View>
+                        ) : (
+                          <TouchableOpacity
+                            style={styles.unlockBtn}
+                            onPress={() => unlockCage(allocation)}
+                          >
+                            <Text style={styles.buttonUnlockText}>Destravar</Text>
+                            <Image
+                              style={styles.padlock}
+                              source={require("../../../assets/OpenedPadlock.png")}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      </>
                     ) : (
                       <>
-                        <Text style={styles.allocationText}>
-                          Horário de início: {allocation.initialDatetime}
-                        </Text>
-                        <TouchableOpacity
-                          style={styles.finishBtn}
-                          onPress={() => finishAllocation(allocation)}
-                        >
-                          <Text style={styles.buttonText}>Finalizar</Text>
-                        </TouchableOpacity>
+                        {allocation.pressed ? (
+                          <View style={styles.finishContent}>
+                            <Text style={styles.allocationText}>
+                              Horário de início: {allocation.initialDatetime}
+                            </Text>
+                            <Text style={styles.allocationText}>
+                              Horário final: {allocation.finalDatetime}
+                            </Text>
+                            <Text style={styles.allocationText}>
+                              Preço a pagar: {allocation.price}
+                            </Text>
+                            <TouchableOpacity
+                              style={styles.paymentBtn}
+                              onPress={() => handlePaymentModal(allocation)}
+                            >
+                              <Text style={styles.buttonText}>Pagar</Text>
+                            </TouchableOpacity>
+                          </View>
+                        ) : (
+                          <>
+                            <Text style={styles.allocationText}>
+                              Horário de início: {allocation.initialDatetime}
+                            </Text>
+                            <TouchableOpacity
+                              style={styles.finishBtn}
+                              onPress={() => finishAllocation(allocation)}
+                            >
+                              <Text style={styles.buttonText}>Finalizar</Text>
+                            </TouchableOpacity>
+                          </>
+                        )}
                       </>
                     )}
-                  </>
-                )}
+                  </View>
+                ))}
               </View>
-            ))}
-          </View>
+            )}
+          </>
         )}
       </ScrollView>
       <Modal
@@ -125,3 +144,4 @@ const InUse = () => {
 };
 
 export default InUse;
+

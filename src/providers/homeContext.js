@@ -1,10 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-root-toast";
 import { api } from "../services/api";
 import { Text, TouchableOpacity, View } from "react-native";
-import styles from "../components/Home/CageList/styles"
-import { LoginContext } from "./loginContext";
+import styles from "../components/Home/CageList/styles";
 
 const HomeContext = createContext();
 
@@ -12,27 +11,7 @@ const HomeProvider = ({ children }) => {
   const [qrcode, setQrcode] = useState(false);
   const [cages, setCages] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedCage, setSelectedCage] = useState({})
-  const { setLogged } = useContext(LoginContext)
-
-  const checkToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('@secbox:TOKEN');
-      if (!token) {
-        setLogged(false)
-      }
-    } catch (error) {
-      Toast.show(`Erro ao verificar token do usuário: ${error}`, {
-        duration: Toast.durations.SHORT,
-        position: Toast.positions.TOP,
-        shadow: true,
-        animation: true,
-        hideOnPress: true,
-        delay: 0,
-      });
-      setLogged(false)
-    }
-  };
+  const [selectedCage, setSelectedCage] = useState({});
 
   const handleQrcode = () => {
     setQrcode(true);
@@ -43,14 +22,17 @@ const HomeProvider = ({ children }) => {
   };
 
   const generateToastConfig = (message) => {
-    return [message, {
-      duration: Toast.durations.SHORT,
-      position: Toast.positions.TOP,
-      shadow: true,
-      animation: true,
-      hideOnPress: true,
-      delay: 0,
-    }];
+    return [
+      message,
+      {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      },
+    ];
   };
 
   function formatDateTime(timestamp) {
@@ -66,6 +48,20 @@ const HomeProvider = ({ children }) => {
 
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
+
+  const getCages = async () => {
+    try {
+      const response = await api.get("/cages/");
+      if (response.status === 200) {
+        setCages(response.data);
+      }
+    } catch (error) {
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao buscar gaiolas do local: ${error.response.data.message}`
+      );
+      Toast.show(message, toastConfig);
+    }
+  };
 
   const renderCageCard = (cage) => {
     return (
@@ -89,20 +85,6 @@ const HomeProvider = ({ children }) => {
     );
   };
 
-  const getCages = async () => {
-    try {
-      const response = await api.get("/cages/");
-      if (response.status === 200) {
-        setCages(response.data);
-      }
-    } catch (error) {
-      const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao buscar gaiolas do local: ${error}`
-      );
-      Toast.show(message, toastConfig);
-    }
-  };
-
   const handleCloseModal = () => {
     setIsModalVisible(false);
   };
@@ -113,20 +95,24 @@ const HomeProvider = ({ children }) => {
     };
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const responseAllocation = await api.post(`/allocations/${cageId}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const responseAllocation = await api.post(
+        `/allocations/${cageId}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (responseAllocation.status === 201) {
         try {
           const payload = {
-            availability: false
-          }
-          await api.patch(`/cages/${cageId}`, payload)
+            availability: false,
+          };
+          await api.patch(`/cages/${cageId}`, payload);
         } catch (error) {
           const [message, toastConfig] = generateToastConfig(
-            `Ocorreu um erro ao atualizar gaiola: ${error}`
+            `Ocorreu um erro ao atualizar gaiola: ${error.response.data.message}`
           );
           Toast.show(message, toastConfig);
         }
@@ -135,10 +121,11 @@ const HomeProvider = ({ children }) => {
         "Alocação iniciada! Acompanhe-a na seção 'Em uso'."
       );
       Toast.show(message, toastConfig);
-      handleCloseModal()
+      getCages();
+      handleCloseModal();
     } catch (error) {
       const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao iniciar alocação: ${error}`
+        `Ocorreu um erro ao iniciar alocação: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
     }
@@ -158,9 +145,8 @@ const HomeProvider = ({ children }) => {
         handleCloseModal,
         handleStartAllocation,
         selectedCage,
-        checkToken,
         handleQrcode,
-        backHome
+        backHome,
       }}
     >
       {children}

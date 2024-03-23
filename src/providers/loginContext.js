@@ -6,7 +6,7 @@ import Toast from "react-native-root-toast";
 const LoginContext = createContext();
 
 const LoginProvider = ({ children }) => {
-  const [logged, setLogged] = useState(true);
+  const [logged, setLogged] = useState(false);
 
   const generateToastConfig = (message) => {
     return [message, {
@@ -33,7 +33,7 @@ const LoginProvider = ({ children }) => {
       }
     } catch (error) {
       const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao fazer login: ${error}`
+        `Ocorreu um erro ao fazer login: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
     }

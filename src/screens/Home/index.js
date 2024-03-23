@@ -3,11 +3,34 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { HomeContext } from "../../providers/homeContext";
 import CageList from "../../components/Home/CageList";
 import styles from "./styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LoginContext } from "../../providers/loginContext";
 
 const HomeScreen = ({ navigation }) => {
-  const { qrcode, checkToken, handleQrcode, backHome } = useContext(HomeContext);
+  const { qrcode, handleQrcode, backHome } =
+    useContext(HomeContext);
+  const { setLogged } = useContext(LoginContext)
 
   useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem("@secbox:TOKEN");
+        if (!token) {
+          setLogged(false);
+        }
+      } catch (error) {
+        Toast.show(`Erro ao verificar token do usuário: ${error.response.data.message}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+        setLogged(false);
+      }
+    };
+
     checkToken();
   }, []);
 
@@ -67,4 +90,3 @@ const HomeScreen = ({ navigation }) => {
 };
 
 export default HomeScreen;
-

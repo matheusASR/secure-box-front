@@ -25,7 +25,7 @@ const MyAccount = () => {
           setUser(response.data);
         }
       } catch (error) {
-        Toast.show(`Erro ao buscar dados do usuário: ${error}`, {
+        Toast.show(`Erro ao buscar dados do usuário: ${error.response.data.message}`, {
           duration: Toast.durations.SHORT,
           position: Toast.positions.TOP,
           shadow: true,

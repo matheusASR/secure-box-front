@@ -60,7 +60,7 @@ const EditProfileModal = ({ isVisible, onClose, user }) => {
         onClose();
       }
     } catch (error) {
-      Toast.show(`Erro na atualização dos dados: ${error}`, {
+      Toast.show(`Erro na atualização dos dados: ${error.response.data.message}`, {
         duration: Toast.durations.SHORT,
         position: Toast.positions.TOP,
         shadow: true,

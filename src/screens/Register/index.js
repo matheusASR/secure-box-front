@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   View,
   TextInput,
@@ -15,11 +15,10 @@ import styles from "./styles";
 import { useForm, Controller } from "react-hook-form";
 import { registerFormSchema } from "./registerFormSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { RegisterContext } from "../../providers/registerContext";
+import Toast from "react-native-root-toast";
+import { api } from "../../services/api";
 
 const RegisterScreen = ({ navigation }) => {
-  const { onSubmit } = useContext(RegisterContext);
-
   const {
     control,
     handleSubmit,
@@ -27,6 +26,48 @@ const RegisterScreen = ({ navigation }) => {
   } = useForm({
     resolver: yupResolver(registerFormSchema),
   });
+
+  const generateToastConfig = (message) => {
+    return [
+      message,
+      {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      },
+    ];
+  };
+
+  const onSubmit = async (data) => {
+    data.email = data.email.toLowerCase();
+  
+    try {
+      const response = await api.post("/users", data);
+      if (response.status === 201) {
+        const [message, toastConfig] = generateToastConfig(
+          "Cadastro realizado com sucesso! Você será redirecionado."
+        );
+        Toast.show(message, toastConfig);
+
+        setTimeout(() => {
+          navigation.navigate("Login");
+        }, 2000);
+      } else {
+        const [message, toastConfig] = generateToastConfig(
+          "Erro ao cadastrar usuário. Verifique os dados e tente novamente."
+        );
+        Toast.show(message, toastConfig);
+      }
+    } catch (error) {
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao cadastrar o usuário: ${error.response.data.message}`
+      );
+      Toast.show(message, toastConfig);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -145,26 +186,7 @@ const RegisterScreen = ({ navigation }) => {
               {errors.password && (
                 <Text style={styles.errorText}>{errors.password.message}</Text>
               )}
-              <Controller
-                control={control}
-                render={({ field }) => (
-                  <TextInput
-                    placeholder="Repetir Senha*"
-                    style={styles.input}
-                    onChangeText={field.onChange}
-                    value={field.value}
-                    secureTextEntry
-                  />
-                )}
-                name="confirmPassword"
-                rules={{ required: true }}
-                defaultValue=""
-              />
-              {errors.confirmPassword && (
-                <Text style={styles.errorText}>
-                  {errors.confirmPassword.message}
-                </Text>
-              )}
+
               <Text style={styles.sectionText}>Endereço:</Text>
               <Controller
                 control={control}

@@ -31,7 +31,7 @@ const Purchases = () => {
               setAllocationsFinished(responseAllocations.data);
             }
           } catch (error) {
-            Toast.show(`Não foi possível buscar compras do usuário: ${error}`, {
+            Toast.show(`Não foi possível buscar compras do usuário: ${error.response.data.message}`, {
               duration: Toast.durations.SHORT,
               position: Toast.positions.TOP,
               shadow: true,
@@ -42,7 +42,7 @@ const Purchases = () => {
           }
         }
       } catch (error) {
-        Toast.show(`Erro ao buscar dados do usuário: ${error}`, {
+        Toast.show(`Erro ao buscar dados do usuário: ${error.response.data.message}`, {
           duration: Toast.durations.SHORT,
           position: Toast.positions.TOP,
           shadow: true,

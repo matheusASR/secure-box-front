@@ -95,5 +95,10 @@ export default styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center",
       marginBottom: "40%"
+    },
+    loadingView: {
+      height: 400,
+      alignItems: "center",
+      justifyContent: "center"
     }
   });

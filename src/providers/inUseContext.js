@@ -76,14 +76,14 @@ const InUseProvider = ({ children }) => {
           }
         } catch (error) {
           const [message, toastConfig] = generateToastConfig(
-            `Ocorreu um erro ao buscar alocações em uso: ${error}`
+            `Ocorreu um erro ao buscar alocações em uso: ${error.response.data.message}`
           );
           Toast.show(message, toastConfig);
         }
       }
     } catch (error) {
       const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao buscar dados do usuário: ${error}`
+        `Ocorreu um erro ao buscar dados do usuário: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
     }
@@ -103,10 +103,12 @@ const InUseProvider = ({ children }) => {
       await api.patch(`/allocations/${allocation.id}/`, formData);
     } catch (error) {
       const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao finalizar alocação: ${error}`
+        `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
     }
+
+    getAllocationsNotFinished();
   };
 
   const handlePaymentModal = (allocation) => {
@@ -118,8 +120,21 @@ const InUseProvider = ({ children }) => {
     setShowPaymentModal(false);
   };
 
-  const unlockCage = (allocation) => {
-    setAllocationSelected({ ...allocationSelected, unlocked: true });
+  const unlockCage = async (allocation) => {
+    const formData = {
+      unlocked: true,
+    };
+
+    try {
+      await api.patch(`/allocations/${allocation.id}/`, formData);
+    } catch (error) {
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao abrir a gaiola: ${error.response.data.message}`
+      );
+      Toast.show(message, toastConfig);
+    }
+
+    getAllocationsNotFinished();
 
     setTimeout(async () => {
       const allocationData = {
@@ -130,7 +145,7 @@ const InUseProvider = ({ children }) => {
         await api.patch(`/allocations/${allocation.id}/`, allocationData);
       } catch (error) {
         const [message, toastConfig] = generateToastConfig(
-          `Ocorreu um erro ao finalizar alocação: ${error}`
+          `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
         );
         Toast.show(message, toastConfig);
       }
@@ -143,10 +158,11 @@ const InUseProvider = ({ children }) => {
         await api.patch(`/cages/${allocation.cageId}/`, cageData);
       } catch (error) {
         const [message, toastConfig] = generateToastConfig(
-          `Ocorreu um erro ao disponibilizar gaiola: ${error}`
+          `Ocorreu um erro ao disponibilizar gaiola: ${error.response.data.message}`
         );
         Toast.show(message, toastConfig);
       }
+      getAllocationsNotFinished();
     }, 60000);
   };
 
@@ -159,12 +175,12 @@ const InUseProvider = ({ children }) => {
       await api.patch(`/allocations/${allocation.id}/`, formData);
     } catch (error) {
       const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro no pagamento da alocação: ${error}`
+        `Ocorreu um erro no pagamento da alocação: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
     }
 
-    setAllocationSelected({ ...allocationSelected, paymentStatus: true });
+    getAllocationsNotFinished();
   };
 
   return (
