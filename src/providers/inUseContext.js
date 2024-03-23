@@ -172,7 +172,14 @@ const InUseProvider = ({ children }) => {
     };
 
     try {
-      await api.patch(`/allocations/${allocation.id}/`, formData);
+      const response = await api.patch(`/allocations/${allocation.id}/`, formData);
+      if (response.status === 200) {
+        const [message, toastConfig] = generateToastConfig(
+          "Pagamento concluído! Você já pode destravar a gaiola."
+        );
+        Toast.show(message, toastConfig);
+        handleClosePaymentModal()
+      }
     } catch (error) {
       const [message, toastConfig] = generateToastConfig(
         `Ocorreu um erro no pagamento da alocação: ${error.response.data.message}`

@@ -41,4 +41,9 @@ export default styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
+  loadingContainer: {
+    height: 400,
+    alignItems: "center",
+    justifyContent: "center"
+  }
 });
