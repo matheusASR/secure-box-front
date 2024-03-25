@@ -5,7 +5,6 @@ import CageList from "../../components/Home/CageList";
 import styles from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginContext } from "../../providers/loginContext";
-import { RNCamera } from "react-native-camera";
 import Toast from "react-native-root-toast";
 
 const HomeScreen = ({ navigation }: any) => {
@@ -42,18 +41,36 @@ const HomeScreen = ({ navigation }: any) => {
   return (
     <>
       {isCameraOpen ? (
-        <RNCamera
-          style={{ flex: 1 }}
-          type={RNCamera.Constants.Type.back}
-          onBarCodeRead={handleBarCodeRead}
-          captureAudio={false}
-        />
+        // <RNCamera
+        //   style={{ flex: 1 }}
+        //   type={RNCamera.Constants.Type.back}
+        //   onBarCodeRead={handleBarCodeRead}
+        //   captureAudio={false}
+        // />
+        <>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.backBtn}
+              onPress={() => setIsCameraOpen(false)}
+            >
+              <Image
+                style={styles.backBtnImage}
+                source={require("../../../assets/BackBtn.png")}
+              />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Selecione a gaiola:</Text>
+          </View>
+          <CageList />
+        </>
       ) : (
         <>
           {requestStatus === 200 ? (
             <>
               <View style={styles.header}>
-                <TouchableOpacity style={styles.backBtn} onPress={() => navigation.navigate("Home")}>
+                <TouchableOpacity
+                  style={styles.backBtn}
+                  onPress={() => navigation.navigate("Home")}
+                >
                   <Image
                     style={styles.backBtnImage}
                     source={require("../../../assets/BackBtn.png")}
@@ -64,7 +81,7 @@ const HomeScreen = ({ navigation }: any) => {
               <CageList />
             </>
           ) : (
-            <View>
+            <>
               <View style={styles.header}>
                 <Text style={styles.headerTitle}>Home</Text>
               </View>
@@ -82,7 +99,7 @@ const HomeScreen = ({ navigation }: any) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </>
           )}
         </>
       )}
