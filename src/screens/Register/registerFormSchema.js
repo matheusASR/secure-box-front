@@ -5,7 +5,7 @@ export const registerFormSchema = yup.object().shape({
   birthdate: yup.string().required("Data de nascimento é obrigatória"),
   cel: yup.string().required("Telefone com DDD é obrigatório"),
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
-  cpf: yup.string().required("CPF é obrigatório"),
+  cpf: yup.string().matches(/^\d{11}$/, 'O CPF deve conter exatamente 11 dígitos').required("CPF é obrigatório"),
   password: yup.string().required("Senha é obrigatória")
     .matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/, 
       "Senha deve conter pelo menos uma letra maiúscula, um número e um caracter especial")

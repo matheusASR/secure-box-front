@@ -14,10 +14,10 @@ const CageList = () => {
     isModalVisible,
     handleStartAllocation,
     handleCloseModal,
-    selectedCage
+    selectedCage,
   } = useContext(HomeContext);
 
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +26,7 @@ const CageList = () => {
       } catch (error) {
         console.error("Erro ao obter gaiolas:", error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -35,14 +35,16 @@ const CageList = () => {
 
   return (
     <ScreenPatternStack>
-      {loading ? ( 
+      {loading ? (
         <View style={[styles.container, styles.loadingContainer]}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
-      ) : ( 
+      ) : (
         <ScrollView style={styles.container}>
           <View style={styles.cardsContainer}>
-            {cages.map((cage) => renderCageCard(cage))}
+            {cages
+              .sort((a, b) => a.id - b.id) 
+              .map((cage) => renderCageCard(cage))}
           </View>
         </ScrollView>
       )}
@@ -57,4 +59,3 @@ const CageList = () => {
 };
 
 export default CageList;
-

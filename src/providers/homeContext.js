@@ -8,17 +8,40 @@ import styles from "../components/Home/CageList/styles";
 const HomeContext = createContext();
 
 const HomeProvider = ({ children }) => {
-  const [qrcode, setQrcode] = useState(false);
   const [cages, setCages] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [selectedCage, setSelectedCage] = useState({});
+  const [qrCodeData, setQrCodeData] = useState("");
+  const [requestStatus, setRequestStatus] = useState(null);
 
-  const handleQrcode = () => {
-    setQrcode(true);
+  const handleCloseCamera = () => {
+    setIsCameraOpen(false);
   };
 
-  const backHome = () => {
-    setQrcode(false);
+  const handleBarCodeRead = async (event) => {
+    if (event.data) {
+      setQrCodeData(event.data);
+
+      try {
+        const qrCodeUrl = event.data;
+        const response = await api.get(qrCodeUrl);
+
+        if (response.status === 200) {
+          setRequestStatus(200);
+        } else {
+          setRequestStatus(response.status);
+        }
+      } catch (error) {
+        const [message, toastConfig] = generateToastConfig(
+          `Ocorreu um erro ao buscar gaiolas do local: ${error.response.data.message}`
+        );
+        Toast.show(message, toastConfig);
+        setRequestStatus(null);
+      }
+
+      handleCloseCamera();
+    }
   };
 
   const generateToastConfig = (message) => {
@@ -134,8 +157,6 @@ const HomeProvider = ({ children }) => {
   return (
     <HomeContext.Provider
       value={{
-        setQrcode,
-        qrcode,
         renderCageCard,
         getCages,
         cages,
@@ -145,8 +166,11 @@ const HomeProvider = ({ children }) => {
         handleCloseModal,
         handleStartAllocation,
         selectedCage,
-        handleQrcode,
-        backHome,
+        isCameraOpen,
+        setIsCameraOpen,
+        requestStatus,
+        qrCodeData,
+        handleBarCodeRead,
       }}
     >
       {children}

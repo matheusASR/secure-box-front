@@ -5,11 +5,12 @@ import CageList from "../../components/Home/CageList";
 import styles from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginContext } from "../../providers/loginContext";
+import { RNCamera } from "react-native-camera";
 
 const HomeScreen = ({ navigation }) => {
-  const { qrcode, handleQrcode, backHome } =
+  const { isCameraOpen, setIsCameraOpen, requestStatus, handleBarCodeRead } =
     useContext(HomeContext);
-  const { setLogged } = useContext(LoginContext)
+  const { setLogged } = useContext(LoginContext);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -19,14 +20,17 @@ const HomeScreen = ({ navigation }) => {
           setLogged(false);
         }
       } catch (error) {
-        Toast.show(`Erro ao verificar token do usuário: ${error.response.data.message}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
+        Toast.show(
+          `Erro ao verificar token do usuário: ${error.response.data.message}`,
+          {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.TOP,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
+          }
+        );
         setLogged(false);
       }
     };
@@ -36,53 +40,49 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <>
-      {qrcode ? (
-        <>
-          <View style={styles.header}>
-            <TouchableOpacity style={styles.backBtn} onPress={backHome}>
-              <Image
-                style={styles.backBtnImage}
-                source={require("../../../assets/BackBtn.png")}
-              />
-            </TouchableOpacity>
-            <Text style={styles.headerTitle}>Selecione a gaiola:</Text>
-          </View>
-          <CageList />
-        </>
+      {isCameraOpen ? (
+        <RNCamera
+          style={{ flex: 1 }}
+          type={RNCamera.Constants.Type.back}
+          onBarCodeRead={handleBarCodeRead}
+          captureAudio={false}
+        />
       ) : (
         <>
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>Home</Text>
-          </View>
-          <View style={styles.container}>
-            <Image
-              source={require("../../../assets/QRcode.png")}
-              style={styles.buttonImage}
-            />
-            <TouchableOpacity style={styles.button} onPress={handleQrcode}>
-              <Text style={styles.buttonText}>Acessar gaiola pelo QRcode</Text>
-            </TouchableOpacity>
-          </View>
-          {/* <View style={styles.cageListRegistered}>
-            <Text style={styles.otherAccessText}>- - - - - Ou - - - - -</Text>
-            <Text style={styles.accessText}>
-              Acessar local já cadastrado:
-            </Text>
-            <ScrollView style={styles.cageListScroll}>
-              <TouchableOpacity style={styles.cageListCard} onPress={handleQrcode}>
+          {requestStatus === 200 ? (
+            <>
+              <View style={styles.header}>
+                <TouchableOpacity style={styles.backBtn} onPress={() => navigation.navigate("Home")}>
+                  <Image
+                    style={styles.backBtnImage}
+                    source={require("../../../assets/BackBtn.png")}
+                  />
+                </TouchableOpacity>
+                <Text style={styles.headerTitle}>Selecione a gaiola:</Text>
+              </View>
+              <CageList />
+            </>
+          ) : (
+            <View>
+              <View style={styles.header}>
+                <Text style={styles.headerTitle}>Home</Text>
+              </View>
+              <View style={styles.container}>
                 <Image
-                  style={styles.cageCardImage}
-                  source={require("../../../assets/ShoppingCentro.jpg")}
+                  source={require("../../../assets/QRcode.png")}
+                  style={styles.buttonImage}
                 />
-                <View style={styles.textCardView}>
-                  <Text style={styles.titleCageCard}>Shopping Centro</Text>
-                  <Text>
-                    Rua Rubião Júnior, 84 Centro - São José dos Campos - SP
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setIsCameraOpen(true)}
+                >
+                  <Text style={styles.buttonText}>
+                    Acessar gaiola pelo QR code
                   </Text>
-                </View>
-              </TouchableOpacity>
-            </ScrollView>
-          </View> */}
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         </>
       )}
     </>
