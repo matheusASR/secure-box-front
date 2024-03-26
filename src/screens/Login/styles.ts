@@ -13,6 +13,9 @@ interface Styles {
   logoView: ViewStyle;
   logo: ImageStyle;
   errorText: TextStyle;
+  forgotPass: TextStyle;
+  clickHere: TextStyle;
+  rowDirectionView: ViewStyle;
 }
 
 const styles: Styles = StyleSheet.create<Styles>({
@@ -72,6 +75,22 @@ const styles: Styles = StyleSheet.create<Styles>({
     fontSize: 14,
     color: "red",
     marginBottom: 15
+  },
+  rowDirectionView: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    justifyContent: "center",
+    marginTop: 20,
+    gap: 5
+  },
+  forgotPass: {
+    fontSize: 16,
+  },
+  clickHere: {
+    color: colors.primary,
+    textDecorationLine: "underline",
+    fontSize: 16,
   }
 });
 
