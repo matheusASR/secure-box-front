@@ -1,7 +1,7 @@
 import { StyleSheet, Platform } from "react-native";
 import { colors } from "../../../../styles";
 
-export default styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
@@ -89,3 +89,5 @@ export default styles = StyleSheet.create({
     color: "white"
   }
 });
+
+export default styles;

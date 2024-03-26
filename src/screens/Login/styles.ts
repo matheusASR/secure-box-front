@@ -74,14 +74,14 @@ const styles: Styles = StyleSheet.create<Styles>({
   errorText: {
     fontSize: 14,
     color: "red",
-    marginBottom: 15
+    marginBottom: 15,
   },
   rowDirectionView: {
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
     justifyContent: "center",
-    marginTop: 20,
+    marginBottom: 10,
     gap: 5
   },
   forgotPass: {

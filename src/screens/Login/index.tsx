@@ -79,18 +79,18 @@ const LoginScreen = ({ navigation }: any) => {
               {errors.password && (
                 <Text style={styles.errorText}>{errors.password.message}</Text>
               )}
-              <TouchableOpacity
-                style={styles.loginButton}
-                onPress={handleSubmit(onSubmit)}
-              >
-                <Text style={styles.buttonText}>Entrar</Text>
-              </TouchableOpacity>
               <View style={styles.rowDirectionView}>
                 <Text style={styles.forgotPass}>Esqueceu sua senha?</Text>
                 <TouchableOpacity>
                   <Text style={styles.clickHere}>Clique aqui</Text>
                 </TouchableOpacity>
               </View>
+              <TouchableOpacity
+                style={styles.loginButton}
+                onPress={handleSubmit(onSubmit)}
+              >
+                <Text style={styles.buttonText}>Entrar</Text>
+              </TouchableOpacity>
               <Text style={styles.registerText}>
                 Ainda não possui cadastro?
               </Text>
