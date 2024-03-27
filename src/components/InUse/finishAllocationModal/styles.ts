@@ -1,30 +1,42 @@
 import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from "react-native";
 import { colors } from "../../../styles";
 
-interface Styles {
-  modalContainer: ViewStyle;
-  modalContent: ViewStyle;
-  modalTitle: TextStyle;
-  modalText: TextStyle;
-  modalCloseBtn: ViewStyle;
-  buttonText: TextStyle;
-  qrcode: ImageStyle;
-  paymentConfirmedView: ViewStyle;
-  viewBttns: ViewStyle;
-}
-
-const styles: Styles = StyleSheet.create<Styles>({
+const styles = StyleSheet.create<any>({
   modalContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  header: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 50,
+    marginBottom: 15
+  },
+  closeHeaderBtn: {
+    backgroundColor: colors.primary,
+    borderRadius: 10,
+    width: 35,
+    height: 35,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  closeHeaderBtnText: {
+    fontSize: 18,
+    color: "white"
+  },
   modalContent: {
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 8,
-    width: "80%",
+    width: "90%",
     height: 400,
     justifyContent: "space-between",
   },

@@ -14,32 +14,32 @@ const MainMenu = () => {
   const { setLogged } = useContext(LoginContext);
   const [user, setUser] = useState<any>({});
 
-  useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const token = await AsyncStorage.getItem("@secbox:TOKEN");
-        const response = await api.get("/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.status === 200) {
-          setUser(response.data);
-        }
-      } catch (error: any) {
-        Toast.show(`Erro ao buscar dados do usuário: ${error.response.data.message}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
-      }
-    };
+  // useEffect(() => {
+  //   const getProfile = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem("@secbox:TOKEN");
+  //       const response = await api.get("/profile", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+  //       if (response.status === 200) {
+  //         setUser(response.data);
+  //       }
+  //     } catch (error: any) {
+  //       Toast.show(`Erro ao buscar dados do usuário: ${error.response.data.message}`, {
+  //         duration: Toast.durations.SHORT,
+  //         position: Toast.positions.TOP,
+  //         shadow: true,
+  //         animation: true,
+  //         hideOnPress: true,
+  //         delay: 0,
+  //       });
+  //     }
+  //   };
 
-    getProfile();
-  }, []);
+  //   getProfile();
+  // }, []);
 
   const handleConfirmLogout = async () => {
     setIsExitModalVisible(false);

@@ -38,7 +38,7 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
   const [allocationSelected, setAllocationSelected] = useState<any>({});
   const [finalDatetime, setFinalDatetime] = useState("");
   const [price, setPrice] = useState("");
-  const [userId, setUserId] = useState("")
+  const [userId, setUserId] = useState("");
 
   const generateToastConfig = (message: any) => {
     return [
@@ -110,7 +110,7 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
       });
       if (responseProfile.status === 200) {
         try {
-          setUserId(responseProfile.data.id)
+          setUserId(responseProfile.data.id);
           const responseAllocations = await api.get(
             `/allocations/${responseProfile.data.id}/userNotFinished`
           );
@@ -142,34 +142,36 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
   };
 
   const unlockCage = async (allocation: any) => {
-    const allocationData = {
-      finished: true,
-    };
+    setTimeout(async () => {
+      const allocationData = {
+        finished: true,
+      };
 
-    try {
-      await api.patch(`/allocations/${allocation.id}/`, allocationData);
-    } catch (error: any) {
-      const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
-      );
-      Toast.show(message, toastConfig);
-    }
+      try {
+        await api.patch(`/allocations/${allocation.id}/`, allocationData);
+      } catch (error: any) {
+        const [message, toastConfig] = generateToastConfig(
+          `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
+        );
+        Toast.show(message, toastConfig);
+      }
 
-    const cageData = {
-      availability: true,
-      open: false,
-    };
+      const cageData = {
+        availability: true,
+        open: false,
+      };
 
-    try {
-      await api.patch(`/cages/${allocation.cageId}/`, cageData);
-    } catch (error: any) {
-      const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao disponibilizar gaiola: ${error.response.data.message}`
-      );
-      Toast.show(message, toastConfig);
-    }
+      try {
+        await api.patch(`/cages/${allocation.cageId}/`, cageData);
+      } catch (error: any) {
+        const [message, toastConfig] = generateToastConfig(
+          `Ocorreu um erro ao disponibilizar gaiola: ${error.response.data.message}`
+        );
+        Toast.show(message, toastConfig);
+      }
 
-    getAllocationsNotFinished();
+      getAllocationsNotFinished();
+    }, 60000);
   };
 
   const finishPayAllocation = async (
@@ -179,15 +181,15 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
   ) => {
     try {
       const patchData = {
-        price: price
-      }
-      const response = await api.patch(`/wallets/${userId}`, patchData)
+        price: price,
+      };
+      const response = await api.patch(`/wallets/${userId}`, patchData);
       if (response.status === 200) {
         const data = {
           finalDatetime: finalDatetime,
           price: price,
         };
-    
+
         try {
           await api.patch(`/allocations/${allocation.id}/`, data);
         } catch (error: any) {
@@ -196,11 +198,11 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
           );
           Toast.show(message, toastConfig);
         }
-    
+
         const formData = {
           paymentStatus: true,
         };
-    
+
         try {
           const response = await api.patch(
             `/allocations/${allocation.id}/`,
@@ -220,9 +222,6 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
           Toast.show(message, toastConfig);
         }
         getAllocationsNotFinished();
-        setTimeout(() => {
-          unlockCage(allocation);
-        }, 60000);
       }
     } catch (error: any) {
       const [message, toastConfig] = generateToastConfig(

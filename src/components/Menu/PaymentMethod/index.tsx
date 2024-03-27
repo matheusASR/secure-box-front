@@ -6,13 +6,24 @@ import styles from "./styles";
 
 const PaymentMethod = () => {
   const navigation: any = useNavigation();
-  const [paymentMethod, setPaymentMethod] = useState<any>({
-    cardType: "CRÉDITO",
-    cardNumber: "3453 3738 9383 3888",
-    cardHolderName: "MATHEUS A S REGO",
-    expirationDate: "09/28",
-    cvv: "434",
-  });
+  const [paymentMethods, setPaymentMethods] = useState<any[]>([
+    {
+      cardType: "CRÉDITO",
+      cardNumber: "3453 3738 9383 3888",
+      cardHolderName: "MATHEUS A S REGO",
+      expirationDate: "09/28",
+      cvv: "434",
+      isDefault: true,
+    },
+    {
+      cardType: "CRÉDITO",
+      cardNumber: "3453 3738 9383 3888",
+      cardHolderName: "MATHEUS A S REGO",
+      expirationDate: "09/28",
+      cvv: "434",
+      isDefault: false,
+    },
+  ]);
   const [paymentMethodModalVisible, setPaymentMethodModalVisible] =
     useState(false);
 
@@ -35,30 +46,47 @@ const PaymentMethod = () => {
         <Text style={styles.title}>Forma de Pagamento</Text>
       </View>
       <View style={styles.paymentMethodContainer}>
-        {paymentMethod ? (
+        {paymentMethods.length > 0 ? (
           <>
-            <View style={styles.paymentMethodCard}>
-              <Text style={styles.cardType}>
-                {paymentMethod.cardType}
-              </Text>
-              <Text style={styles.cardNumber}>
-                {paymentMethod.cardNumber}
-              </Text>
-              <Text style={styles.expirationDate}>
-                {paymentMethod.expirationDate}
-              </Text>
-              <Text style={styles.cardHolderName}>
-                {paymentMethod.cardHolderName}
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={styles.addPaymentBtn}
-              onPress={() => setPaymentMethod(null)}
-            >
-              <Text style={styles.addPaymentBtnText}>
-                Remover Cartão de Crédito/Débito
-              </Text>
-            </TouchableOpacity>
+            {paymentMethods.map((paymentMethod, index) => (
+              <View key={index} style={styles.paymentMethodCard}>
+                <TouchableOpacity
+                  style={styles.removeCardBttn}
+                  // onPress={togglePaymentMethodModal}
+                >
+                  <Text style={styles.removeCardBttnText}>Remover cartão</Text>
+                </TouchableOpacity>
+                <Text style={styles.cardType}>{paymentMethod.cardType}</Text>
+                <Text style={styles.cardNumber}>
+                  {paymentMethod.cardNumber}
+                </Text>
+                <Text style={styles.expirationDate}>
+                  {paymentMethod.expirationDate}
+                </Text>
+                <Text style={styles.cardHolderName}>
+                  {paymentMethod.cardHolderName}
+                </Text>
+                {paymentMethod.isDefault === true ? (
+                  <>
+                    <Text style={styles.cardDefault}>Padrão</Text>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.cardDefault}>Definir como padrão</Text>                  
+                  </>
+                )}
+              </View>
+            ))}
+            {paymentMethods.length < 2 && (
+              <TouchableOpacity
+                style={styles.addPaymentBtn}
+                onPress={togglePaymentMethodModal}
+              >
+                <Text style={styles.addPaymentBtnText}>
+                  Adicionar Cartão de Crédito/Débito
+                </Text>
+              </TouchableOpacity>
+            )}
           </>
         ) : (
           <TouchableOpacity

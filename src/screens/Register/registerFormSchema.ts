@@ -11,6 +11,7 @@ export const registerFormSchema = yup.object().shape({
       "Senha deve conter pelo menos uma letra maiúscula, um número e um caracter especial")
     .min(8, "Senha deve ter no mínimo 8 caracteres"),
   address: yup.object().shape({
+    zipCode: yup.string().required("CEP é obrigatório"),
     street: yup.string().required("Rua/Avenida é obrigatória"),
     number: yup.string().required("Número é obrigatório"),
     city: yup.string().required("Cidade é obrigatória"),

@@ -12,51 +12,51 @@ const Purchases = () => {
   const [isLoading, setIsLoading] = useState(false); // Estado para controlar o indicador de loading
   const [allocationsFinished, setAllocationsFinished] = useState([]);
 
-  useEffect(() => {
-    const getAllocationsFinished = async () => {
-      setIsLoading(true); // Ativar o indicador de loading
-      try {
-        const token = await AsyncStorage.getItem("@secbox:TOKEN");
-        const responseProfile = await api.get("/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (responseProfile.status === 200) {
-          try {
-            const responseAllocations = await api.get(
-              `/allocations/${responseProfile.data.id}/userFinished`
-            );
-            if (responseAllocations.status === 200) {
-              setAllocationsFinished(responseAllocations.data);
-            }
-          } catch (error: any) {
-            Toast.show(`Não foi possível buscar compras do usuário: ${error.response.data.message}`, {
-              duration: Toast.durations.SHORT,
-              position: Toast.positions.TOP,
-              shadow: true,
-              animation: true,
-              hideOnPress: true,
-              delay: 0,
-            });
-          }
-        }
-      } catch (error: any) {
-        Toast.show(`Erro ao buscar dados do usuário: ${error.response.data.message}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
-      } finally {
-        setIsLoading(false); // Desativar o indicador de loading após a requisição ser concluída
-      }
-    };
+  // useEffect(() => {
+  //   const getAllocationsFinished = async () => {
+  //     setIsLoading(true); // Ativar o indicador de loading
+  //     try {
+  //       const token = await AsyncStorage.getItem("@secbox:TOKEN");
+  //       const responseProfile = await api.get("/profile", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+  //       if (responseProfile.status === 200) {
+  //         try {
+  //           const responseAllocations = await api.get(
+  //             `/allocations/${responseProfile.data.id}/userFinished`
+  //           );
+  //           if (responseAllocations.status === 200) {
+  //             setAllocationsFinished(responseAllocations.data);
+  //           }
+  //         } catch (error: any) {
+  //           Toast.show(`Não foi possível buscar compras do usuário: ${error.response.data.message}`, {
+  //             duration: Toast.durations.SHORT,
+  //             position: Toast.positions.TOP,
+  //             shadow: true,
+  //             animation: true,
+  //             hideOnPress: true,
+  //             delay: 0,
+  //           });
+  //         }
+  //       }
+  //     } catch (error: any) {
+  //       Toast.show(`Erro ao buscar dados do usuário: ${error.response.data.message}`, {
+  //         duration: Toast.durations.SHORT,
+  //         position: Toast.positions.TOP,
+  //         shadow: true,
+  //         animation: true,
+  //         hideOnPress: true,
+  //         delay: 0,
+  //       });
+  //     } finally {
+  //       setIsLoading(false); // Desativar o indicador de loading após a requisição ser concluída
+  //     }
+  //   };
 
-    getAllocationsFinished();
-  }, []);
+  //   getAllocationsFinished();
+  // }, []);
 
   return (
     <>
@@ -99,9 +99,9 @@ const Purchases = () => {
                 <Text style={styles.allocationData}>
                   Preço: {allocation.price}
                 </Text>
-                <TouchableOpacity style={styles.receiptBtn}>
+                {/* <TouchableOpacity style={styles.receiptBtn}>
                   <Text style={styles.receiptText}>Comprovante</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             ))}
           </View>

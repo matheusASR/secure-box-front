@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    marginTop: 30
   },
   cardType: {
     fontSize: 22,
@@ -69,6 +70,23 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 40,
     left: 20,
+  },
+  cardDefault: {
+    fontSize: 16,
+    color: colors.primary,
+    fontWeight: "bold",
+    position: "absolute",
+    bottom: 10,
+    right: 20,
+  },
+  removeCardBttn: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+  },
+  removeCardBttnText: {
+    fontSize: 16,
+    color: colors.primary,
   },
   addPaymentBtn: {
     backgroundColor: colors.primary,

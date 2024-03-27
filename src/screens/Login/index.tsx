@@ -37,12 +37,12 @@ const LoginScreen = ({ navigation }: any) => {
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={styles.container}
             >
-              <View style={styles.logoView}>
+              {/* <View style={styles.logoView}>
                 <Image
                   style={styles.logo}
                   source={require("../../../assets/Logo.png")}
                 />
-              </View>
+              </View> */}
               <Controller
                 control={control}
                 render={({ field }: any) => (

@@ -203,6 +203,25 @@ const RegisterScreen = ({ navigation }: any) => {
                 control={control}
                 render={({ field }: any) => (
                   <TextInput
+                    placeholder="CEP*"
+                    style={styles.input}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                  />
+                )}
+                name="address.zipCode"
+                rules={{ required: true }}
+                defaultValue=""
+              />
+              {errors.address?.street && (
+                <Text style={styles.errorText}>
+                  {errors.address.street.message}
+                </Text>
+              )}
+              <Controller
+                control={control}
+                render={({ field }: any) => (
+                  <TextInput
                     placeholder="Rua/Avenida*"
                     style={styles.input}
                     onChangeText={field.onChange}

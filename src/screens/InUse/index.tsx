@@ -22,7 +22,7 @@ const InUse = () => {
     allocationsNotFinished,
     handleFinishModal,
     handleCloseFinishModal,
-    showPaymentModal,
+    showFinishModal,
     allocationSelected,
     unlockCage,
     formatDatetime,
@@ -118,7 +118,7 @@ const InUse = () => {
         )}
       </ScrollView>
       <Modal
-        visible={showPaymentModal}
+        visible={showFinishModal}
         animationType="slide"
         transparent={true}
       >
