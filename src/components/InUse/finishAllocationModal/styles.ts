@@ -10,6 +10,7 @@ interface Styles {
   buttonText: TextStyle;
   qrcode: ImageStyle;
   paymentConfirmedView: ViewStyle;
+  viewBttns: ViewStyle;
 }
 
 const styles: Styles = StyleSheet.create<Styles>({
@@ -56,6 +57,12 @@ const styles: Styles = StyleSheet.create<Styles>({
     justifyContent: "center",
     paddingTop: "50%",
   },
+  viewBttns: {
+    width: "100%",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  }
 });
 
 export default styles;

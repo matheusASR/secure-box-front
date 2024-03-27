@@ -6,17 +6,21 @@ import { api } from "../services/api";
 interface InUseContextType {
   formatDateTime: (timestamp: any) => string;
   handlePayment: (finalTime: any, initialTime: any) => string;
-  showCageContent: boolean;
-  setShowCageContent: React.Dispatch<React.SetStateAction<boolean>>;
+  finalDatetime: string;
+  setFinalDatetime: React.Dispatch<React.SetStateAction<string>>;
+  price: string;
+  setPrice: React.Dispatch<React.SetStateAction<string>>;
+  showFinishContent: boolean;
+  setShowFinishContent: React.Dispatch<React.SetStateAction<boolean>>;
   getAllocationsNotFinished: () => void;
   allocationsNotFinished: any[];
   finishAllocation: (allocation: any) => void;
-  handlePaymentModal: (allocation: any) => void;
-  showPaymentModal: boolean;
+  handleFinishModal: (allocation: any) => void;
+  showFinishModal: boolean;
   allocationSelected: any;
-  handleClosePaymentModal: () => void;
+  handleCloseFinishModal: () => void;
   unlockCage: (allocation: any) => void;
-  handlePaymentConfirmed: (allocation: any) => void;
+  finishPayAllocation: (allocation: any) => void;
 }
 
 const InUseContext = createContext<any>({} as InUseContextType);
@@ -27,19 +31,27 @@ interface InUseProviderProps {
 
 const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
   const [showCageContent, setShowCageContent] = useState<boolean>(true);
-  const [allocationsNotFinished, setAllocationsNotFinished] = useState<any[]>([]);
-  const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
+  const [allocationsNotFinished, setAllocationsNotFinished] = useState<any[]>(
+    []
+  );
+  const [showFinishModal, setShowFinishModal] = useState<boolean>(false);
   const [allocationSelected, setAllocationSelected] = useState<any>({});
+  const [finalDatetime, setFinalDatetime] = useState("");
+  const [price, setPrice] = useState("");
+  const [userId, setUserId] = useState("")
 
   const generateToastConfig = (message: any) => {
-    return [message, {
-      duration: Toast.durations.SHORT,
-      position: Toast.positions.TOP,
-      shadow: true,
-      animation: true,
-      hideOnPress: true,
-      delay: 0,
-    }];
+    return [
+      message,
+      {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      },
+    ];
   };
 
   const formatDateTime = (timestamp: any) => {
@@ -60,15 +72,25 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
     const parseDate = (dateTimeString: any): any => {
       const [day, month, year, hour, minute, second] =
         dateTimeString.split(/[\s/,:]+/);
-      return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hour), parseInt(minute), parseInt(second));
+      return new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+        parseInt(day),
+        parseInt(hour),
+        parseInt(minute),
+        parseInt(second)
+      );
     };
-  
+
     const differenceInMinutes: any =
-      Math.abs(parseDate(finalTime).getTime() - parseDate(initialTime).getTime()) / (1000 * 60);
-  
+      Math.abs(
+        parseDate(finalTime).getTime() - parseDate(initialTime).getTime()
+      ) /
+      (1000 * 60);
+
     const basePrice: any = 5;
     const additionalHourPrice: any = 2.5;
-  
+
     if (differenceInMinutes <= 60) {
       return `R$${basePrice.toFixed(2)}`;
     } else {
@@ -76,7 +98,7 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
       const totalPrice: any = basePrice + additionalHours * additionalHourPrice;
       return `R$${totalPrice.toFixed(2)}`;
     }
-  };  
+  };
 
   const getAllocationsNotFinished = async () => {
     try {
@@ -88,6 +110,7 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
       });
       if (responseProfile.status === 200) {
         try {
+          setUserId(responseProfile.data.id)
           const responseAllocations = await api.get(
             `/allocations/${responseProfile.data.id}/userNotFinished`
           );
@@ -109,18 +132,22 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
     }
   };
 
-  const finishAllocation = async (allocation: any) => {
-    const finalDatetime = Date.now();
-    const finalDatetimeFormatted = formatDateTime(finalDatetime);
-    const timeUsed = handlePayment(finalDatetimeFormatted, allocation.initialDatetime)
-    const formData = {
-      finalDatetime: finalDatetimeFormatted,
-      price: timeUsed,
-      pressed: true,
+  const handleFinishModal = (allocation: any) => {
+    setShowFinishModal(true);
+    setAllocationSelected(allocation);
+  };
+
+  const handleCloseFinishModal = () => {
+    setShowFinishModal(false);
+  };
+
+  const unlockCage = async (allocation: any) => {
+    const allocationData = {
+      finished: true,
     };
 
     try {
-      await api.patch(`/allocations/${allocation.id}/`, formData);
+      await api.patch(`/allocations/${allocation.id}/`, allocationData);
     } catch (error: any) {
       const [message, toastConfig] = generateToastConfig(
         `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
@@ -128,78 +155,74 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
       Toast.show(message, toastConfig);
     }
 
-    getAllocationsNotFinished();
-  };
-
-  const handlePaymentModal = (allocation: any) => {
-    setShowPaymentModal(true);
-    setAllocationSelected(allocation);
-  };
-
-  const handleClosePaymentModal = () => {
-    setShowPaymentModal(false);
-  };
-
-  const unlockCage = async (allocation: any) => {
-    const formData = {
-      unlocked: true,
+    const cageData = {
+      availability: true,
+      open: false,
     };
 
     try {
-      await api.patch(`/allocations/${allocation.id}/`, formData);
+      await api.patch(`/cages/${allocation.cageId}/`, cageData);
     } catch (error: any) {
       const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao abrir a gaiola: ${error.response.data.message}`
+        `Ocorreu um erro ao disponibilizar gaiola: ${error.response.data.message}`
       );
-      Toast.show(message, toastConfig);
       Toast.show(message, toastConfig);
     }
 
     getAllocationsNotFinished();
-
-    setTimeout(async () => {
-      const allocationData = {
-        finished: true,
-      };
-
-      try {
-        await api.patch(`/allocations/${allocation.id}/`, allocationData);
-      } catch (error: any) {
-        const [message, toastConfig] = generateToastConfig(
-          `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
-        );
-        Toast.show(message, toastConfig);
-      }
-
-      const cageData = {
-        availability: true,
-      };
-
-      try {
-        await api.patch(`/cages/${allocation.cageId}/`, cageData);
-      } catch (error: any) {
-        const [message, toastConfig] = generateToastConfig(
-          `Ocorreu um erro ao disponibilizar gaiola: ${error.response.data.message}`
-        );
-        Toast.show(message, toastConfig);
-      }
-      getAllocationsNotFinished();
-    }, 60000);
   };
 
-  const handlePaymentConfirmed = async (allocation: any) => {
-    const formData = {
-      paymentStatus: true,
-    };
-
+  const finishPayAllocation = async (
+    allocation: any,
+    finalDatetime: any,
+    price: any
+  ) => {
     try {
-      const response = await api.patch(`/allocations/${allocation.id}/`, formData);
+      const patchData = {
+        price: price
+      }
+      const response = await api.patch(`/wallets/${userId}`, patchData)
       if (response.status === 200) {
-        const [message, toastConfig] = generateToastConfig(
-          "Pagamento concluído! Você já pode destravar a gaiola."
-        );
-        Toast.show(message, toastConfig);
-        handleClosePaymentModal()
+        const data = {
+          finalDatetime: finalDatetime,
+          price: price,
+        };
+    
+        try {
+          await api.patch(`/allocations/${allocation.id}/`, data);
+        } catch (error: any) {
+          const [message, toastConfig] = generateToastConfig(
+            `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
+          );
+          Toast.show(message, toastConfig);
+        }
+    
+        const formData = {
+          paymentStatus: true,
+        };
+    
+        try {
+          const response = await api.patch(
+            `/allocations/${allocation.id}/`,
+            formData
+          );
+          if (response.status === 200) {
+            const [message, toastConfig] = generateToastConfig(
+              "Pagamento concluído! Você já pode destravar a gaiola."
+            );
+            Toast.show(message, toastConfig);
+            handleCloseFinishModal();
+          }
+        } catch (error: any) {
+          const [message, toastConfig] = generateToastConfig(
+            `Ocorreu um erro no pagamento da alocação: ${error.response.data.message}`
+          );
+          Toast.show(message, toastConfig);
+        }
+        getAllocationsNotFinished();
+        setTimeout(() => {
+          unlockCage(allocation);
+        }, 60000);
       }
     } catch (error: any) {
       const [message, toastConfig] = generateToastConfig(
@@ -207,8 +230,6 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
       );
       Toast.show(message, toastConfig);
     }
-
-    getAllocationsNotFinished();
   };
 
   return (
@@ -220,13 +241,16 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
         setShowCageContent,
         getAllocationsNotFinished,
         allocationsNotFinished,
-        finishAllocation,
-        handlePaymentModal,
-        showPaymentModal,
+        handleFinishModal,
+        showFinishModal,
         allocationSelected,
-        handleClosePaymentModal,
+        handleCloseFinishModal,
         unlockCage,
-        handlePaymentConfirmed
+        finishPayAllocation,
+        setFinalDatetime,
+        finalDatetime,
+        price,
+        setPrice,
       }}
     >
       {children}
@@ -235,4 +259,3 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
 };
 
 export { InUseProvider, InUseContext };
-

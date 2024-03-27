@@ -20,19 +20,19 @@ const CageList = () => {
 
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await getCages();
-      } catch (error) {
-        console.error("Erro ao obter gaiolas:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       await getCages();
+  //     } catch (error) {
+  //       console.error("Erro ao obter gaiolas:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const renderCageCard = (cage: any) => {
     return (

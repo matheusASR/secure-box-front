@@ -124,6 +124,7 @@ const HomeProvider = ({ children }: any) => {
         try {
           const payload = {
             availability: false,
+            open: true
           };
           await api.patch(`/cages/${cageId}`, payload);
         } catch (error: any) {

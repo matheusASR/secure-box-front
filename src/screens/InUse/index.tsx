@@ -9,43 +9,48 @@ import {
   ActivityIndicator,
 } from "react-native";
 import ScreenPatternStack from "../../components/ScreenPattern/ScreenPatternStack";
-import ModalPayment from "../../components/InUse/CagePaymentModal";
+import ModalPayment from "../../components/InUse/finishAllocationModal";
 import { InUseContext } from "../../providers/inUseContext";
 import styles from "./styles";
 import { colors } from "../../styles";
-import { HomeContext } from "../../providers/homeContext"
+import { HomeContext } from "../../providers/homeContext";
 
 const InUse = () => {
   const [loading, setLoading] = useState(false);
   const {
     getAllocationsNotFinished,
     allocationsNotFinished,
-    finishAllocation,
-    handlePaymentModal,
+    handleFinishModal,
+    handleCloseFinishModal,
     showPaymentModal,
     allocationSelected,
-    handleClosePaymentModal,
     unlockCage,
-    handlePaymentConfirmed,
+    formatDatetime,
+    handlePayment,
+    finishPayAllocation,
+    price,
+    setPrice,
+    finalDatetime,
+    setFinalDatetime,
   } = useContext(InUseContext);
-  const { handleStartAllocation } = useContext(HomeContext)
+  const { handleStartAllocation } = useContext(HomeContext);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true); 
-      await getAllocationsNotFinished();
-      setLoading(false); 
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     await getAllocationsNotFinished();
+  //     setLoading(false);
+  //   };
 
-    fetchData();
-  }, [handleStartAllocation]);
+  //   fetchData();
+  // }, [handleStartAllocation]);
 
   return (
     <ScreenPatternStack>
       <ScrollView style={styles.container}>
         {loading ? (
           <View style={styles.loadingView}>
-            <ActivityIndicator size="large" color={colors.primary} /> 
+            <ActivityIndicator size="large" color={colors.primary} />
           </View>
         ) : (
           <>
@@ -64,7 +69,7 @@ const InUse = () => {
                     </Text>
                     {allocation.paymentStatus === true ? (
                       <>
-                        {allocation.unlocked === true ? (
+                        {allocation.finished === true ? (
                           <View style={styles.unlockedCageView}>
                             <Text style={styles.allocationText}>
                               Gaiola destravada com sucesso.
@@ -78,7 +83,9 @@ const InUse = () => {
                             style={styles.unlockBtn}
                             onPress={() => unlockCage(allocation)}
                           >
-                            <Text style={styles.buttonUnlockText}>Destravar</Text>
+                            <Text style={styles.buttonUnlockText}>
+                              Destravar
+                            </Text>
                             <Image
                               style={styles.padlock}
                               source={require("../../../assets/OpenedPadlock.png")}
@@ -88,37 +95,19 @@ const InUse = () => {
                       </>
                     ) : (
                       <>
-                        {allocation.pressed ? (
-                          <View style={styles.finishContent}>
-                            <Text style={styles.allocationText}>
-                              Horário de início: {allocation.initialDatetime}
-                            </Text>
-                            <Text style={styles.allocationText}>
-                              Horário final: {allocation.finalDatetime}
-                            </Text>
-                            <Text style={styles.allocationText}>
-                              Preço a pagar: {allocation.price}
-                            </Text>
-                            <TouchableOpacity
-                              style={styles.paymentBtn}
-                              onPress={() => handlePaymentModal(allocation)}
-                            >
-                              <Text style={styles.buttonText}>Pagar</Text>
-                            </TouchableOpacity>
-                          </View>
-                        ) : (
-                          <>
-                            <Text style={styles.allocationText}>
-                              Horário de início: {allocation.initialDatetime}
-                            </Text>
-                            <TouchableOpacity
-                              style={styles.finishBtn}
-                              onPress={() => finishAllocation(allocation)}
-                            >
-                              <Text style={styles.buttonText}>Finalizar</Text>
-                            </TouchableOpacity>
-                          </>
-                        )}
+                        <Text style={styles.allocationText}>
+                          Horário de início: {allocation.initialDatetime}
+                        </Text>
+                        <TouchableOpacity
+                          style={styles.finishBtn}
+                          onPress={() => {
+                            setFinalDatetime(formatDatetime(Date.now()))
+                            setPrice(handlePayment(formatDatetime(Date.now()) - allocation.initialDatetime))
+                            handleFinishModal()
+                          }}
+                        >
+                          <Text style={styles.buttonText}>Finalizar/Pagar</Text>
+                        </TouchableOpacity>
                       </>
                     )}
                   </View>
@@ -135,8 +124,10 @@ const InUse = () => {
       >
         <ModalPayment
           allocation={allocationSelected}
-          onClose={handleClosePaymentModal}
-          handlePaymentConfirmed={handlePaymentConfirmed}
+          onClose={handleCloseFinishModal}
+          finishPayAllocation={finishPayAllocation}
+          price={price}
+          finalDatetime={finalDatetime}
         />
       </Modal>
     </ScreenPatternStack>
@@ -144,4 +135,3 @@ const InUse = () => {
 };
 
 export default InUse;
-
