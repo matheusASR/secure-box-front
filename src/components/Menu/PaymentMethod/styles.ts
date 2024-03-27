@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   paymentMethodCard: {
-    backgroundColor: "#CCE5FF",
+    backgroundColor: colors.secondary,
     width: "90%",
     padding: 10,
     borderRadius: 15,
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     fontWeight: "bold",
     bottom: 150,
-    fontFamily: "Courier New",
     left: 20,
   },
   cardNumber: {
@@ -53,7 +52,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     fontWeight: "bold",
     bottom: 110,
-    fontFamily: "Courier New",
     left: 20,
   },
   expirationDate: {
@@ -61,7 +59,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
     position: "absolute",
     fontWeight: "bold",
-    fontFamily: "Courier New",
     bottom: 80,
     left: 20,
   },
@@ -70,7 +67,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: "bold",
     position: "absolute",
-    fontFamily: "Courier New",
     bottom: 40,
     left: 20,
   },

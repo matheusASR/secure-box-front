@@ -12,31 +12,31 @@ const HomeScreen = ({ navigation }: any) => {
     useContext<any>(HomeContext);
   const { setLogged } = useContext(LoginContext);
 
-  // useEffect(() => {
-  //   const checkToken = async () => {
-  //     try {
-  //       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-  //       if (!token) {
-  //         setLogged(false);
-  //       }
-  //     } catch (error: any) {
-  //       Toast.show(
-  //         `Erro ao verificar token do usuário: ${error.response.data.message}`,
-  //         {
-  //           duration: Toast.durations.SHORT,
-  //           position: Toast.positions.TOP,
-  //           shadow: true,
-  //           animation: true,
-  //           hideOnPress: true,
-  //           delay: 0,
-  //         }
-  //       );
-  //       setLogged(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem("@secbox:TOKEN");
+        if (!token) {
+          setLogged(false);
+        }
+      } catch (error: any) {
+        Toast.show(
+          `Erro ao verificar token do usuário: ${error.response.data.message}`,
+          {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.TOP,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
+          }
+        );
+        setLogged(false);
+      }
+    };
 
-  //   checkToken();
-  // }, []);
+    checkToken();
+  }, []);
 
   return (
     <>

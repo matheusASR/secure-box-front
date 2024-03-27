@@ -60,14 +60,14 @@ const MyAccount = () => {
       <ScrollView style={styles.container}>
         <View style={styles.dataContainer}>
           <View style={styles.dataContainerTop}>
-            <Text style={styles.titleData}>Dados Pessoais:</Text>
+            <Text style={styles.titleData}>DADOS PESSOAIS:</Text>
             <Text style={styles.data}>Nome: {user.name}</Text>
             <Text style={styles.data}>Email: {user.email}</Text>
             <Text style={styles.data}>Telefone: {user.cel}</Text>
             <Text style={styles.data}>
               Data de Nascimento: {user.birthdate}
             </Text>
-            <Text style={styles.titleDataAddress}>Endereço:</Text>
+            <Text style={styles.titleDataAddress}>ENDEREÇO:</Text>
             <Text style={styles.data}>
               Rua/Avenida: {user.address && user.address.street}
             </Text>
