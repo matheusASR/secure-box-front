@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "./styles";
 
-const finishAllocationModal = ({
+const FinishAllocationModal = ({
   allocation,
   onClose,
   finishPayAllocation,
@@ -48,4 +48,4 @@ const finishAllocationModal = ({
   );
 };
 
-export default finishAllocationModal;
+export default FinishAllocationModal;

@@ -1,34 +1,162 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PaymentMethodModal from "./PaymentMethodModal";
 import styles from "./styles";
+import Toast from "react-native-root-toast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { api } from "../../../services/api";
 
 const PaymentMethod = () => {
   const navigation: any = useNavigation();
-  const [paymentMethods, setPaymentMethods] = useState<any[]>([
-    {
-      cardType: "CRÉDITO",
-      cardNumber: "3453 3738 9383 3888",
-      cardHolderName: "MATHEUS A S REGO",
-      expirationDate: "09/28",
-      cvv: "434",
-      isDefault: true,
-    },
-    {
-      cardType: "CRÉDITO",
-      cardNumber: "3453 3738 9383 3888",
-      cardHolderName: "MATHEUS A S REGO",
-      expirationDate: "09/28",
-      cvv: "434",
-      isDefault: false,
-    },
-  ]);
+  // const [isLoading, setIsLoading] = useState(false);
+  const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
+  const [userId, setUserId] = useState("");
+
+  const getUserPaymentMethods = async () => {
+    try {
+      const token = await AsyncStorage.getItem("@secbox:TOKEN");
+      const responseProfile = await api.get("/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (responseProfile.status === 200) {
+        setUserId(responseProfile.data.id);
+        setPaymentMethods(responseProfile.data.paymentMethods);
+      }
+    } catch (error: any) {
+      Toast.show(
+        `Erro ao buscar dados do usuário: ${error.response.data.message}`,
+        {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        }
+      );
+    } 
+  };
+
+  useEffect(() => {
+    getUserPaymentMethods();
+  }, []);
+
   const [paymentMethodModalVisible, setPaymentMethodModalVisible] =
     useState(false);
 
   const togglePaymentMethodModal = () => {
     setPaymentMethodModalVisible(!paymentMethodModalVisible);
+  };
+
+  const addPaymentMethod = async (data: any) => {
+    try {
+      const token = await AsyncStorage.getItem("@secbox:TOKEN");
+      const response = await api.post(`/paymentMethods/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data,
+      });
+      if (response.status === 201) {
+        Toast.show("Método de pagamento adicionado com sucesso!", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+        getUserPaymentMethods();
+        togglePaymentMethodModal()
+      }
+    } catch (error: any) {
+      Toast.show(
+        `Erro ao criar método de pagamento: ${error.response.data.message}`,
+        {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        }
+      );
+    }
+  };
+
+  const removePaymentMethod = async (id: any) => {
+    try {
+      const token = await AsyncStorage.getItem("@secbox:TOKEN");
+      const response = await api.post(`/paymentMethods/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      if (response.status === 204) {
+        Toast.show("Método de pagamento excluído com sucesso!", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+        getUserPaymentMethods();
+      }
+    } catch (error: any) {
+      Toast.show(
+        `Erro ao deletar método de pagamento: ${error.response.data.message}`,
+        {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        }
+      );
+    } 
+  };
+
+  const patternPaymentMethod = async (id: any) => {
+    const payload = {
+      isDefault: true
+    }
+    try {
+      const token = await AsyncStorage.getItem("@secbox:TOKEN");
+      const response = await api.post(`/paymentMethods/${id}/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        payload
+      });
+      if (response.status === 204) {
+        Toast.show("Método de pagamento definido como padrão!", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
+        getUserPaymentMethods();
+      }
+    } catch (error: any) {
+      Toast.show(
+        `Erro ao definir método de pagamento como padrão: ${error.response.data.message}`,
+        {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        }
+      );
+    } 
   };
 
   return (
@@ -48,11 +176,11 @@ const PaymentMethod = () => {
       <View style={styles.paymentMethodContainer}>
         {paymentMethods.length > 0 ? (
           <>
-            {paymentMethods.map((paymentMethod, index) => (
+            {paymentMethods.map((paymentMethod: any, index: any) => (
               <View key={index} style={styles.paymentMethodCard}>
                 <TouchableOpacity
                   style={styles.removeCardBttn}
-                  // onPress={togglePaymentMethodModal}
+                  onPress={removePaymentMethod(paymentMethod.id)}
                 >
                   <Text style={styles.removeCardBttnText}>Remover cartão</Text>
                 </TouchableOpacity>
@@ -72,7 +200,11 @@ const PaymentMethod = () => {
                   </>
                 ) : (
                   <>
-                    <Text style={styles.cardDefault}>Definir como padrão</Text>                  
+                    <TouchableOpacity onPress={patternPaymentMethod(paymentMethod.id)}>
+                      <Text style={styles.cardDefault}>
+                        Definir como padrão
+                      </Text>
+                    </TouchableOpacity>
                   </>
                 )}
               </View>
@@ -102,6 +234,7 @@ const PaymentMethod = () => {
       <PaymentMethodModal
         isVisible={paymentMethodModalVisible}
         onClose={togglePaymentMethodModal}
+        addPaymentMethod={addPaymentMethod}
       />
     </>
   );

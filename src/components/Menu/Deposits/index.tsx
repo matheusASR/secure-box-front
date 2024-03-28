@@ -7,13 +7,13 @@ import Toast from "react-native-root-toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { colors } from "../../../styles";
 
-const Purchases = () => {
+const Deposits = () => {
   const navigation: any = useNavigation();
   const [isLoading, setIsLoading] = useState(false); 
-  const [allocationsFinished, setAllocationsFinished] = useState([]);
+  const [userPayments, setUserPayments] = useState([]);
 
   useEffect(() => {
-    const getAllocationsFinished = async () => {
+    const getUserPayments = async () => {
       setIsLoading(true); 
       try {
         const token = await AsyncStorage.getItem("@secbox:TOKEN");
@@ -24,14 +24,14 @@ const Purchases = () => {
         });
         if (responseProfile.status === 200) {
           try {
-            const responseAllocations = await api.get(
-              `/allocations/${responseProfile.data.id}/userFinished`
+            const responseUserPayments = await api.get(
+              `/payments/${responseProfile.data.id}/`
             );
-            if (responseAllocations.status === 200) {
-              setAllocationsFinished(responseAllocations.data);
+            if (responseUserPayments.status === 200) {
+              setUserPayments(responseUserPayments.data);
             }
           } catch (error: any) {
-            Toast.show(`Não foi possível buscar compras do usuário: ${error.response.data.message}`, {
+            Toast.show(`Não foi possível buscar depósitos do usuário: ${error.response.data.message}`, {
               duration: Toast.durations.SHORT,
               position: Toast.positions.TOP,
               shadow: true,
@@ -55,7 +55,7 @@ const Purchases = () => {
       }
     };
 
-    getAllocationsFinished();
+    getUserPayments();
   }, []);
 
   return (
@@ -77,27 +77,27 @@ const Purchases = () => {
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.primary} />
           </View>
-        ) : allocationsFinished.length === 0 ? (
+        ) : userPayments.length === 0 ? (
           <View style={styles.noContent}>
-            <Text style={styles.noPurchasesText}>
-              Nenhuma compra/alocação realizada até o momento.
+            <Text style={styles.noDepositsText}>
+              Nenhum depósito realizado até o momento.
             </Text>
           </View>
         ) : (
-          <View style={styles.purchasesList}>
-            {allocationsFinished.map((allocation: any) => (
-              <View key={allocation.id} style={styles.allocationContainer}>
-                <Text style={styles.allocationTitle}>
-                  Alocação {allocation.id}
+          <View style={styles.depositsList}>
+            {userPayments.map((userPayment: any) => (
+              <View key={userPayment.id} style={styles.userPaymentContainer}>
+                <Text style={styles.userPaymentTitle}>
+                  Pagamento ID: {userPayment.id}
                 </Text>
-                <Text style={styles.allocationData}>
-                  Início: {allocation.initialDatetime}
+                <Text style={styles.userPaymentData}>
+                  Valor: {userPayment.price}
                 </Text>
-                <Text style={styles.allocationData}>
-                  Fim: {allocation.finalDatetime}
+                <Text style={styles.userPaymentData}>
+                  Data: {userPayment.paymentDate}
                 </Text>
-                <Text style={styles.allocationData}>
-                  Preço: {allocation.price}
+                <Text style={styles.userPaymentData}>
+                  Tipo de pagamento: {userPayment.type}
                 </Text>
                 {/* <TouchableOpacity style={styles.receiptBtn}>
                   <Text style={styles.receiptText}>Comprovante</Text>
@@ -111,5 +111,4 @@ const Purchases = () => {
   );
 };
 
-export default Purchases;
-
+export default Deposits;

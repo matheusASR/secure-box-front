@@ -69,6 +69,9 @@ const MyAccount = () => {
             </Text>
             <Text style={styles.titleDataAddress}>ENDEREÇO:</Text>
             <Text style={styles.data}>
+              CEP: {user.address && user.address.zipCode}
+            </Text>
+            <Text style={styles.data}>
               Rua/Avenida: {user.address && user.address.street}
             </Text>
             <Text style={styles.data}>

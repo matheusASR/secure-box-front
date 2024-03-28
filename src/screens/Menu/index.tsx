@@ -9,6 +9,7 @@ import Notifications from "../../components/Menu/Notifications";
 import Support from "../../components/Menu/Support";
 import ScreenPatternStack from "../../components/ScreenPattern/ScreenPatternStack";
 import PaymentMethod from "../../components/Menu/PaymentMethod";
+import Deposits from "../../components/Menu/Deposits";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ const MenuScreen = () => {
         <Stack.Screen name="MainMenu" component={MainMenu} />
         <Stack.Screen name="MyAccount" component={MyAccount} />
         <Stack.Screen name="PaymentMethods" component={PaymentMethod} />
+        <Stack.Screen name="Deposits" component={Deposits} />
         <Stack.Screen name="Purchases" component={Purchases} />
         <Stack.Screen name="Terms" component={Terms} />
         <Stack.Screen name="Policies" component={Policies} />

@@ -142,36 +142,39 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
   };
 
   const unlockCage = async (allocation: any) => {
-    setTimeout(async () => {
-      const allocationData = {
-        finished: true,
-      };
+    const [message, toastConfig] = generateToastConfig(
+      "Gaiola destravada com sucesso! Você já pode retirar seus pertences."
+    );
+    Toast.show(message, toastConfig);
 
-      try {
-        await api.patch(`/allocations/${allocation.id}/`, allocationData);
-      } catch (error: any) {
-        const [message, toastConfig] = generateToastConfig(
-          `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
-        );
-        Toast.show(message, toastConfig);
-      }
+    const allocationData = {
+      finished: true,
+    };
 
-      const cageData = {
-        availability: true,
-        open: false,
-      };
+    try {
+      await api.patch(`/allocations/${allocation.id}/`, allocationData);
+    } catch (error: any) {
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
+      );
+      Toast.show(message, toastConfig);
+    }
 
-      try {
-        await api.patch(`/cages/${allocation.cageId}/`, cageData);
-      } catch (error: any) {
-        const [message, toastConfig] = generateToastConfig(
-          `Ocorreu um erro ao disponibilizar gaiola: ${error.response.data.message}`
-        );
-        Toast.show(message, toastConfig);
-      }
+    const cageData = {
+      availability: true,
+      open: false,
+    };
 
-      getAllocationsNotFinished();
-    }, 60000);
+    try {
+      await api.patch(`/cages/${allocation.cageId}/`, cageData);
+    } catch (error: any) {
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao disponibilizar gaiola: ${error.response.data.message}`
+      );
+      Toast.show(message, toastConfig);
+    }
+
+    getAllocationsNotFinished();
   };
 
   const finishPayAllocation = async (

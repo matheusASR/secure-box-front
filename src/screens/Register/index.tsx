@@ -44,40 +44,29 @@ const RegisterScreen = ({ navigation }: any) => {
   const onSubmit = async (data: any) => {
     data.email = data.email.toLowerCase();
 
-    console.log(data)
+    try {
+      const response = await api.post("/users", data);
+      if (response.status === 201) {
+        const [message, toastConfig] = generateToastConfig(
+          "Cadastro realizado com sucesso! Você será redirecionado."
+        );
+        Toast.show(message, toastConfig);
 
-    const [message, toastConfig] = generateToastConfig(
-      "Cadastro realizado com sucesso! Você será redirecionado."
-    );
-    Toast.show(message, toastConfig);
-
-    setTimeout(() => {
-      navigation.navigate("Login");
-    }, 2000);
-
-    // try {
-    //   const response = await api.post("/users", data);
-    //   if (response.status === 201) {
-    //     const [message, toastConfig] = generateToastConfig(
-    //       "Cadastro realizado com sucesso! Você será redirecionado."
-    //     );
-    //     Toast.show(message, toastConfig);
-
-    //     setTimeout(() => {
-    //       navigation.navigate("Login");
-    //     }, 2000);
-    //   } else {
-    //     const [message, toastConfig] = generateToastConfig(
-    //       "Erro ao cadastrar usuário. Verifique os dados e tente novamente."
-    //     );
-    //     Toast.show(message, toastConfig);
-    //   }
-    // } catch (error: any) {
-    //   const [message, toastConfig] = generateToastConfig(
-    //     `Ocorreu um erro ao cadastrar o usuário: ${error}`
-    //   );
-    //   Toast.show(message, toastConfig);
-    // }
+        setTimeout(() => {
+          navigation.navigate("Login");
+        }, 2000);
+      } else {
+        const [message, toastConfig] = generateToastConfig(
+          "Erro ao cadastrar usuário. Verifique os dados e tente novamente."
+        );
+        Toast.show(message, toastConfig);
+      }
+    } catch (error: any) {
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao cadastrar o usuário: ${error}`
+      );
+      Toast.show(message, toastConfig);
+    }
   };
 
   return (

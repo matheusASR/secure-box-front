@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import ScreenPatternStack from "../../components/ScreenPattern/ScreenPatternStack";
-import ModalPayment from "../../components/InUse/finishAllocationModal";
+import FinishAllocationModal from "../../components/InUse/FinishAllocationModal";
 import { InUseContext } from "../../providers/inUseContext";
 import styles from "./styles";
 import { colors } from "../../styles";
@@ -35,15 +35,15 @@ const InUse = () => {
   } = useContext(InUseContext);
   const { handleStartAllocation } = useContext(HomeContext);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setLoading(true);
-  //     await getAllocationsNotFinished();
-  //     setLoading(false);
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await getAllocationsNotFinished();
+      setLoading(false);
+    };
 
-  //   fetchData();
-  // }, [handleStartAllocation]);
+    fetchData();
+  }, [handleStartAllocation]);
 
   return (
     <ScreenPatternStack>
@@ -68,31 +68,16 @@ const InUse = () => {
                       Gaiola {allocation.cageId}
                     </Text>
                     {allocation.paymentStatus === true ? (
-                      <>
-                        {allocation.finished === true ? (
-                          <View style={styles.unlockedCageView}>
-                            <Text style={styles.allocationText}>
-                              Gaiola destravada com sucesso.
-                            </Text>
-                            <Text style={styles.allocationText}>
-                              Você já pode retirar seus pertences!
-                            </Text>
-                          </View>
-                        ) : (
-                          <TouchableOpacity
-                            style={styles.unlockBtn}
-                            onPress={() => unlockCage(allocation)}
-                          >
-                            <Text style={styles.buttonUnlockText}>
-                              Destravar
-                            </Text>
-                            <Image
-                              style={styles.padlock}
-                              source={require("../../../assets/OpenedPadlock.png")}
-                            />
-                          </TouchableOpacity>
-                        )}
-                      </>
+                      <TouchableOpacity
+                        style={styles.unlockBtn}
+                        onPress={() => unlockCage(allocation)}
+                      >
+                        <Text style={styles.buttonUnlockText}>Destravar</Text>
+                        <Image
+                          style={styles.padlock}
+                          source={require("../../../assets/OpenedPadlock.png")}
+                        />
+                      </TouchableOpacity>
                     ) : (
                       <>
                         <Text style={styles.allocationText}>
@@ -101,9 +86,14 @@ const InUse = () => {
                         <TouchableOpacity
                           style={styles.finishBtn}
                           onPress={() => {
-                            setFinalDatetime(formatDatetime(Date.now()))
-                            setPrice(handlePayment(formatDatetime(Date.now()) - allocation.initialDatetime))
-                            handleFinishModal()
+                            setFinalDatetime(formatDatetime(Date.now()));
+                            setPrice(
+                              handlePayment(
+                                formatDatetime(Date.now()) -
+                                  allocation.initialDatetime
+                              )
+                            );
+                            handleFinishModal();
                           }}
                         >
                           <Text style={styles.buttonText}>Finalizar/Pagar</Text>
@@ -117,12 +107,8 @@ const InUse = () => {
           </>
         )}
       </ScrollView>
-      <Modal
-        visible={showFinishModal}
-        animationType="slide"
-        transparent={true}
-      >
-        <ModalPayment
+      <Modal visible={showFinishModal} animationType="slide" transparent={true}>
+        <FinishAllocationModal
           allocation={allocationSelected}
           onClose={handleCloseFinishModal}
           finishPayAllocation={finishPayAllocation}

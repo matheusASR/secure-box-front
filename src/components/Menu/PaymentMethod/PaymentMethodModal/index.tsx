@@ -13,11 +13,19 @@ import {
 } from "react-native";
 import styles from "./styles";
 
-const PaymentMethodModal = ({ isVisible, onClose }: any) => {
+const PaymentMethodModal = ({ isVisible, onClose, addPaymentMethod }: any) => {
   const [cardNumber, setCardNumber] = useState("");
   const [cardHolderName, setCardHolderName] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
   const [cvv, setCvv] = useState("");
+
+  const data = {
+    cardNumber: cardNumber,
+    cardHolderName: cardHolderName,
+    expirationDate: expirationDate,
+    cvv: cvv,
+    cardType: "Crédito"
+  }
 
   return (
     <Modal
@@ -74,7 +82,7 @@ const PaymentMethodModal = ({ isVisible, onClose }: any) => {
             <View style={styles.viewBtns}>
               <TouchableOpacity
                 style={styles.saveBtn}
-                onPress={() => console.log("Adicionar")}
+                onPress={addPaymentMethod(data)}
               >
                 <Text style={styles.saveBtnText}>Adicionar</Text>
               </TouchableOpacity>

@@ -21,6 +21,7 @@ const EditProfileModal = ({ isVisible, onClose, user }: any) => {
   const [email, setEmail] = useState(user.email);
   const [cel, setCel] = useState(user.cel);
   const [birthdate, setBirthdate] = useState(user.birthdate);
+  const [zipCode, setZipCode] = useState(user.address.zipCode);
   const [street, setStreet] = useState(user.address.street);
   const [number, setNumber] = useState(user.address.number);
   const [city, setCity] = useState(user.address.city);
@@ -34,6 +35,7 @@ const EditProfileModal = ({ isVisible, onClose, user }: any) => {
       cel: cel,
       birthdate: birthdate,
       address: {
+        zipCode: zipCode,
         street: street,
         number: number,
         city: city,
@@ -127,6 +129,14 @@ const EditProfileModal = ({ isVisible, onClose, user }: any) => {
               />
 
               <Text style={styles.title}>Endereço:</Text>
+
+              <Text style={styles.label}>CEP:</Text>
+              <TextInput
+                placeholder="CEP"
+                value={zipCode}
+                onChangeText={setZipCode}
+                style={styles.input}
+              />
 
               <Text style={styles.label}>Rua/Avenida:</Text>
               <TextInput
