@@ -90,7 +90,7 @@ const PaymentMethod = () => {
   const removePaymentMethod = async (id: any) => {
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const response = await api.post(`/paymentMethods/${id}`, {
+      const response = await api.delete(`/paymentMethods/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -127,7 +127,7 @@ const PaymentMethod = () => {
     }
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const response = await api.post(`/paymentMethods/${id}/${userId}`, {
+      const response = await api.patch(`/paymentMethods/${id}/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -180,7 +180,7 @@ const PaymentMethod = () => {
               <View key={index} style={styles.paymentMethodCard}>
                 <TouchableOpacity
                   style={styles.removeCardBttn}
-                  onPress={removePaymentMethod(paymentMethod.id)}
+                  onPress={() => removePaymentMethod(paymentMethod.id)}
                 >
                   <Text style={styles.removeCardBttnText}>Remover cartão</Text>
                 </TouchableOpacity>
@@ -200,7 +200,7 @@ const PaymentMethod = () => {
                   </>
                 ) : (
                   <>
-                    <TouchableOpacity onPress={patternPaymentMethod(paymentMethod.id)}>
+                    <TouchableOpacity onPress={() => patternPaymentMethod(paymentMethod.id)}>
                       <Text style={styles.cardDefault}>
                         Definir como padrão
                       </Text>

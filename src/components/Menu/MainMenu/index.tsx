@@ -25,6 +25,7 @@ const MainMenu = () => {
         });
         if (response.status === 200) {
           setUser(response.data);
+          console.log(response.data)
         }
       } catch (error: any) {
         Toast.show(`Erro ao buscar dados do usuário: ${error.response.data.message}`, {
@@ -60,6 +61,10 @@ const MainMenu = () => {
         />
         <Text style={styles.fullName}>{user.name}</Text>
         <Text style={styles.email}>{user.email}</Text>
+        {user.wallet && <Text style={styles.email}>Saldo: {user.wallet.balance}</Text>}
+        <TouchableOpacity>
+          <Text>Depositar</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity

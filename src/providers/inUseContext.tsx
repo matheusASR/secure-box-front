@@ -38,7 +38,7 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
   const [allocationSelected, setAllocationSelected] = useState<any>({});
   const [finalDatetime, setFinalDatetime] = useState("");
   const [price, setPrice] = useState("");
-  const [userId, setUserId] = useState("");
+  const [user, setUser] = useState<any>({});
 
   const generateToastConfig = (message: any) => {
     return [
@@ -110,9 +110,9 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
       });
       if (responseProfile.status === 200) {
         try {
-          setUserId(responseProfile.data.id);
+          setUser(responseProfile.data);
           const responseAllocations = await api.get(
-            `/allocations/${responseProfile.data.id}/userNotFinished`
+            `/allocations/${responseProfile.data.id}/inuse`
           );
           if (responseAllocations.status === 200) {
             setAllocationsNotFinished(responseAllocations.data);
@@ -142,27 +142,27 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
   };
 
   const unlockCage = async (allocation: any) => {
-    const [message, toastConfig] = generateToastConfig(
-      "Gaiola destravada com sucesso! Você já pode retirar seus pertences."
-    );
-    Toast.show(message, toastConfig);
-
     const allocationData = {
       finished: true,
     };
 
     try {
-      await api.patch(`/allocations/${allocation.id}/`, allocationData);
+      const responseUnlock = await api.patch(`/allocations/${allocation.id}/`, allocationData);
+      if (responseUnlock.status === 200) {
+        const [message, toastConfig] = generateToastConfig(
+          "Gaiola destravada com sucesso! Você já pode retirar seus pertences."
+        );
+        Toast.show(message, toastConfig);
+      }
     } catch (error: any) {
       const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
+        `Ocorreu um erro ao destravar a gaiola: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
     }
 
     const cageData = {
-      availability: true,
-      open: false,
+      availability: true
     };
 
     try {
@@ -186,41 +186,27 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
       const patchData = {
         price: price,
       };
-      const response = await api.patch(`/wallets/${userId}`, patchData);
+      const response = await api.patch(`/wallets/${user.id}`, patchData);
       if (response.status === 200) {
         const data = {
           finalDatetime: finalDatetime,
           price: price,
-        };
-
-        try {
-          await api.patch(`/allocations/${allocation.id}/`, data);
-        } catch (error: any) {
-          const [message, toastConfig] = generateToastConfig(
-            `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
-          );
-          Toast.show(message, toastConfig);
-        }
-
-        const formData = {
           paymentStatus: true,
         };
 
         try {
-          const response = await api.patch(
-            `/allocations/${allocation.id}/`,
-            formData
-          );
-          if (response.status === 200) {
+          const responseFinish =await api.patch(`/allocations/${allocation.id}/`, data);
+          if (responseFinish.status === 200) {
             const [message, toastConfig] = generateToastConfig(
-              "Pagamento concluído! Você já pode destravar a gaiola."
+              "Alocação finalizada com sucesso! Você já pode destravar a gaiola."
             );
             Toast.show(message, toastConfig);
             handleCloseFinishModal();
           }
+          
         } catch (error: any) {
           const [message, toastConfig] = generateToastConfig(
-            `Ocorreu um erro no pagamento da alocação: ${error.response.data.message}`
+            `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
           );
           Toast.show(message, toastConfig);
         }
@@ -253,6 +239,7 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
         finalDatetime,
         price,
         setPrice,
+        user
       }}
     >
       {children}

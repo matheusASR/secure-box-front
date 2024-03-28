@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, ScrollView, ActivityIndicator, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  ScrollView,
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import ScreenPatternStack from "../../ScreenPattern/ScreenPatternStack";
 import styles from "./styles";
 import CageAllocationModal from "../CageAllocationModal";
@@ -15,7 +21,7 @@ const CageList = () => {
     handleCloseModal,
     selectedCage,
     setSelectedCage,
-    setIsModalVisible
+    setIsModalVisible,
   } = useContext<any>(HomeContext);
 
   const [loading, setLoading] = useState(true);
@@ -25,7 +31,6 @@ const CageList = () => {
       try {
         await getCages();
       } catch (error) {
-        console.error("Erro ao obter gaiolas:", error);
       } finally {
         setLoading(false);
       }
@@ -37,7 +42,7 @@ const CageList = () => {
   const renderCageCard = (cage: any) => {
     return (
       <View key={cage.id} style={styles.card}>
-        <Text style={styles.cardText}>Gaiola {cage.id}</Text>
+        <Text style={styles.cardText}>Gaiola {cage.number}</Text>
         <Text style={styles.cardText}>
           {cage.availability ? "Disponível" : "Em uso"}
         </Text>
@@ -66,7 +71,7 @@ const CageList = () => {
         <ScrollView style={styles.container}>
           <View style={styles.cardsContainer}>
             {cages
-              .sort((a: any, b: any) => a.id - b.id) 
+              .sort((a: any, b: any) => a.number - b.number)
               .map((cage: any) => renderCageCard(cage))}
           </View>
         </ScrollView>

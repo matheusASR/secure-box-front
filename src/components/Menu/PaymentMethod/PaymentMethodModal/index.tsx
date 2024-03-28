@@ -24,7 +24,7 @@ const PaymentMethodModal = ({ isVisible, onClose, addPaymentMethod }: any) => {
     cardHolderName: cardHolderName,
     expirationDate: expirationDate,
     cvv: cvv,
-    cardType: "Crédito"
+    cardType: "Crédito",
   }
 
   return (

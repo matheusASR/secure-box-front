@@ -32,6 +32,7 @@ const InUse = () => {
     setPrice,
     finalDatetime,
     setFinalDatetime,
+    user
   } = useContext(InUseContext);
   const { handleStartAllocation } = useContext(HomeContext);
 
@@ -114,6 +115,7 @@ const InUse = () => {
           finishPayAllocation={finishPayAllocation}
           price={price}
           finalDatetime={finalDatetime}
+          user={user}
         />
       </Modal>
     </ScreenPatternStack>

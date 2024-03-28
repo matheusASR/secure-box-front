@@ -8,13 +8,14 @@ const FinishAllocationModal = ({
   finishPayAllocation,
   price,
   finalDatetime,
+  user
 }: any) => {
   return (
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
         <>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Gaiola {allocation.cageId}</Text>
+            <Text style={styles.headerTitle}>Alocação ID: {allocation.id}</Text>
             <TouchableOpacity style={styles.closeHeaderBtn} onPress={onClose}>
               <Text style={styles.closeHeaderBtnText}>X</Text>
             </TouchableOpacity>
@@ -32,6 +33,9 @@ const FinishAllocationModal = ({
           </Text>
           <Text style={styles.modalText}>
             Certifique-se de que possui saldo em sua conta para pagar!
+          </Text>
+          <Text style={styles.modalText}>
+            Seu saldo: {user.wallet.balance}
           </Text>
 
           <TouchableOpacity

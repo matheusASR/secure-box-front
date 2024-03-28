@@ -25,7 +25,7 @@ const styles: Styles = StyleSheet.create<Styles>({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    height: "30%",
+    height: "25%",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -39,7 +39,6 @@ const styles: Styles = StyleSheet.create<Styles>({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 5,
     textAlign: "center",
   },
   email: {
@@ -69,8 +68,8 @@ const styles: Styles = StyleSheet.create<Styles>({
     fontSize: 16,
   },
   profileImage: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     marginBottom: 20,
   },
   buttonImage: {

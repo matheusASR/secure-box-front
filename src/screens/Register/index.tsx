@@ -63,7 +63,7 @@ const RegisterScreen = ({ navigation }: any) => {
       }
     } catch (error: any) {
       const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao cadastrar o usuário: ${error}`
+        `Ocorreu um erro ao cadastrar o usuário: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
     }

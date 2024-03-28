@@ -25,7 +25,7 @@ const Purchases = () => {
         if (responseProfile.status === 200) {
           try {
             const responseAllocations = await api.get(
-              `/allocations/${responseProfile.data.id}/userFinished`
+              `/allocations/${responseProfile.data.id}/finished`
             );
             if (responseAllocations.status === 200) {
               setAllocationsFinished(responseAllocations.data);

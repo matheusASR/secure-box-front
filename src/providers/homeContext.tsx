@@ -89,7 +89,7 @@ const HomeProvider = ({ children }: any) => {
 
   const getCages = async () => {
     try {
-      const response = await api.get("/cages/");
+      const response = await api.get(`/cages/`);
       if (response.status === 200) {
         setCages(response.data);
       }
@@ -120,20 +120,6 @@ const HomeProvider = ({ children }: any) => {
           },
         }
       );
-      if (responseAllocation.status === 201) {
-        try {
-          const payload = {
-            availability: false,
-            open: true
-          };
-          await api.patch(`/cages/${cageId}`, payload);
-        } catch (error: any) {
-          const [message, toastConfig] = generateToastConfig(
-            `Ocorreu um erro ao atualizar gaiola: ${error.response.data.message}`
-          );
-          Toast.show(message, toastConfig);
-        }
-      }
       const [message, toastConfig] = generateToastConfig(
         "Alocação iniciada! Acompanhe-a na seção 'Em uso'."
       );

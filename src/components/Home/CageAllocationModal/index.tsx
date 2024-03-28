@@ -17,7 +17,7 @@ const CageAllocationModal = ({
     >
       <View style={styles.container}>
         <View style={styles.modalView}>
-          <Text style={styles.title}>Gaiola {cage.id}</Text>
+          <Text style={styles.title}>Gaiola {cage.number}</Text>
           <View style={styles.detailsView}>
             <Text style={styles.detailsTitle}>ATENÇÃO!</Text>
             <Text style={styles.detailsText}>

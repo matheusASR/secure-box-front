@@ -70,7 +70,7 @@ const Deposits = () => {
             source={require("../../../../assets/BackBtn.png")}
           />
         </TouchableOpacity>
-        <Text style={styles.title}>Minhas Alocações</Text>
+        <Text style={styles.title}>Meus Depósitos</Text>
       </View>
       <ScrollView>
         {isLoading ? ( // Renderizar o indicador de loading se isLoading for verdadeiro
