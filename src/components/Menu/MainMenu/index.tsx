@@ -42,6 +42,10 @@ const MainMenu = () => {
     getProfile();
   }, []);
 
+  const handleDepositModal = () => {
+    
+  }
+
   const handleConfirmLogout = async () => {
     setIsExitModalVisible(false);
     await AsyncStorage.removeItem("@secbox:TOKEN");
@@ -62,7 +66,7 @@ const MainMenu = () => {
         <Text style={styles.fullName}>{user.name}</Text>
         <Text style={styles.email}>{user.email}</Text>
         {user.wallet && <Text style={styles.email}>Saldo: {user.wallet.balance}</Text>}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleDepositModal}>
           <Text>Depositar</Text>
         </TouchableOpacity>
       </View>
@@ -92,7 +96,7 @@ const MainMenu = () => {
           onPress={() => navigation.navigate("Deposits")}
         >
           <Image
-            source={require("../../../../assets/Shop.png")}
+            source={require("../../../../assets/Deposit.png")}
             style={styles.buttonImage}
           />
           <Text style={styles.buttonText}>Meus Depósitos</Text>

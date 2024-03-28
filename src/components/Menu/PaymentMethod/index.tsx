@@ -54,11 +54,10 @@ const PaymentMethod = () => {
   const addPaymentMethod = async (data: any) => {
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const response = await api.post(`/paymentMethods/${userId}`, {
+      const response = await api.post(`/paymentMethods/${userId}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        data,
       });
       if (response.status === 201) {
         Toast.show("Método de pagamento adicionado com sucesso!", {
@@ -186,7 +185,7 @@ const PaymentMethod = () => {
                 </TouchableOpacity>
                 <Text style={styles.cardType}>{paymentMethod.cardType}</Text>
                 <Text style={styles.cardNumber}>
-                  {paymentMethod.cardNumber}
+                  {/* {paymentMethod.cardNumber} */}
                 </Text>
                 <Text style={styles.expirationDate}>
                   {paymentMethod.expirationDate}

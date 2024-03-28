@@ -82,7 +82,7 @@ const PaymentMethodModal = ({ isVisible, onClose, addPaymentMethod }: any) => {
             <View style={styles.viewBtns}>
               <TouchableOpacity
                 style={styles.saveBtn}
-                onPress={addPaymentMethod(data)}
+                onPress={() => addPaymentMethod(data)}
               >
                 <Text style={styles.saveBtnText}>Adicionar</Text>
               </TouchableOpacity>
