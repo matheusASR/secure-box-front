@@ -218,6 +218,7 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
             `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
           );
           Toast.show(message, toastConfig);
+          
         }
         getAllocationsNotFinished();
       }
@@ -226,6 +227,7 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
         `Ocorreu um erro no pagamento da alocação: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
+      handleCloseFinishModal();
     }
   };
 

@@ -12,6 +12,12 @@ const styles = StyleSheet.create<any>({
     fontSize: 20,
     fontWeight: "bold",
   },
+  attentionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: 20
+  },
   header: {
     flexDirection: "row",
     width: "100%",
@@ -37,7 +43,6 @@ const styles = StyleSheet.create<any>({
     padding: 20,
     borderRadius: 8,
     width: "90%",
-    height: 400,
     justifyContent: "space-between",
   },
   modalTitle: {
@@ -48,6 +53,7 @@ const styles = StyleSheet.create<any>({
   modalText: {
     fontSize: 16,
     marginBottom: 10,
+    textAlign: "center"
   },
   modalCloseBtn: {
     backgroundColor: colors.primary,

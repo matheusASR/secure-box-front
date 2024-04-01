@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderWidth: 1,
     borderRadius: 10,
-    padding: 20
+    padding: 20,
   },
   attrData: {
     textAlign: "center",

@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-root-toast";
 import { api } from "../../../services/api";
 import DepositModal from "../Deposits/DepositModal";
+import { InUseContext } from "../../../providers/inUseContext";
 
 const MainMenu = () => {
   const navigation: any = useNavigation();
@@ -16,6 +17,15 @@ const MainMenu = () => {
     useState<any>(false);
   const { setLogged } = useContext(LoginContext);
   const [user, setUser] = useState<any>({});
+  const [username, setUsername] = useState<any>("");
+  const { finishPayAllocation } = useContext(InUseContext)
+
+  const getFirstName = (fullName: string) => {
+    const firstSpaceIndex = fullName.indexOf(" ");
+    return firstSpaceIndex !== -1
+      ? fullName.substring(0, firstSpaceIndex)
+      : fullName;
+  };
 
   useEffect(() => {
     const getProfile = async () => {
@@ -28,6 +38,8 @@ const MainMenu = () => {
         });
         if (response.status === 200) {
           setUser(response.data);
+          const firstName = getFirstName(response.data.name);
+          setUsername(firstName);
         }
       } catch (error: any) {
         Toast.show(
@@ -45,10 +57,10 @@ const MainMenu = () => {
     };
 
     getProfile();
-  }, []);
+  }, [isDepositModalVisible, finishPayAllocation]);
 
   const handleDepositModal = () => {
-    setIsDepositModalVisible(true)
+    setIsDepositModalVisible(true);
   };
 
   const handleConfirmLogout = async () => {
@@ -72,13 +84,12 @@ const MainMenu = () => {
           source={require("../../../../assets/ProfileImage.png")}
           style={styles.profileImage}
         />
-        <View>
-          <Text style={styles.fullName}>{user.name}</Text>
-          <Text style={styles.email}>{user.email}</Text>
-        </View>
+        <Text style={styles.fullName}>Olá, {username}</Text>
         <View style={styles.viewBalanceDeposit}>
           {user.wallet && (
-            <Text style={styles.balance}>Saldo: R${user.wallet.balance},00</Text>
+            <Text style={styles.balance}>
+              Saldo: R${user.wallet.balance}
+            </Text>
           )}
           <TouchableOpacity
             style={styles.depositBttn}
@@ -191,6 +202,8 @@ const MainMenu = () => {
         <DepositModal
           isVisible={isDepositModalVisible}
           onClose={handleCloseDepositModal}
+          user={user}
+          navigation={navigation}
         />
       )}
     </View>

@@ -27,7 +27,7 @@ const FinishAllocationModal = ({
           <Text style={styles.modalText}>Horário atual: {finalDatetime}</Text>
           <Text style={styles.modalText}>Valor a pagar: {price}</Text>
 
-          <Text style={styles.headerTitle}>ATENÇÃO!</Text>
+          <Text style={styles.attentionTitle}>ATENÇÃO!</Text>
           <Text style={styles.modalText}>
             Tem certeza de que deseja finalizar a alocação?
           </Text>
