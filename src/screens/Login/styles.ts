@@ -74,7 +74,12 @@ const styles = StyleSheet.create<any>({
     color: colors.primary,
     textDecorationLine: "underline",
     fontSize: 16,
-  }
+  },
+  loadingContainer: {
+    height: 500,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default styles;

@@ -7,6 +7,7 @@ interface LoginContextType {
   onSubmit: (formData: any) => void;
   logged: any;
   setLogged: React.Dispatch<React.SetStateAction<any>>;
+  loading: boolean;
 }
 
 const LoginContext = createContext<any>({} as LoginContextType);
@@ -17,6 +18,7 @@ interface LoginProviderProps {
 
 const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
   const [logged, setLogged] = useState<any>(false);
+  const [loading, setLoading] = useState<boolean>(false)
 
   const generateToastConfig = (message: any) => {
     return [
@@ -33,6 +35,7 @@ const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
   };
 
   const onSubmit = async (formData: any) => {
+    setLoading(true)
     try {
       formData.email = formData.email.toLowerCase();
       const response = await api.post("/login", formData);
@@ -49,11 +52,13 @@ const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
         `Ocorreu um erro ao fazer login: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
+    } finally {
+      setLoading(false)
     }
   };
 
   return (
-    <LoginContext.Provider value={{ onSubmit, logged, setLogged }}>
+    <LoginContext.Provider value={{ onSubmit, logged, setLogged, loading }}>
       {children}
     </LoginContext.Provider>
   );

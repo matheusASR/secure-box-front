@@ -16,6 +16,11 @@ const styles = StyleSheet.create<any>({
   inputContainer: {
     width: "100%",
   },
+  loadingContainer: {
+    height: 500,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   input: {
     marginBottom: 20,
     padding: Platform.OS === "ios" ? 15 : 10,
@@ -54,13 +59,13 @@ const styles = StyleSheet.create<any>({
   sectionText: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 20
+    marginBottom: 20,
   },
   errorText: {
     fontSize: 14,
     color: "red",
-    marginBottom: 15
-  }
+    marginBottom: 15,
+  },
 });
 
 export default styles;
