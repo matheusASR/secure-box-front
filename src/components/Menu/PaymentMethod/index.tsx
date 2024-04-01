@@ -6,12 +6,19 @@ import styles from "./styles";
 import Toast from "react-native-root-toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "../../../services/api";
+import RemovePaymentMethodModal from "./RemovePaymentMethodModal";
+import PatchPaymentMethodModal from "./PatchPaymentMethodModal";
 
 const PaymentMethod = () => {
   const navigation: any = useNavigation();
   // const [isLoading, setIsLoading] = useState(false);
   const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
+  const [paymentMethodModalVisible, setPaymentMethodModalVisible] =
+    useState(false);
+  const [removePMModalVisible, setRemovePMModalVisible] = useState(false);
+  const [patchPMModalVisible, setPatchPMModalVisible] = useState(false);
   const [userId, setUserId] = useState("");
+  const [paymentMethodId, setPaymentMethodId] = useState("")
 
   const getUserPaymentMethods = async () => {
     try {
@@ -37,15 +44,12 @@ const PaymentMethod = () => {
           delay: 0,
         }
       );
-    } 
+    }
   };
 
   useEffect(() => {
     getUserPaymentMethods();
   }, []);
-
-  const [paymentMethodModalVisible, setPaymentMethodModalVisible] =
-    useState(false);
 
   const togglePaymentMethodModal = () => {
     setPaymentMethodModalVisible(!paymentMethodModalVisible);
@@ -69,7 +73,7 @@ const PaymentMethod = () => {
           delay: 0,
         });
         getUserPaymentMethods();
-        togglePaymentMethodModal()
+        togglePaymentMethodModal();
       }
     } catch (error: any) {
       Toast.show(
@@ -92,7 +96,7 @@ const PaymentMethod = () => {
       const response = await api.delete(`/paymentMethods/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       });
       if (response.status === 204) {
         Toast.show("Método de pagamento excluído com sucesso!", {
@@ -117,20 +121,24 @@ const PaymentMethod = () => {
           delay: 0,
         }
       );
-    } 
+    }
   };
 
   const patternPaymentMethod = async (id: any) => {
     const payload = {
-      isDefault: true
-    }
+      isDefault: true,
+    };
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const response = await api.patch(`/paymentMethods/${id}/${userId}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await api.patch(
+        `/paymentMethods/${id}/${userId}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
       if (response.status === 200) {
         Toast.show("Método de pagamento definido como padrão!", {
           duration: Toast.durations.SHORT,
@@ -154,7 +162,7 @@ const PaymentMethod = () => {
           delay: 0,
         }
       );
-    } 
+    }
   };
 
   return (
@@ -178,13 +186,16 @@ const PaymentMethod = () => {
               <View key={index} style={styles.paymentMethodCard}>
                 <TouchableOpacity
                   style={styles.removeCardBttn}
-                  onPress={() => removePaymentMethod(paymentMethod.id)}
+                  onPress={() => {
+                    setRemovePMModalVisible(true)
+                    setPaymentMethodId(paymentMethod.id)
+                  }}
                 >
                   <Text style={styles.removeCardBttnText}>Remover cartão</Text>
                 </TouchableOpacity>
                 <Text style={styles.cardType}>{paymentMethod.cardType}</Text>
                 <Text style={styles.cardNumber}>
-                  {/* {paymentMethod.cardNumber} */}
+                  {paymentMethod.cardNumber}
                 </Text>
                 <Text style={styles.expirationDate}>
                   {paymentMethod.expirationDate}
@@ -198,7 +209,13 @@ const PaymentMethod = () => {
                   </>
                 ) : (
                   <>
-                    <TouchableOpacity style={styles.cardDefineDefaultBttn} onPress={() => patternPaymentMethod(paymentMethod.id)}>
+                    <TouchableOpacity
+                      style={styles.cardDefineDefaultBttn}
+                      onPress={() => {
+                        setPatchPMModalVisible(true)
+                        setPaymentMethodId(paymentMethod.id)
+                      }}
+                    >
                       <Text style={styles.cardDefineDefaultText}>
                         Definir como padrão
                       </Text>
@@ -233,6 +250,16 @@ const PaymentMethod = () => {
         isVisible={paymentMethodModalVisible}
         onClose={togglePaymentMethodModal}
         addPaymentMethod={addPaymentMethod}
+      />
+      <RemovePaymentMethodModal
+        isVisible={paymentMethodModalVisible}
+        onClose={togglePaymentMethodModal}
+        onConfirm={removePaymentMethod(paymentMethodId)}
+      />
+      <PatchPaymentMethodModal
+        isVisible={paymentMethodModalVisible}
+        onClose={togglePaymentMethodModal}
+        onConfirm={patternPaymentMethod(paymentMethodId)}
       />
     </>
   );
