@@ -25,8 +25,6 @@ const InUse = () => {
     showFinishModal,
     allocationSelected,
     unlockCage,
-    formatDatetime,
-    handlePayment,
     finishPayAllocation,
     price,
     setPrice,
@@ -35,6 +33,52 @@ const InUse = () => {
     user
   } = useContext(InUseContext);
   const { handleStartAllocation } = useContext(HomeContext);
+
+  const formatDateTime = (timestamp: any) => {
+    const date = new Date(timestamp);
+
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  };
+
+  const handlePayment = (finalTime: any, initialTime: any): any => {
+    const parseDate = (dateTimeString: any): any => {
+      const [day, month, year, hour, minute, second] =
+        dateTimeString.split(/[\s/,:]+/);
+      return new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+        parseInt(day),
+        parseInt(hour),
+        parseInt(minute),
+        parseInt(second)
+      );
+    };
+
+    const differenceInMinutes: any =
+      Math.abs(
+        parseDate(finalTime).getTime() - parseDate(initialTime).getTime()
+      ) /
+      (1000 * 60);
+
+    const basePrice: any = 5;
+    const additionalHourPrice: any = 2.5;
+
+    if (differenceInMinutes <= 60) {
+      return `${basePrice.toFixed(2)}`;
+    } else {
+      const additionalHours: any = Math.ceil((differenceInMinutes - 60) / 60);
+      const totalPrice: any = basePrice + additionalHours * additionalHourPrice;
+      return `${totalPrice.toFixed(2)}`;
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,14 +131,9 @@ const InUse = () => {
                         <TouchableOpacity
                           style={styles.finishBtn}
                           onPress={() => {
-                            setFinalDatetime(formatDatetime(Date.now()));
-                            setPrice(
-                              handlePayment(
-                                formatDatetime(Date.now()) -
-                                  allocation.initialDatetime
-                              )
-                            );
-                            handleFinishModal();
+                            setFinalDatetime(formatDateTime(Date.now()));
+                            setPrice(handlePayment(formatDateTime(Date.now()), allocation.initialDatetime));
+                            handleFinishModal(allocation);
                           }}
                         >
                           <Text style={styles.buttonText}>Finalizar/Pagar</Text>

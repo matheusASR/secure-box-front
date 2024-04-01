@@ -126,13 +126,12 @@ const PaymentMethod = () => {
     }
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const response = await api.patch(`/paymentMethods/${id}/${userId}`, {
+      const response = await api.patch(`/paymentMethods/${id}/${userId}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
-        },
-        payload
+        }
       });
-      if (response.status === 204) {
+      if (response.status === 200) {
         Toast.show("Método de pagamento definido como padrão!", {
           duration: Toast.durations.SHORT,
           position: Toast.positions.TOP,
@@ -199,8 +198,8 @@ const PaymentMethod = () => {
                   </>
                 ) : (
                   <>
-                    <TouchableOpacity onPress={() => patternPaymentMethod(paymentMethod.id)}>
-                      <Text style={styles.cardDefault}>
+                    <TouchableOpacity style={styles.cardDefineDefaultBttn} onPress={() => patternPaymentMethod(paymentMethod.id)}>
+                      <Text style={styles.cardDefineDefaultText}>
                         Definir como padrão
                       </Text>
                     </TouchableOpacity>

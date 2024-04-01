@@ -3,14 +3,17 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import ExitModal from "./ExitModal";
-import { LoginContext } from "../../../providers/loginContext"
+import { LoginContext } from "../../../providers/loginContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-root-toast";
 import { api } from "../../../services/api";
+import DepositModal from "../Deposits/DepositModal";
 
 const MainMenu = () => {
   const navigation: any = useNavigation();
   const [isExitModalVisible, setIsExitModalVisible] = useState<any>(false);
+  const [isDepositModalVisible, setIsDepositModalVisible] =
+    useState<any>(false);
   const { setLogged } = useContext(LoginContext);
   const [user, setUser] = useState<any>({});
 
@@ -25,17 +28,19 @@ const MainMenu = () => {
         });
         if (response.status === 200) {
           setUser(response.data);
-          console.log(response.data)
         }
       } catch (error: any) {
-        Toast.show(`Erro ao buscar dados do usuário: ${error.response.data.message}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
+        Toast.show(
+          `Erro ao buscar dados do usuário: ${error.response.data.message}`,
+          {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.TOP,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
+          }
+        );
       }
     };
 
@@ -43,8 +48,8 @@ const MainMenu = () => {
   }, []);
 
   const handleDepositModal = () => {
-    
-  }
+    setIsDepositModalVisible(true)
+  };
 
   const handleConfirmLogout = async () => {
     setIsExitModalVisible(false);
@@ -56,6 +61,10 @@ const MainMenu = () => {
     setIsExitModalVisible(false);
   };
 
+  const handleCloseDepositModal = () => {
+    setIsDepositModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
@@ -63,12 +72,21 @@ const MainMenu = () => {
           source={require("../../../../assets/ProfileImage.png")}
           style={styles.profileImage}
         />
-        <Text style={styles.fullName}>{user.name}</Text>
-        <Text style={styles.email}>{user.email}</Text>
-        {user.wallet && <Text style={styles.email}>Saldo: {user.wallet.balance}</Text>}
-        <TouchableOpacity onPress={handleDepositModal}>
-          <Text>Depositar</Text>
-        </TouchableOpacity>
+        <View>
+          <Text style={styles.fullName}>{user.name}</Text>
+          <Text style={styles.email}>{user.email}</Text>
+        </View>
+        <View style={styles.viewBalanceDeposit}>
+          {user.wallet && (
+            <Text style={styles.balance}>Saldo: R${user.wallet.balance},00</Text>
+          )}
+          <TouchableOpacity
+            style={styles.depositBttn}
+            onPress={handleDepositModal}
+          >
+            <Text style={styles.depositBttnText}>Depositar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
@@ -151,7 +169,10 @@ const MainMenu = () => {
           />
           <Text style={styles.buttonText}>Notificações</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setIsExitModalVisible(true)}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setIsExitModalVisible(true)}
+        >
           <Image
             source={require("../../../../assets/Exit.png")}
             style={styles.buttonImage}
@@ -164,6 +185,12 @@ const MainMenu = () => {
           isVisible={isExitModalVisible}
           onClose={handleCloseExitModal}
           onConfirm={handleConfirmLogout}
+        />
+      )}
+      {isDepositModalVisible && (
+        <DepositModal
+          isVisible={isDepositModalVisible}
+          onClose={handleCloseDepositModal}
         />
       )}
     </View>

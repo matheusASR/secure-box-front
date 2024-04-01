@@ -92,11 +92,11 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
     const additionalHourPrice: any = 2.5;
 
     if (differenceInMinutes <= 60) {
-      return `R$${basePrice.toFixed(2)}`;
+      return `${basePrice.toFixed(2)}`;
     } else {
       const additionalHours: any = Math.ceil((differenceInMinutes - 60) / 60);
       const totalPrice: any = basePrice + additionalHours * additionalHourPrice;
-      return `R$${totalPrice.toFixed(2)}`;
+      return `${totalPrice.toFixed(2)}`;
     }
   };
 
@@ -142,34 +142,43 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
   };
 
   const unlockCage = async (allocation: any) => {
+    const token = await AsyncStorage.getItem("@secbox:TOKEN");
     const allocationData = {
       finished: true,
     };
 
     try {
-      const responseUnlock = await api.patch(`/allocations/${allocation.id}/`, allocationData);
+      const responseUnlock = await api.patch(`/allocations/${allocation.id}/`, allocationData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (responseUnlock.status === 200) {
         const [message, toastConfig] = generateToastConfig(
           "Gaiola destravada com sucesso! Você já pode retirar seus pertences."
         );
         Toast.show(message, toastConfig);
+        
+        const cageData = {
+          availability: true
+        };
+    
+        try {
+          await api.patch(`/cages/${allocation.cageId}/`, cageData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        } catch (error: any) {
+          const [message, toastConfig] = generateToastConfig(
+            `Ocorreu um erro ao disponibilizar gaiola: ${error.response.data.message}`
+          );
+          Toast.show(message, toastConfig);
+        }
       }
     } catch (error: any) {
       const [message, toastConfig] = generateToastConfig(
         `Ocorreu um erro ao destravar a gaiola: ${error.response.data.message}`
-      );
-      Toast.show(message, toastConfig);
-    }
-
-    const cageData = {
-      availability: true
-    };
-
-    try {
-      await api.patch(`/cages/${allocation.cageId}/`, cageData);
-    } catch (error: any) {
-      const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao disponibilizar gaiola: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
     }

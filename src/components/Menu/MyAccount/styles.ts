@@ -18,13 +18,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     paddingBottom: 20,
-    color: colors.primary,
-  },
-  titleDataAddress: {
-    fontWeight: "bold",
-    fontSize: 20,
-    color: colors.primary,
-    paddingVertical: 20,
+    textAlign: "center",
   },
   container: {
     flex: 1,
@@ -53,7 +47,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     borderRadius: 5,
     paddingVertical: 12,
-    width: "90%",
+    width: "85%",
   },
   updateBtnText: {
     color: "white",
@@ -69,22 +63,24 @@ const styles = StyleSheet.create({
   dataContainerTop: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
     width: "100%",
     padding: 15,
-    borderRadius: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    gap: 5
+  },
+  value: {
+    color: "black",
   },
   data: {
     fontSize: 16,
     width: "100%",
     paddingVertical: 10,
-    textAlign: "left",
     padding: 5,
-    color: colors.primary,
+    borderWidth: 1,
+    textAlign: "center",
+    fontWeight: "bold",
+    borderRadius: 5,
+    marginTop: 5
   },
   whiteBg: {
     backgroundColor: "white",
@@ -93,6 +89,23 @@ const styles = StyleSheet.create({
   myAccountView: {
     height: "100%",
   },
+  addressData: {
+    width: "100%",
+    borderWidth: 1,
+    padding: 20,
+    borderRadius: 10,
+    marginTop: 20
+  },
+  personalData: {
+    width: "100%",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 20
+  },
+  attrData: {
+    textAlign: "center",
+    marginTop: 10
+  }
 });
 
 export default styles;

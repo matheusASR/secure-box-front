@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: "bold",
     position: "absolute",
-    bottom: 40,
+    bottom: 55,
     left: 20,
   },
   cardDefault: {
@@ -100,6 +100,17 @@ const styles = StyleSheet.create({
   addPaymentBtnText: {
     color: "#FFFFFF",
     fontSize: 16,
+    fontWeight: "bold",
+  },
+  cardDefineDefaultBttn: {
+    position: "absolute",
+    top: 170,
+    right: 15,
+    
+  },
+  cardDefineDefaultText: {
+    fontSize: 16,
+    color: colors.primary,
     fontWeight: "bold",
   },
 });

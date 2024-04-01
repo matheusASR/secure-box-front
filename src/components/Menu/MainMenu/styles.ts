@@ -1,19 +1,8 @@
-import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from "react-native";
+import { StyleSheet } from "react-native";
 import { colors } from "../../../styles";
 
-interface Styles {
-  container: ViewStyle;
-  userInfo: ViewStyle;
-  fullName: TextStyle;
-  email: TextStyle;
-  buttonsContainer: ViewStyle;
-  button: ViewStyle;
-  buttonText: TextStyle;
-  profileImage: ImageStyle;
-  buttonImage: ImageStyle;
-}
 
-const styles: Styles = StyleSheet.create<Styles>({
+const styles = StyleSheet.create<any>({
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -21,11 +10,12 @@ const styles: Styles = StyleSheet.create<Styles>({
   userInfo: {
     backgroundColor: colors.primary,
     paddingVertical: "10%",
-    marginBottom: 20,
+    marginBottom: 10,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    height: "25%",
+    gap: 10,
+    height: "27%",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -68,13 +58,41 @@ const styles: Styles = StyleSheet.create<Styles>({
     fontSize: 16,
   },
   profileImage: {
-    width: 70,
-    height: 70,
-    marginBottom: 20,
+    width: 60,
+    height: 60,
   },
   buttonImage: {
     width: 30,
     height: 30,
+  },
+  viewBalanceDeposit: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  balance: {
+    fontSize: 14,
+    color: "white",
+    borderColor: "white",
+    borderWidth: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 30,
+  },
+  depositBttnText: {
+    fontSize: 14,
+    // color: "white",
+    textAlign: "center",
+    fontWeight: "bold",
+    color: colors.primary
+  },
+  depositBttn: {
+    paddingVertical: 8,
+    paddingHorizontal: 30,
+    alignItems: "center",
+    borderColor: "white",
+    borderWidth: 1,
+    justifyContent: "center",
+    backgroundColor: "white"
   },
 });
 

@@ -25,14 +25,17 @@ const MyAccount = () => {
           setUser(response.data);
         }
       } catch (error: any) {
-        Toast.show(`Erro ao buscar dados do usuário: ${error.response.data.message}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
+        Toast.show(
+          `Erro ao buscar dados do usuário: ${error.response.data.message}`,
+          {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.TOP,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
+          }
+        );
       }
     };
 
@@ -60,32 +63,32 @@ const MyAccount = () => {
       <ScrollView style={styles.container}>
         <View style={styles.dataContainer}>
           <View style={styles.dataContainerTop}>
-            <Text style={styles.titleData}>DADOS PESSOAIS:</Text>
-            <Text style={styles.data}>Nome: {user.name}</Text>
-            <Text style={styles.data}>Email: {user.email}</Text>
-            <Text style={styles.data}>Telefone: {user.cel}</Text>
-            <Text style={styles.data}>
-              Data de Nascimento: {user.birthdate}
-            </Text>
-            <Text style={styles.titleDataAddress}>ENDEREÇO:</Text>
-            <Text style={styles.data}>
-              CEP: {user.address && user.address.zipCode}
-            </Text>
-            <Text style={styles.data}>
-              Rua/Avenida: {user.address && user.address.street}
-            </Text>
-            <Text style={styles.data}>
-              Número: {user.address && user.address.number}
-            </Text>
-            <Text style={styles.data}>
-              Cidade: {user.address && user.address.city}
-            </Text>
-            <Text style={styles.data}>
-              Estado: {user.address && user.address.state}
-            </Text>
-            <Text style={styles.data}>
-              Complemento: {user.address && user.address.complement}
-            </Text>
+            <View style={styles.personalData}>
+              <Text style={styles.titleData}>Dados Pessoais:</Text>
+              <Text style={styles.attrData}>Nome:</Text>
+              <Text style={styles.data}>{user.name}</Text>
+              <Text style={styles.attrData}>Email:</Text>
+              <Text style={styles.data}>{user.email}</Text>
+              <Text style={styles.attrData}>Telefone:</Text>
+              <Text style={styles.data}>{user.cel}</Text>
+              <Text style={styles.attrData}>Data de Nascimento:</Text>
+              <Text style={styles.data}>{user.birthdate}</Text>
+            </View>
+            <View style={styles.addressData}>
+              <Text style={styles.titleData}>Endereço:</Text>
+              <Text style={styles.attrData}>CEP:</Text>
+              <Text style={styles.data}>{user.address && user.address.zipCode}</Text>
+              <Text style={styles.attrData}>Rua/Avenida:</Text>
+              <Text style={styles.data}>{user.address && user.address.street}</Text>
+              <Text style={styles.attrData}>Número:</Text>
+              <Text style={styles.data}>{user.address && user.address.number}</Text>
+              <Text style={styles.attrData}>Cidade:</Text>
+              <Text style={styles.data}>{user.address && user.address.city}</Text>
+              <Text style={styles.attrData}>Estado:</Text>
+              <Text style={styles.data}>{user.address && user.address.state}</Text>
+              <Text style={styles.attrData}>Complemento:</Text>
+              <Text style={styles.data}>{user.address && user.address.complement}</Text>
+            </View>
           </View>
         </View>
       </ScrollView>
