@@ -13,7 +13,6 @@ import {
   ScrollView,
   SafeAreaView,
   KeyboardAvoidingView,
-  Image,
 } from "react-native";
 import styles from "./styles";
 import { LoginContext } from "../../providers/loginContext";
@@ -37,12 +36,6 @@ const LoginScreen = ({ navigation }: any) => {
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={styles.container}
             >
-              {/* <View style={styles.logoView}>
-                <Image
-                  style={styles.logo}
-                  source={require("../../../assets/Logo.png")}
-                />
-              </View> */}
               <Controller
                 control={control}
                 render={({ field }: any) => (

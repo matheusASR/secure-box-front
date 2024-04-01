@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import { api } from "../../../services/api";
@@ -9,12 +16,12 @@ import { colors } from "../../../styles";
 
 const Deposits = () => {
   const navigation: any = useNavigation();
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const [userPayments, setUserPayments] = useState([]);
 
   useEffect(() => {
     const getUserPayments = async () => {
-      setIsLoading(true); 
+      setIsLoading(true);
       try {
         const token = await AsyncStorage.getItem("@secbox:TOKEN");
         const responseProfile = await api.get("/profile", {
@@ -31,27 +38,33 @@ const Deposits = () => {
               setUserPayments(responseUserPayments.data);
             }
           } catch (error: any) {
-            Toast.show(`Não foi possível buscar depósitos do usuário: ${error.response.data.message}`, {
-              duration: Toast.durations.SHORT,
-              position: Toast.positions.TOP,
-              shadow: true,
-              animation: true,
-              hideOnPress: true,
-              delay: 0,
-            });
+            Toast.show(
+              `Não foi possível buscar depósitos do usuário: ${error.response.data.message}`,
+              {
+                duration: Toast.durations.SHORT,
+                position: Toast.positions.TOP,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                delay: 0,
+              }
+            );
           }
         }
       } catch (error: any) {
-        Toast.show(`Erro ao buscar dados do usuário: ${error.response.data.message}`, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.TOP,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
+        Toast.show(
+          `Erro ao buscar dados do usuário: ${error.response.data.message}`,
+          {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.TOP,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
+          }
+        );
       } finally {
-        setIsLoading(false); // Desativar o indicador de loading após a requisição ser concluída
+        setIsLoading(false);
       }
     };
 
@@ -73,7 +86,7 @@ const Deposits = () => {
         <Text style={styles.title}>Meus Depósitos</Text>
       </View>
       <ScrollView>
-        {isLoading ? ( // Renderizar o indicador de loading se isLoading for verdadeiro
+        {isLoading ? ( 
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.primary} />
           </View>

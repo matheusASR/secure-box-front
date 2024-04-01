@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import styles from "./styles";
 
 const FinishAllocationModal = ({
@@ -8,14 +8,14 @@ const FinishAllocationModal = ({
   finishPayAllocation,
   price,
   finalDatetime,
-  user
+  user,
 }: any) => {
   return (
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
         <>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Alocação ID: {allocation.id}</Text>
+            <Text style={styles.headerTitle}>ID Alocação: {allocation.id}</Text>
             <TouchableOpacity style={styles.closeHeaderBtn} onPress={onClose}>
               <Text style={styles.closeHeaderBtnText}>X</Text>
             </TouchableOpacity>
@@ -34,9 +34,7 @@ const FinishAllocationModal = ({
           <Text style={styles.modalText}>
             Certifique-se de que possui saldo em sua conta para pagar!
           </Text>
-          <Text style={styles.modalText}>
-            Seu saldo: {user.wallet.balance}
-          </Text>
+          <Text style={styles.modalText}>Seu saldo: {user.wallet.balance}</Text>
 
           <TouchableOpacity
             style={styles.modalCloseBtn}

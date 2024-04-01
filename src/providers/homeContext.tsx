@@ -11,13 +11,10 @@ interface HomeContextType {
   setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   handleCloseModal: () => void;
   handleStartAllocation: (cageId: any) => void;
-  selectedCage: any;
   isCameraOpen: boolean;
   setIsCameraOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  requestStatus: number | null;
-  qrCodeData: string;
-  handleBarCodeRead: (event: any) => void;
-  setSelectedCage: React.Dispatch<React.SetStateAction<any>>; 
+  selectedCage: any;
+  setSelectedCage: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const HomeContext = createContext<HomeContextType>({} as HomeContextType);
@@ -27,37 +24,6 @@ const HomeProvider = ({ children }: any) => {
   const [isModalVisible, setIsModalVisible] = useState<any>(false);
   const [isCameraOpen, setIsCameraOpen] = useState<any>(false);
   const [selectedCage, setSelectedCage] = useState<any>({});
-  const [qrCodeData, setQrCodeData] = useState<any>("");
-  const [requestStatus, setRequestStatus] = useState<any>(null);
-
-  const handleCloseCamera = () => {
-    setIsCameraOpen(false);
-  };
-
-  const handleBarCodeRead = async (event: any) => {
-    if (event.data) {
-      setQrCodeData(event.data);
-
-      try {
-        const qrCodeUrl = event.data;
-        const response = await api.get(qrCodeUrl);
-
-        if (response.status === 200) {
-          setRequestStatus(200);
-        } else {
-          setRequestStatus(response.status);
-        }
-      } catch (error: any) {
-        const [message, toastConfig] = generateToastConfig(
-          `Ocorreu um erro ao buscar gaiolas do local: ${error.response.data.message}`
-        );
-        Toast.show(message, toastConfig);
-        setRequestStatus(null);
-      }
-
-      handleCloseCamera();
-    }
-  };
 
   const generateToastConfig = (message: any) => {
     return [
@@ -111,15 +77,11 @@ const HomeProvider = ({ children }: any) => {
     };
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const responseAllocation = await api.post(
-        `/allocations/${cageId}`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await api.post(`/allocations/${cageId}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const [message, toastConfig] = generateToastConfig(
         "Alocação iniciada! Acompanhe-a na seção 'Em uso'."
       );
@@ -147,9 +109,6 @@ const HomeProvider = ({ children }: any) => {
         selectedCage,
         isCameraOpen,
         setIsCameraOpen,
-        requestStatus,
-        qrCodeData,
-        handleBarCodeRead,
         setSelectedCage,
       }}
     >
@@ -159,6 +118,3 @@ const HomeProvider = ({ children }: any) => {
 };
 
 export { HomeProvider, HomeContext };
-    
-         
-

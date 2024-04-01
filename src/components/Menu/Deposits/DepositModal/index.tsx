@@ -74,24 +74,20 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
       const payload = {
         price: Number(depositValue),
         paymentDate: formatDateTime(Date.now()),
-        type: selectedPaymentMethod
+        type: selectedPaymentMethod,
       };
       try {
         const token = await AsyncStorage.getItem("@secbox:TOKEN");
-        await api.post(
-          `/payments/${user.id}`,
-          payload,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await api.post(`/payments/${user.id}`, payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const [message, toastConfig] = generateToastConfig(
           "Depósito realizado com sucesso!"
         );
         Toast.show(message, toastConfig);
-        onClose()
+        onClose();
       } catch (error: any) {
         const [message, toastConfig] = generateToastConfig(
           `Ocorreu um erro ao realizar depósito: ${error.response.data.message}`

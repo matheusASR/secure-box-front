@@ -8,8 +8,7 @@ import { LoginContext } from "../../providers/loginContext";
 import Toast from "react-native-root-toast";
 
 const HomeScreen = ({ navigation }: any) => {
-  const { isCameraOpen, setIsCameraOpen, requestStatus, handleBarCodeRead } =
-    useContext<any>(HomeContext);
+  const { isCameraOpen, setIsCameraOpen } = useContext<any>(HomeContext);
   const { setLogged } = useContext(LoginContext);
 
   useEffect(() => {

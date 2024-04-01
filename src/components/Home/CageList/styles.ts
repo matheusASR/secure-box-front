@@ -1,17 +1,7 @@
-import { StyleSheet, ViewStyle, TextStyle } from "react-native";
+import { StyleSheet } from "react-native";
 import { colors } from "../../../styles";
 
-interface Styles {
-  container: ViewStyle;
-  cardsContainer: ViewStyle;
-  card: ViewStyle;
-  cardText: TextStyle;
-  startAllocationBtn: ViewStyle;
-  buttonText: TextStyle;
-  loadingContainer: ViewStyle;
-}
-
-const styles: Styles = StyleSheet.create<Styles>({
+const styles = StyleSheet.create<any>({
   container: {
     flex: 1,
     backgroundColor: "white",

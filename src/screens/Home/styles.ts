@@ -1,28 +1,7 @@
-import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from "react-native";
+import { StyleSheet } from "react-native";
 import { colors } from "../../styles";
 
-interface Styles {
-  backBtn: ViewStyle;
-  backBtnImage: ImageStyle;
-  header: ViewStyle;
-  headerTitle: TextStyle;
-  container: ViewStyle;
-  title: TextStyle;
-  titleCageCard: TextStyle;
-  subtitle: TextStyle;
-  button: ViewStyle;
-  buttonImage: ImageStyle;
-  buttonText: TextStyle;
-  cageListRegistered: ViewStyle;
-  accessText: TextStyle;
-  otherAccessText: TextStyle;
-  cageListCard: ViewStyle;
-  cageListScroll: ViewStyle;
-  cageCardImage: ImageStyle;
-  textCardView: ViewStyle;
-}
-
-const styles: Styles = StyleSheet.create<Styles>({
+const styles = StyleSheet.create<any>({
   backBtn: {
     position: "absolute",
     left: 20,
@@ -123,4 +102,3 @@ const styles: Styles = StyleSheet.create<Styles>({
 });
 
 export default styles;
-

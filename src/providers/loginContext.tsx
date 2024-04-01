@@ -17,7 +17,6 @@ interface LoginProviderProps {
 
 const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
   const [logged, setLogged] = useState<any>(false);
-  const [user, setUser] = useState({});
 
   const generateToastConfig = (message: any) => {
     return [
@@ -44,28 +43,6 @@ const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
           "Login realizado com sucesso! Você será redirecionado."
         );
         Toast.show(message, toastConfig);
-        try {
-          const responseProfile = await api.get("/profile", {
-            headers: {
-              Authorization: `Bearer ${response.data.token}`,
-            },
-          });
-          if (responseProfile.status === 200) {
-            setUser(responseProfile.data);
-          }
-        } catch (error: any) {
-          Toast.show(
-            `Erro ao buscar dados do usuário: ${error.response.data.message}`,
-            {
-              duration: Toast.durations.SHORT,
-              position: Toast.positions.TOP,
-              shadow: true,
-              animation: true,
-              hideOnPress: true,
-              delay: 0,
-            }
-          );
-        }
       }
     } catch (error: any) {
       const [message, toastConfig] = generateToastConfig(

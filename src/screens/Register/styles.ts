@@ -1,21 +1,7 @@
-import { StyleSheet, Platform, ViewStyle, TextStyle } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { colors } from "../../styles";
 
-interface Styles {
-  container: ViewStyle;
-  contentContainer: ViewStyle;
-  inputContainer: ViewStyle;
-  input: ViewStyle;
-  button: ViewStyle;
-  buttonText: TextStyle;
-  signInTextContainer: ViewStyle;
-  signInLink: TextStyle;
-  accountText: TextStyle;
-  sectionText: TextStyle;
-  errorText: TextStyle;
-}
-
-const styles: Styles = StyleSheet.create<Styles>({
+const styles = StyleSheet.create<any>({
   container: {
     flex: 1,
     backgroundColor: "#fff",

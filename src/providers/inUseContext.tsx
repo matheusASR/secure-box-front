@@ -31,9 +31,7 @@ interface InUseProviderProps {
 
 const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
   const [showCageContent, setShowCageContent] = useState<boolean>(true);
-  const [allocationsNotFinished, setAllocationsNotFinished] = useState<any[]>(
-    []
-  );
+  const [allocationsNotFinished, setAllocationsNotFinished] = useState<any[]>([]);
   const [showFinishModal, setShowFinishModal] = useState<boolean>(false);
   const [allocationSelected, setAllocationSelected] = useState<any>({});
   const [finalDatetime, setFinalDatetime] = useState("");
@@ -148,21 +146,25 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
     };
 
     try {
-      const responseUnlock = await api.patch(`/allocations/${allocation.id}/`, allocationData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const responseUnlock = await api.patch(
+        `/allocations/${allocation.id}/`,
+        allocationData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (responseUnlock.status === 200) {
         const [message, toastConfig] = generateToastConfig(
           "Gaiola destravada com sucesso! Você já pode retirar seus pertences."
         );
         Toast.show(message, toastConfig);
-        
+
         const cageData = {
-          availability: true
+          availability: true,
         };
-    
+
         try {
           await api.patch(`/cages/${allocation.cageId}/`, cageData, {
             headers: {
@@ -204,7 +206,10 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
         };
 
         try {
-          const responseFinish =await api.patch(`/allocations/${allocation.id}/`, data);
+          const responseFinish = await api.patch(
+            `/allocations/${allocation.id}/`,
+            data
+          );
           if (responseFinish.status === 200) {
             const [message, toastConfig] = generateToastConfig(
               "Alocação finalizada com sucesso! Você já pode destravar a gaiola."
@@ -212,13 +217,12 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
             Toast.show(message, toastConfig);
             handleCloseFinishModal();
           }
-          
         } catch (error: any) {
           const [message, toastConfig] = generateToastConfig(
             `Ocorreu um erro ao finalizar alocação: ${error.response.data.message}`
           );
           Toast.show(message, toastConfig);
-          
+          handleCloseFinishModal();
         }
         getAllocationsNotFinished();
       }
@@ -250,7 +254,7 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
         finalDatetime,
         price,
         setPrice,
-        user
+        user,
       }}
     >
       {children}

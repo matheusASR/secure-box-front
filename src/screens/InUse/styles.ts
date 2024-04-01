@@ -1,27 +1,7 @@
-import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from "react-native";
+import { StyleSheet } from "react-native";
 import { colors } from "../../styles";
 
-interface Styles {
-  container: ViewStyle;
-  title: TextStyle;
-  noGaiolasText: TextStyle;
-  allocationContainer: ViewStyle;
-  allocationTitle: TextStyle;
-  allocationText: TextStyle;
-  inUseAllocationsList: ViewStyle;
-  buttonText: TextStyle;
-  finishBtn: ViewStyle;
-  paymentBtn: ViewStyle;
-  finishContent: ViewStyle;
-  unlockBtn: ViewStyle;
-  padlock: ImageStyle;
-  buttonUnlockText: TextStyle;
-  noContent: ViewStyle;
-  unlockedCageView: ViewStyle;
-  loadingView: ViewStyle;
-}
-
-const styles: Styles = StyleSheet.create<Styles>({
+const styles = StyleSheet.create<any>({
   container: {
     flex: 1,
     backgroundColor: "white",
@@ -57,7 +37,7 @@ const styles: Styles = StyleSheet.create<Styles>({
     flexDirection: "column",
     gap: 20,
     paddingVertical: 20,
-    marginBottom: 30  
+    marginBottom: 30,
   },
   buttonText: {
     color: "#FFF",
@@ -108,19 +88,19 @@ const styles: Styles = StyleSheet.create<Styles>({
   noContent: {
     width: "100%",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   unlockedCageView: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: "40%"
+    marginBottom: "40%",
   },
   loadingView: {
     height: 400,
     alignItems: "center",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 });
 
 export default styles;

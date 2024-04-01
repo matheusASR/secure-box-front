@@ -1,25 +1,7 @@
-import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from "react-native";
+import { StyleSheet } from "react-native";
 import { colors } from "../../../styles";
 
-interface Styles {
-  container: ViewStyle;
-  modalView: ViewStyle;
-  title: TextStyle;
-  startBtn: ViewStyle;
-  closeBtn: ViewStyle;
-  startBtnText: TextStyle;
-  closeBtnText: TextStyle;
-  viewBtns: ViewStyle;
-  detailsView: ViewStyle;
-  detailsTitle: TextStyle;
-  detailsText: TextStyle;
-  openedPadlock: ImageStyle;
-  allocationStartedView: ViewStyle;
-  closeBtnAlt: ViewStyle;
-  detailsTextAlt: TextStyle;
-}
-
-const styles: Styles = StyleSheet.create<Styles>({
+const styles = StyleSheet.create<any>({
   container: {
     flex: 1,
     justifyContent: "center",
