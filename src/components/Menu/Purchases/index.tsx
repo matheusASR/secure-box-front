@@ -51,7 +51,7 @@ const Purchases = () => {
           delay: 0,
         });
       } finally {
-        setIsLoading(false); // Desativar o indicador de loading após a requisição ser concluída
+        setIsLoading(false); 
       }
     };
 
@@ -73,7 +73,7 @@ const Purchases = () => {
         <Text style={styles.title}>Minhas Alocações</Text>
       </View>
       <ScrollView>
-        {isLoading ? ( // Renderizar o indicador de loading se isLoading for verdadeiro
+        {isLoading ? ( 
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.primary} />
           </View>
@@ -88,7 +88,7 @@ const Purchases = () => {
             {allocationsFinished.map((allocation: any) => (
               <View key={allocation.id} style={styles.allocationContainer}>
                 <Text style={styles.allocationTitle}>
-                  Alocação {allocation.id}
+                  Alocação ID: {allocation.id}
                 </Text>
                 <Text style={styles.allocationData}>
                   Início: {allocation.initialDatetime}

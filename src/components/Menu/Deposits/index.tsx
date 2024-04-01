@@ -101,10 +101,10 @@ const Deposits = () => {
             {userPayments.map((userPayment: any) => (
               <View key={userPayment.id} style={styles.userPaymentContainer}>
                 <Text style={styles.userPaymentTitle}>
-                  Pagamento ID: {userPayment.id}
+                  Depósito ID: {userPayment.id}
                 </Text>
                 <Text style={styles.userPaymentData}>
-                  Valor: {userPayment.price}
+                  Valor: {userPayment.price % 1 === 0 ? `R$${userPayment.price}.00` : `R$${userPayment.price}`}
                 </Text>
                 <Text style={styles.userPaymentData}>
                   Data: {userPayment.paymentDate}

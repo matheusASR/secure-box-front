@@ -56,6 +56,8 @@ const PaymentMethodModal = ({ isVisible, onClose, addPaymentMethod }: any) => {
                 value={cardNumber}
                 onChangeText={setCardNumber}
                 style={styles.input}
+                maxLength={16}
+                keyboardType="numeric"
               />
 
               <Text style={styles.label}>Titular do cartão:</Text>
@@ -77,6 +79,8 @@ const PaymentMethodModal = ({ isVisible, onClose, addPaymentMethod }: any) => {
                 value={cvv}
                 onChangeText={setCvv}
                 style={styles.input}
+                maxLength={4}
+                keyboardType="numeric"
               />
             </View>
             <View style={styles.viewBtns}>

@@ -64,15 +64,24 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
 
+  const replaceCommaWithDot = (value: any) => {
+    if (typeof value === 'string') {
+      return value.replace(',', '.');
+    }
+    return value;
+  };
+
   const deposit = async () => {
-    if (depositValue < 5) {
+    const price = replaceCommaWithDot(depositValue);
+    if (price < 5) {
       const [message, toastConfig] = generateToastConfig(
         "O valor mínimo de depósito é 5.00!"
       );
       Toast.show(message, toastConfig);
     } else {
+      const price = replaceCommaWithDot(depositValue);
       const payload = {
-        price: Number(depositValue),
+        price: Number(price),
         paymentDate: formatDateTime(Date.now()),
         type: selectedPaymentMethod,
       };
