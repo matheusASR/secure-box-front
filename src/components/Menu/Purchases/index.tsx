@@ -25,7 +25,11 @@ const Purchases = () => {
         if (responseProfile.status === 200) {
           try {
             const responseAllocations = await api.get(
-              `/allocations/${responseProfile.data.id}/finished`
+              `/allocations/${responseProfile.data.id}/finished`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                }
+              }
             );
             if (responseAllocations.status === 200) {
               setAllocationsFinished(responseAllocations.data);

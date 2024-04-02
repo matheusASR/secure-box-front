@@ -32,7 +32,11 @@ const Deposits = () => {
         if (responseProfile.status === 200) {
           try {
             const responseUserPayments = await api.get(
-              `/payments/${responseProfile.data.id}/`
+              `/payments/${responseProfile.data.id}/`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                }
+              }
             );
             if (responseUserPayments.status === 200) {
               setUserPayments(responseUserPayments.data);

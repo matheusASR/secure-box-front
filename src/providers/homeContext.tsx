@@ -55,7 +55,12 @@ const HomeProvider = ({ children }: any) => {
 
   const getCages = async () => {
     try {
-      const response = await api.get(`/cages/`);
+      const token = await AsyncStorage.getItem("@secbox:TOKEN");
+      const response = await api.get("/cages?location=shoppcentro", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
       if (response.status === 200) {
         setCages(response.data);
       }

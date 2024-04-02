@@ -99,6 +99,45 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
   },
+  qrCodePixView: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  qrCode: {
+    width: "90%",
+    height: 180
+  },
+  qrCodeText: {
+    fontSize: 16,
+    marginTop: 20
+  },
+  copyCodeBtn: {
+    width: "100%",
+    paddingVertical: 15,
+    backgroundColor: colors.primary,
+    borderRadius: 10,
+    marginTop: 20
+  },
+  copyCodeBtnText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 17,
+  },
+  alreadyPaidBtn: {
+    width: "100%",
+    paddingVertical: 15,
+    backgroundColor: colors.secondary,
+    borderRadius: 10,
+    marginTop: 20
+  },
+  alreadyPaidBtnText: {
+    color: colors.primary,
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 17,
+  },
   input: {
     marginBottom: 20,
     padding: Platform.OS === "ios" ? 15 : 10,
@@ -106,6 +145,30 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 5,
     width: "100%"
+  },
+  header: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 50,
+    marginBottom: 15
+  },
+  closeHeaderBtn: {
+    backgroundColor: colors.primary,
+    borderRadius: 10,
+    width: 35,
+    height: 35,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  closeHeaderBtnText: {
+    fontSize: 18,
+    color: "white"
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 

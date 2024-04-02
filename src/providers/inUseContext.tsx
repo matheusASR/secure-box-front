@@ -110,7 +110,11 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
         try {
           setUser(responseProfile.data);
           const responseAllocations = await api.get(
-            `/allocations/${responseProfile.data.id}/inuse`
+            `/allocations/${responseProfile.data.id}/inuse`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              }
+            }
           );
           if (responseAllocations.status === 200) {
             setAllocationsNotFinished(responseAllocations.data);
@@ -197,7 +201,12 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
       const patchData = {
         price: price,
       };
-      const response = await api.patch(`/wallets/${user.id}`, patchData);
+      const token = await AsyncStorage.getItem("@secbox:TOKEN");
+      const response = await api.patch(`/wallets/${user.id}`, patchData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
       if (response.status === 200) {
         const data = {
           finalDatetime: finalDatetime,
@@ -208,7 +217,12 @@ const InUseProvider: React.FC<InUseProviderProps> = ({ children }) => {
         try {
           const responseFinish = await api.patch(
             `/allocations/${allocation.id}/`,
-            data
+            data,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              }
+            }
           );
           if (responseFinish.status === 200) {
             const [message, toastConfig] = generateToastConfig(

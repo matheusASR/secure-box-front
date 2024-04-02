@@ -19,6 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [depositValue, setDepositValue] = useState<any>();
+  const [qrCodePix, setQrCodePix] = useState<any>(false);
   const [defineValue, setDefineValue] = useState(false);
   let defaultPaymentMethod: any = null;
 
@@ -65,8 +66,8 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   }
 
   const replaceCommaWithDot = (value: any) => {
-    if (typeof value === 'string') {
-      return value.replace(',', '.');
+    if (typeof value === "string") {
+      return value.replace(",", ".");
     }
     return value;
   };
@@ -78,8 +79,11 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
         "O valor mínimo de depósito é 5.00!"
       );
       Toast.show(message, toastConfig);
+    }
+
+    if (selectedPaymentMethod === "PIX") {
+      setQrCodePix(true);
     } else {
-      const price = replaceCommaWithDot(depositValue);
       const payload = {
         price: Number(price),
         paymentDate: formatDateTime(Date.now()),
@@ -106,6 +110,34 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     }
   };
 
+  const depositPix = async () => {
+    const price = replaceCommaWithDot(depositValue);
+
+    const payload = {
+      price: Number(price),
+      paymentDate: formatDateTime(Date.now()),
+      type: selectedPaymentMethod,
+    };
+    try {
+      const token = await AsyncStorage.getItem("@secbox:TOKEN");
+      await api.post(`/payments/${user.id}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const [message, toastConfig] = generateToastConfig(
+        "Depósito realizado com sucesso!"
+      );
+      Toast.show(message, toastConfig);
+      onClose();
+    } catch (error: any) {
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao realizar depósito: ${error.response.data.message}`
+      );
+      Toast.show(message, toastConfig);
+    }
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -119,90 +151,150 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
           style={styles.container}
         >
           <View style={styles.modalView}>
-            {defineValue ? (
+            {qrCodePix ? (
               <>
-                <Text style={styles.title}>Defina o valor do depósito:</Text>
-                <Text>Depósito mínimo: 5.00</Text>
-                <TextInput
-                  placeholder="Valor*"
-                  style={styles.input}
-                  value={depositValue}
-                  onChangeText={setDepositValue}
-                  keyboardType="numeric"
-                />
-                <View style={styles.viewBtns}>
-                  <TouchableOpacity style={styles.nextBtn} onPress={deposit}>
-                    <Text style={styles.nextBtnText}>Depositar</Text>
+                <View style={styles.qrCodePixView}>
+                  <View style={styles.header}>
+                    <Text style={styles.headerTitle}>Código PIX:</Text>
+                    <TouchableOpacity
+                      style={styles.closeHeaderBtn}
+                      onPress={onClose}
+                    >
+                      <Text style={styles.closeHeaderBtnText}>X</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Image
+                    style={styles.qrCode}
+                    source={require("../../../../../assets/QRcode.png")}
+                  />
+                  <Text style={styles.qrCodeText}>
+                    22828hshssjsjsjk100\lle~;:
+                  </Text>
+                  <TouchableOpacity style={styles.copyCodeBtn}>
+                    <Text style={styles.copyCodeBtnText}>
+                      Copiar código PIX
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={styles.closeBtn}
-                    onPress={() => setDefineValue(false)}
+                    style={styles.alreadyPaidBtn}
+                    onPress={depositPix}
                   >
-                    <Text style={styles.closeBtnText}>Voltar</Text>
+                    <Text style={styles.alreadyPaidBtnText}>Já paguei!</Text>
                   </TouchableOpacity>
                 </View>
               </>
             ) : (
               <>
-                <Text style={styles.title}>
-                  Selecione o método de pagamento:
-                </Text>
-                <View style={styles.viewOptions}>
-                  <TouchableOpacity
-                    style={[
-                      styles.optionBtn,
-                      selectedPaymentMethod === "PIX" &&
-                        styles.selectedOptionBtn,
-                    ]}
-                    onPress={() => handlePaymentMethodSelect("PIX")}
-                  >
-                    <Image
-                      style={styles.optionBtnImage}
-                      source={require("../../../../../assets/PIX.png")}
-                    />
-                    <Text style={styles.optionBtnText}>PIX</Text>
-                  </TouchableOpacity>
-                  {defaultPaymentMethod ? (
-                    <TouchableOpacity
-                      style={[
-                        styles.optionBtn,
-                        selectedPaymentMethod === "PADRÃO" &&
-                          styles.selectedOptionBtn,
-                      ]}
-                      onPress={() => handlePaymentMethodSelect("PADRÃO")}
-                    >
-                      <Image
-                        style={styles.optionBtnImage}
-                        source={require("../../../../../assets/PaymentMethods.png")}
-                      />
-                      <Text style={styles.optionBtnText}>PADRÃO</Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.addPaymentMethodBtn}
-                      onPress={() => {
-                        onClose();
-                        navigation.navigate("PaymentMethods");
-                      }}
-                    >
-                      <Text style={styles.addPaymentMethodBtnText}>
-                        Adicionar forma de pagamento
+                {defineValue ? (
+                  <>
+                    <View style={styles.header}>
+                      <Text style={styles.headerTitle}>
+                        Defina o valor do depósito:
                       </Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-                <View style={styles.viewBtns}>
-                  <TouchableOpacity
-                    style={styles.nextBtn}
-                    onPress={handleNext}
-                    disabled={!selectedPaymentMethod}
-                  >
-                    <Text style={styles.nextBtnText}>Próximo</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-                    <Text style={styles.closeBtnText}>Fechar</Text>
-                  </TouchableOpacity>
-                </View>
+                      <TouchableOpacity
+                        style={styles.closeHeaderBtn}
+                        onPress={onClose}
+                      >
+                        <Text style={styles.closeHeaderBtnText}>X</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <Text>Depósito mínimo: 5.00</Text>
+                    <TextInput
+                      placeholder="Valor*"
+                      style={styles.input}
+                      value={depositValue}
+                      onChangeText={setDepositValue}
+                      keyboardType="numeric"
+                    />
+                    <View style={styles.viewBtns}>
+                      <TouchableOpacity
+                        style={styles.nextBtn}
+                        onPress={deposit}
+                      >
+                        <Text style={styles.nextBtnText}>Depositar</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.closeBtn}
+                        onPress={() => setDefineValue(false)}
+                      >
+                        <Text style={styles.closeBtnText}>Voltar</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <View style={styles.header}>
+                      <Text style={styles.headerTitle}>
+                        Selecione o método de pagamento:
+                      </Text>
+                      <TouchableOpacity
+                        style={styles.closeHeaderBtn}
+                        onPress={onClose}
+                      >
+                        <Text style={styles.closeHeaderBtnText}>X</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.viewOptions}>
+                      <TouchableOpacity
+                        style={[
+                          styles.optionBtn,
+                          selectedPaymentMethod === "PIX" &&
+                            styles.selectedOptionBtn,
+                        ]}
+                        onPress={() => handlePaymentMethodSelect("PIX")}
+                      >
+                        <Image
+                          style={styles.optionBtnImage}
+                          source={require("../../../../../assets/PIX.png")}
+                        />
+                        <Text style={styles.optionBtnText}>PIX</Text>
+                      </TouchableOpacity>
+                      {defaultPaymentMethod ? (
+                        <TouchableOpacity
+                          style={[
+                            styles.optionBtn,
+                            selectedPaymentMethod === "PADRÃO" &&
+                              styles.selectedOptionBtn,
+                          ]}
+                          onPress={() => handlePaymentMethodSelect("PADRÃO")}
+                        >
+                          <Image
+                            style={styles.optionBtnImage}
+                            source={require("../../../../../assets/PaymentMethods.png")}
+                          />
+                          <Text style={styles.optionBtnText}>PADRÃO</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          style={styles.addPaymentMethodBtn}
+                          onPress={() => {
+                            onClose();
+                            navigation.navigate("PaymentMethods");
+                          }}
+                        >
+                          <Text style={styles.addPaymentMethodBtnText}>
+                            Adicionar forma de pagamento
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <View style={styles.viewBtns}>
+                      <TouchableOpacity
+                        style={styles.nextBtn}
+                        onPress={handleNext}
+                        disabled={!selectedPaymentMethod}
+                      >
+                        <Text style={styles.nextBtnText}>Próximo</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.closeBtn}
+                        onPress={onClose}
+                      >
+                        <Text style={styles.closeBtnText}>Fechar</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </>
+                )}
               </>
             )}
           </View>
