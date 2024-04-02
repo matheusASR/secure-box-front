@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 10,
     padding: 5,
-    borderWidth: 1,
+    borderWidth: 2,
     textAlign: "center",
     fontWeight: "bold",
     borderRadius: 5,
@@ -91,14 +91,14 @@ const styles = StyleSheet.create({
   },
   addressData: {
     width: "100%",
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 20,
     borderRadius: 10,
     marginTop: 20
   },
   personalData: {
     width: "100%",
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 10,
     padding: 20,
   },

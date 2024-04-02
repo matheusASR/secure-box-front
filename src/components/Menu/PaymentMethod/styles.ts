@@ -28,20 +28,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   paymentMethodCard: {
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
     width: "90%",
     padding: 10,
     borderRadius: 15,
     height: 200,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    marginTop: 30
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    marginTop: 30,
+    borderWidth: 2
   },
   cardType: {
     fontSize: 22,
-    color: colors.primary,
+    
     position: "absolute",
     fontWeight: "bold",
     bottom: 150,
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
   },
   cardNumber: {
     fontSize: 22,
-    color: colors.primary,
+    
     position: "absolute",
     fontWeight: "bold",
     bottom: 110,
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   },
   expirationDate: {
     fontSize: 16,
-    color: colors.primary,
+    
     position: "absolute",
     fontWeight: "bold",
     bottom: 80,
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
   },
   cardHolderName: {
     fontSize: 16,
-    color: colors.primary,
+    
     fontWeight: "bold",
     position: "absolute",
     bottom: 55,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   },
   cardDefault: {
     fontSize: 16,
-    color: colors.primary,
+    
     fontWeight: "bold",
     position: "absolute",
     bottom: 10,
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   },
   removeCardBttnText: {
     fontSize: 16,
-    color: colors.primary,
+    
   },
   addPaymentBtn: {
     backgroundColor: colors.primary,
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   },
   cardDefineDefaultText: {
     fontSize: 16,
-    color: colors.primary,
+    
     fontWeight: "bold",
   },
 });
