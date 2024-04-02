@@ -25,7 +25,7 @@ const FinishAllocationModal = ({
             Início: {allocation.initialDatetime}
           </Text>
           <Text style={styles.modalText}>Horário atual: {finalDatetime}</Text>
-          <Text style={styles.modalText}>Valor a pagar: {price}</Text>
+          <Text style={styles.modalText}>Valor a pagar: R${price}</Text>
 
           <Text style={styles.attentionTitle}>ATENÇÃO!</Text>
           <Text style={styles.modalText}>
@@ -34,7 +34,7 @@ const FinishAllocationModal = ({
           <Text style={styles.modalText}>
             Certifique-se de que possui saldo em sua conta para pagar!
           </Text>
-          <Text style={styles.modalText}>Seu saldo: {user.wallet.balance}</Text>
+          <Text style={styles.modalText}>Seu saldo: R${user.wallet.balance}</Text>
 
           <TouchableOpacity
             style={styles.modalCloseBtn}

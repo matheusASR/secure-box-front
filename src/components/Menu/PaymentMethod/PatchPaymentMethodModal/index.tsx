@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, Modal } from "react-native";
 import styles from "./styles";
 
-const PatchPaymentMethodModal = ({ isVisible, onClose, onConfirm }: any) => {
+const PatchPaymentMethodModal = ({ isVisible, onClose, patternPaymentMethod, paymentMethodId}: any) => {
   return (
     <Modal
       animationType="slide"
@@ -17,7 +17,7 @@ const PatchPaymentMethodModal = ({ isVisible, onClose, onConfirm }: any) => {
             padrão?
           </Text>
           <View style={styles.viewBtns}>
-            <TouchableOpacity style={styles.yesBtn} onPress={onConfirm}>
+            <TouchableOpacity style={styles.yesBtn} onPress={() => patternPaymentMethod(paymentMethodId)}>
               <Text style={styles.yesBtnText}>Sim</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeBtn} onPress={onClose}>

@@ -15,10 +15,12 @@ const PaymentMethod = () => {
   const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
   const [paymentMethodModalVisible, setPaymentMethodModalVisible] =
     useState(false);
-  const [removePMModalVisible, setRemovePMModalVisible] = useState(false);
-  const [patchPMModalVisible, setPatchPMModalVisible] = useState(false);
+  const [removePMModalVisible, setRemovePMModalVisible] =
+    useState<boolean>(false);
+  const [patchPMModalVisible, setPatchPMModalVisible] =
+    useState<boolean>(false);
   const [userId, setUserId] = useState("");
-  const [paymentMethodId, setPaymentMethodId] = useState("")
+  const [paymentMethodId, setPaymentMethodId] = useState("");
 
   const getUserPaymentMethods = async () => {
     try {
@@ -53,6 +55,16 @@ const PaymentMethod = () => {
 
   const togglePaymentMethodModal = () => {
     setPaymentMethodModalVisible(!paymentMethodModalVisible);
+  };
+
+  const toggleRemovePaymentMethodModal = (PMID: any) => {
+    setRemovePMModalVisible(!removePMModalVisible);
+    setPaymentMethodId(PMID)
+  };
+
+  const togglePatchPaymentMethodModal = (PMID: any) => {
+    setPatchPMModalVisible(!patchPMModalVisible);
+    setPaymentMethodId(PMID)
   };
 
   const addPaymentMethod = async (data: any) => {
@@ -108,6 +120,7 @@ const PaymentMethod = () => {
           delay: 0,
         });
         getUserPaymentMethods();
+        setRemovePMModalVisible(false)
       }
     } catch (error: any) {
       Toast.show(
@@ -121,6 +134,7 @@ const PaymentMethod = () => {
           delay: 0,
         }
       );
+      setRemovePMModalVisible(false)
     }
   };
 
@@ -131,7 +145,7 @@ const PaymentMethod = () => {
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
       const response = await api.patch(
-        `/paymentMethods/${id}/${userId}`,
+        `/paymentMethods/${id}/`,
         payload,
         {
           headers: {
@@ -149,6 +163,7 @@ const PaymentMethod = () => {
           delay: 0,
         });
         getUserPaymentMethods();
+        setPatchPMModalVisible(false)
       }
     } catch (error: any) {
       Toast.show(
@@ -162,7 +177,18 @@ const PaymentMethod = () => {
           delay: 0,
         }
       );
+      setPatchPMModalVisible(false)
     }
+  };
+
+  const formatCardNumber = (cardNumber: any) => {
+    if (typeof cardNumber !== "string") {
+      return "";
+    }
+    cardNumber = cardNumber.replace(/\s/g, "");
+    const formattedCardNumber = cardNumber.replace(/(.{4})/g, "$1 ");
+
+    return formattedCardNumber;
   };
 
   return (
@@ -186,16 +212,13 @@ const PaymentMethod = () => {
               <View key={index} style={styles.paymentMethodCard}>
                 <TouchableOpacity
                   style={styles.removeCardBttn}
-                  onPress={() => {
-                    setRemovePMModalVisible(true)
-                    setPaymentMethodId(paymentMethod.id)
-                  }}
+                  onPress={() => toggleRemovePaymentMethodModal(paymentMethod.id)}
                 >
                   <Text style={styles.removeCardBttnText}>Remover cartão</Text>
                 </TouchableOpacity>
                 <Text style={styles.cardType}>{paymentMethod.cardType}</Text>
                 <Text style={styles.cardNumber}>
-                  {paymentMethod.cardNumber}
+                  {formatCardNumber(paymentMethod.cardNumber)}
                 </Text>
                 <Text style={styles.expirationDate}>
                   {paymentMethod.expirationDate}
@@ -211,10 +234,7 @@ const PaymentMethod = () => {
                   <>
                     <TouchableOpacity
                       style={styles.cardDefineDefaultBttn}
-                      onPress={() => {
-                        setPatchPMModalVisible(true)
-                        setPaymentMethodId(paymentMethod.id)
-                      }}
+                      onPress={() => togglePatchPaymentMethodModal(paymentMethod.id)}
                     >
                       <Text style={styles.cardDefineDefaultText}>
                         Definir como padrão
@@ -252,14 +272,16 @@ const PaymentMethod = () => {
         addPaymentMethod={addPaymentMethod}
       />
       <RemovePaymentMethodModal
-        isVisible={paymentMethodModalVisible}
-        onClose={togglePaymentMethodModal}
-        onConfirm={removePaymentMethod(paymentMethodId)}
+        isVisible={removePMModalVisible}
+        onClose={toggleRemovePaymentMethodModal}
+        removePaymentMethod={removePaymentMethod}
+        paymentMethodId={paymentMethodId}
       />
       <PatchPaymentMethodModal
-        isVisible={paymentMethodModalVisible}
-        onClose={togglePaymentMethodModal}
-        onConfirm={patternPaymentMethod(paymentMethodId)}
+        isVisible={patchPMModalVisible}
+        onClose={togglePatchPaymentMethodModal}
+        patternPaymentMethod={patternPaymentMethod}
+        paymentMethodId={paymentMethodId}
       />
     </>
   );

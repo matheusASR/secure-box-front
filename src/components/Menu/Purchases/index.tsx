@@ -97,7 +97,7 @@ const Purchases = () => {
                   Fim: {allocation.finalDatetime}
                 </Text>
                 <Text style={styles.allocationData}>
-                  Preço: {allocation.price}
+                  Preço: R${allocation.price}
                 </Text>
                 {/* <TouchableOpacity style={styles.receiptBtn}>
                   <Text style={styles.receiptText}>Comprovante</Text>

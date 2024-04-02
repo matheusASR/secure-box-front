@@ -54,10 +54,7 @@ const RegisterScreen = ({ navigation }: any) => {
           "Cadastro realizado com sucesso! Você será redirecionado."
         );
         Toast.show(message, toastConfig);
-
-        setTimeout(() => {
-          navigation.navigate("Login");
-        }, 2000);
+        navigation.navigate("Login");
       } else {
         const [message, toastConfig] = generateToastConfig(
           "Erro ao cadastrar usuário. Verifique os dados e tente novamente."
@@ -213,6 +210,8 @@ const RegisterScreen = ({ navigation }: any) => {
                         style={styles.input}
                         onChangeText={field.onChange}
                         value={field.value}
+                        keyboardType="numeric"
+                        maxLength={8}
                       />
                     )}
                     name="address.zipCode"

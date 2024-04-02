@@ -88,7 +88,7 @@ const MainMenu = () => {
         <View style={styles.viewBalanceDeposit}>
           {user.wallet && (
             <Text style={styles.balance}>
-              Saldo: {user.wallet.balance % 1 === 0 ? `R$${user.wallet.balance}.00` : `R$${user.wallet.balance}`}
+              Saldo: R${user.wallet.balance}
             </Text>
           )}
           <TouchableOpacity
