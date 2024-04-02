@@ -22,6 +22,7 @@ import { colors } from "../../styles";
 
 const RegisterScreen = ({ navigation }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [cepApi, setCepApi] = useState<any>(null);
   const {
     control,
     handleSubmit,
@@ -43,6 +44,19 @@ const RegisterScreen = ({ navigation }: any) => {
       },
     ];
   };
+
+  // const fetchAddressByCep = async (cep: string) => {
+  //   try {
+  //     const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+  //     const { logradouro, localidade, uf } = response.data;
+  //     setCepApi({ street: logradouro, city: localidade, state: uf });
+  //   } catch (error) {
+  //     const [message, toastConfig] = generateToastConfig(
+  //       "Erro ao buscar CEP. Verifique os dados e tente novamente."
+  //     );
+  //     Toast.show(message, toastConfig);
+  //   }
+  // };
 
   const onSubmit = async (data: any) => {
     data.email = data.email.toLowerCase();
@@ -114,6 +128,7 @@ const RegisterScreen = ({ navigation }: any) => {
                         style={styles.input}
                         onChangeText={field.onChange}
                         value={field.value}
+                        
                       />
                     )}
                     name="birthdate"
