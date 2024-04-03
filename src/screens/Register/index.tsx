@@ -19,12 +19,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Toast from "react-native-root-toast";
 import { api } from "../../services/api";
 import { colors } from "../../styles";
+import axios from "axios";
 
 const RegisterScreen = ({ navigation }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [cepApi, setCepApi] = useState<any>(null);
   const {
     control,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -45,18 +46,23 @@ const RegisterScreen = ({ navigation }: any) => {
     ];
   };
 
-  // const fetchAddressByCep = async (cep: string) => {
-  //   try {
-  //     const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-  //     const { logradouro, localidade, uf } = response.data;
-  //     setCepApi({ street: logradouro, city: localidade, state: uf });
-  //   } catch (error) {
-  //     const [message, toastConfig] = generateToastConfig(
-  //       "Erro ao buscar CEP. Verifique os dados e tente novamente."
-  //     );
-  //     Toast.show(message, toastConfig);
-  //   }
-  // };
+  const fetchAddressByCep = async (cep: string) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+      const { logradouro, localidade, uf } = response.data;
+      setValue("address.street", logradouro); 
+      setValue("address.city", localidade); 
+      setValue("address.state", uf);
+    } catch (error: any) {
+      const [message, toastConfig] = generateToastConfig(
+        `Erro ao buscar CEP: ${error.response.data.message}`
+      );
+      Toast.show(message, toastConfig);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const onSubmit = async (data: any) => {
     data.email = data.email.toLowerCase();
@@ -83,6 +89,17 @@ const RegisterScreen = ({ navigation }: any) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleChangeText = (text: any) => {
+    let formattedText = text.replace(/\D/g, "");
+    if (formattedText.length > 2) {
+      formattedText = `${formattedText.substring(0, 2)}/${formattedText.substring(2)}`;
+    }
+    if (formattedText.length > 5) {
+      formattedText = `${formattedText.substring(0, 5)}/${formattedText.substring(5)}`;
+    }
+    setValue("birthdate", formattedText);
   };
 
   return (
@@ -126,9 +143,10 @@ const RegisterScreen = ({ navigation }: any) => {
                       <TextInput
                         placeholder="Data de Nascimento*"
                         style={styles.input}
-                        onChangeText={field.onChange}
+                        onChangeText={handleChangeText}
                         value={field.value}
-                        
+                        keyboardType="numeric"
+                        maxLength={10}
                       />
                     )}
                     name="birthdate"
@@ -223,7 +241,12 @@ const RegisterScreen = ({ navigation }: any) => {
                       <TextInput
                         placeholder="CEP*"
                         style={styles.input}
-                        onChangeText={field.onChange}
+                        onChangeText={(value) => {
+                          field.onChange(value);
+                          if (value.length === 8) {
+                            fetchAddressByCep(value);
+                          }
+                        }}
                         value={field.value}
                         keyboardType="numeric"
                         maxLength={8}

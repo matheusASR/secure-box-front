@@ -15,11 +15,13 @@ import styles from "./styles";
 import Toast from "react-native-root-toast";
 import { api } from "../../../../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import QRCode from "react-native-qrcode-svg";
 
 const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [depositValue, setDepositValue] = useState<any>();
   const [qrCodePix, setQrCodePix] = useState<any>(false);
+  const [pixCode, setPixCode] = useState("");
   const [defineValue, setDefineValue] = useState(false);
   let defaultPaymentMethod: any = null;
 
@@ -82,6 +84,8 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     }
 
     if (selectedPaymentMethod === "PIX") {
+      const value = Number(price);
+      generatePixCode(value);
       setQrCodePix(true);
     } else {
       const payload = {
@@ -108,6 +112,24 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
         Toast.show(message, toastConfig);
       }
     }
+  };
+
+  const generatePixCode = (value: any) => {
+    const chavePix = "48124536821";
+
+    const pixData = {
+      chavePix,
+      valor: value.toFixed(2),
+      descricao: "Depósito SECBOX.",
+      nomeRecebedor: "Matheus Rego",
+    };
+    const pixUrl = `https://api.example.com/pix?chave=${
+      pixData.chavePix
+    }&valor=${pixData.valor}&desc=${encodeURIComponent(
+      pixData.descricao
+    )}&nome=${encodeURIComponent(pixData.nomeRecebedor)}`;
+
+    setPixCode(pixUrl);
   };
 
   const depositPix = async () => {
@@ -138,6 +160,10 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     }
   };
 
+  const copyTextToClipboard = () => {
+    
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -163,14 +189,12 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
                       <Text style={styles.closeHeaderBtnText}>X</Text>
                     </TouchableOpacity>
                   </View>
-                  <Image
-                    style={styles.qrCode}
-                    source={require("../../../../../assets/QRcode.png")}
-                  />
-                  <Text style={styles.qrCodeText}>
-                    22828hshssjsjsjk100\lle~;:
-                  </Text>
-                  <TouchableOpacity style={styles.copyCodeBtn}>
+                  <QRCode value={pixCode} size={200} />
+                  <Text style={styles.qrCodeText}>{pixCode}</Text>
+                  <TouchableOpacity
+                    style={styles.copyCodeBtn}
+                    onPress={copyTextToClipboard}
+                  >
                     <Text style={styles.copyCodeBtnText}>
                       Copiar código PIX
                     </Text>

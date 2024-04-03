@@ -104,13 +104,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  qrCode: {
-    width: "90%",
-    height: 180
-  },
   qrCodeText: {
     fontSize: 16,
-    marginTop: 20
+    marginTop: 20,
+    textAlign: "center"
   },
   copyCodeBtn: {
     width: "100%",

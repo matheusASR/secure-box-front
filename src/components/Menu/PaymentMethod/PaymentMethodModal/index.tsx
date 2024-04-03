@@ -25,7 +25,16 @@ const PaymentMethodModal = ({ isVisible, onClose, addPaymentMethod }: any) => {
     expirationDate: expirationDate,
     cvv: cvv,
     cardType: "Crédito",
-  }
+  };
+
+  const formatExpirationDate = (text: any) => {
+    let formattedText = text.replace(/\D/g, "");
+    if (formattedText.length > 2) {
+      formattedText =
+        formattedText.substring(0, 2) + "/" + formattedText.substring(2);
+    }
+    setExpirationDate(formattedText);
+  };
 
   return (
     <Modal
@@ -70,8 +79,10 @@ const PaymentMethodModal = ({ isVisible, onClose, addPaymentMethod }: any) => {
               <Text style={styles.label}>Expira em:</Text>
               <TextInput
                 value={expirationDate}
-                onChangeText={setExpirationDate}
+                onChangeText={formatExpirationDate}
                 style={styles.input}
+                maxLength={5}
+                keyboardType="numeric"
               />
 
               <Text style={styles.label}>CVV:</Text>
@@ -86,7 +97,11 @@ const PaymentMethodModal = ({ isVisible, onClose, addPaymentMethod }: any) => {
             <View style={styles.viewBtns}>
               <TouchableOpacity
                 style={styles.saveBtn}
-                onPress={() => addPaymentMethod(data)}
+                onPress={() => {
+                  if (data.cardNumber.length === 16) {
+                    addPaymentMethod(data);
+                  }
+                }}
               >
                 <Text style={styles.saveBtnText}>Adicionar</Text>
               </TouchableOpacity>
