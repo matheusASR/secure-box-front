@@ -58,7 +58,7 @@ const HomeScreen = ({ navigation }: any) => {
       ) : (
         <>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Home</Text>
+            <Text style={styles.headerTitle}>Início</Text>
           </View>
           <View style={styles.container}>
             <Image

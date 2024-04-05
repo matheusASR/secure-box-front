@@ -14,7 +14,12 @@ const styles = StyleSheet.create({
     padding: 20,
     elevation: 5,
     width: "90%",
-    maxHeight: "66%",
+    maxHeight: "62%",
+  },
+  errorText: {
+    fontSize: 14,
+    color: "red",
+    marginBottom: 15,
   },
   title: {
     fontSize: 16,
@@ -87,7 +92,22 @@ const styles = StyleSheet.create({
   closeHeaderBtnText: {
     fontSize: 18,
     color: "white"
-  }
+  },
+  passwordReqView: {
+    backgroundColor: colors.secondary,
+    padding: 20,
+    width: "100%",
+    borderRadius: 10,
+    marginBottom: 20
+  },
+  passwordReqTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10
+  },
+  passwordReq: {
+    fontSize: 14,
+  },
 });
 
 export default styles;

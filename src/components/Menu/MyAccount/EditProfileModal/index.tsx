@@ -21,12 +21,6 @@ const EditProfileModal = ({ isVisible, onClose, user }: any) => {
   const [email, setEmail] = useState(user.email);
   const [cel, setCel] = useState(user.cel);
   const [birthdate, setBirthdate] = useState(user.birthdate);
-  const [zipCode, setZipCode] = useState(user.address.zipCode);
-  const [street, setStreet] = useState(user.address.street);
-  const [number, setNumber] = useState(user.address.number);
-  const [city, setCity] = useState(user.address.city);
-  const [state, setState] = useState(user.address.state);
-  const [complement, setComplement] = useState(user.address.complement);
 
   const handleEditProfile = async () => {
     const formData = {
@@ -34,14 +28,6 @@ const EditProfileModal = ({ isVisible, onClose, user }: any) => {
       email: email,
       cel: cel,
       birthdate: birthdate,
-      address: {
-        zipCode: zipCode,
-        street: street,
-        number: number,
-        city: city,
-        state: state,
-        complement: complement
-      }
     };
     const token = await AsyncStorage.getItem("@secbox:TOKEN");
     try {
@@ -93,9 +79,6 @@ const EditProfileModal = ({ isVisible, onClose, user }: any) => {
                   <Text style={styles.closeHeaderBtnText}>X</Text>
                 </TouchableOpacity>
               </View>
-
-              <Text style={styles.title}>Dados Pessoais:</Text>
-
               <Text style={styles.label}>Nome:</Text>
               <TextInput
                 placeholder="Nome"
@@ -125,56 +108,6 @@ const EditProfileModal = ({ isVisible, onClose, user }: any) => {
                 placeholder="Data de Nascimento"
                 value={birthdate}
                 onChangeText={setBirthdate}
-                style={styles.input}
-              />
-
-              <Text style={styles.title}>Endereço:</Text>
-
-              <Text style={styles.label}>CEP:</Text>
-              <TextInput
-                placeholder="CEP"
-                value={zipCode}
-                onChangeText={setZipCode}
-                style={styles.input}
-              />
-
-              <Text style={styles.label}>Rua/Avenida:</Text>
-              <TextInput
-                placeholder="Rua/Avenida"
-                value={street}
-                onChangeText={setStreet}
-                style={styles.input}
-              />
-
-              <Text style={styles.label}>Número:</Text>
-              <TextInput
-                placeholder="Número"
-                value={number}
-                onChangeText={setNumber}
-                style={styles.input}
-              />
-
-              <Text style={styles.label}>Cidade:</Text>
-              <TextInput
-                placeholder="Cidade"
-                value={city}
-                onChangeText={setCity}
-                style={styles.input}
-              />
-
-              <Text style={styles.label}>Estado:</Text>
-              <TextInput
-                placeholder="Estado"
-                value={state}
-                onChangeText={setState}
-                style={styles.input}
-              />
-
-              <Text style={styles.label}>Complemento:</Text>
-              <TextInput
-                placeholder="Complemento"
-                value={complement}
-                onChangeText={setComplement}
                 style={styles.input}
               />
             </View>

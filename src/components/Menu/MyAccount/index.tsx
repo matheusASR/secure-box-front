@@ -6,10 +6,12 @@ import EditProfileModal from "./EditProfileModal";
 import { api } from "../../../services/api";
 import Toast from "react-native-root-toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import EditPasswordModal from "./EditPasswordModal";
 
 const MyAccount = () => {
   const navigation: any = useNavigation();
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isEditPasswordModalVisible, setIsEditPasswordModalVisible] = useState(false);
   const [user, setUser] = useState<any>({});
 
   useEffect(() => {
@@ -46,6 +48,15 @@ const MyAccount = () => {
     setIsEditModalVisible(false);
   };
 
+  const handleClosePasswordModal = () => {
+    setIsEditPasswordModalVisible(false);
+  };
+
+  function formatPhoneNumber(phoneNumber: any) {
+    const formattedPhoneNumber = `(${phoneNumber.slice(0, 2)}) ${phoneNumber.slice(2, 7)}-${phoneNumber.slice(7, 11)}`;
+    return formattedPhoneNumber;
+}
+
   return (
     <View style={styles.myAccountView}>
       <View style={styles.header}>
@@ -60,50 +71,50 @@ const MyAccount = () => {
         </TouchableOpacity>
         <Text style={styles.title}>Minha Conta</Text>
       </View>
-      <ScrollView style={styles.container}>
-        <View style={styles.dataContainer}>
-          <View style={styles.dataContainerTop}>
-            <View style={styles.personalData}>
-              <Text style={styles.titleData}>Dados Pessoais:</Text>
-              <Text style={styles.attrData}>Nome:</Text>
-              <Text style={styles.data}>{user.name}</Text>
-              <Text style={styles.attrData}>Email:</Text>
-              <Text style={styles.data}>{user.email}</Text>
-              <Text style={styles.attrData}>Telefone:</Text>
-              <Text style={styles.data}>{user.cel}</Text>
-              <Text style={styles.attrData}>Data de Nascimento:</Text>
-              <Text style={styles.data}>{user.birthdate}</Text>
-            </View>
-            <View style={styles.addressData}>
-              <Text style={styles.titleData}>Endereço:</Text>
-              <Text style={styles.attrData}>CEP:</Text>
-              <Text style={styles.data}>{user.address && user.address.zipCode}</Text>
-              <Text style={styles.attrData}>Rua/Avenida:</Text>
-              <Text style={styles.data}>{user.address && user.address.street}</Text>
-              <Text style={styles.attrData}>Número:</Text>
-              <Text style={styles.data}>{user.address && user.address.number}</Text>
-              <Text style={styles.attrData}>Cidade:</Text>
-              <Text style={styles.data}>{user.address && user.address.city}</Text>
-              <Text style={styles.attrData}>Estado:</Text>
-              <Text style={styles.data}>{user.address && user.address.state}</Text>
-              <Text style={styles.attrData}>Complemento:</Text>
-              <Text style={styles.data}>{user.address && user.address.complement}</Text>
-            </View>
+      <View style={styles.container}>
+        <View style={styles.dataContainerTop}>
+          <View style={styles.viewData}>
+            <Text style={styles.attrData}>Nome:</Text>
+            <Text style={styles.data}>{user.name}</Text>
+          </View>
+          <View style={styles.viewData}>
+            <Text style={styles.attrData}>Email:</Text>
+            <Text style={styles.data}>{user.email}</Text>
+          </View>
+          <View style={styles.viewData}>
+            <Text style={styles.attrData}>Telefone:</Text>
+            <Text style={styles.data}>{user.cel && formatPhoneNumber(user.cel)}</Text>
+          </View>
+          <View style={styles.viewData}>
+            <Text style={styles.attrData}>Data de Nascimento:</Text>
+            <Text style={styles.data}>{user.birthdate}</Text>
           </View>
         </View>
-      </ScrollView>
-      <View style={styles.whiteBg}>
         <TouchableOpacity
           style={styles.updateBtn}
           onPress={() => setIsEditModalVisible(true)}
         >
           <Text style={styles.updateBtnText}>Editar Perfil</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.updateBtn}
+          onPress={() => setIsEditPasswordModalVisible(true)}
+        >
+          <Text style={styles.updateBtnText}>Alterar Senha</Text>
+        </TouchableOpacity>
       </View>
       {isEditModalVisible && (
         <EditProfileModal
           isVisible={isEditModalVisible}
           onClose={handleCloseModal}
+          user={user}
+        />
+      )}
+      {isEditPasswordModalVisible && (
+        <EditPasswordModal
+          isVisible={isEditPasswordModalVisible}
+          onClose={handleClosePasswordModal}
           user={user}
         />
       )}

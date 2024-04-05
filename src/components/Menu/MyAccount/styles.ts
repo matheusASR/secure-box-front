@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "white",
+    width: "100%",
+    alignItems: "center",
   },
   label: {
     fontSize: 16,
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
   },
   updateBtn: {
     backgroundColor: colors.primary,
-    marginBottom: 40,
+    marginBottom: 15,
     borderRadius: 5,
     paddingVertical: 12,
     width: "85%",
@@ -55,17 +56,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  dataContainer: {
-    padding: 20,
-    width: "100%",
-    justifyContent: "center",
-  },
   dataContainerTop: {
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: colors.secondary,
     width: "100%",
     padding: 15,
+    paddingBottom: 35,
     gap: 5
   },
   value: {
@@ -76,35 +72,21 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 10,
     padding: 5,
-    borderWidth: 2,
+    borderWidth: 1,
     textAlign: "center",
     fontWeight: "bold",
     borderRadius: 5,
     marginTop: 5
   },
-  whiteBg: {
-    backgroundColor: "white",
-    alignItems: "center",
-  },
   myAccountView: {
     height: "100%",
-  },
-  addressData: {
-    width: "100%",
-    borderWidth: 2,
-    padding: 20,
-    borderRadius: 10,
-    marginTop: 20
-  },
-  personalData: {
-    width: "100%",
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 20,
   },
   attrData: {
     textAlign: "center",
     marginTop: 10
+  },
+  viewData: {
+    width: "90%"
   }
 });
 

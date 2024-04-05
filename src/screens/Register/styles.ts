@@ -21,6 +21,12 @@ const styles = StyleSheet.create<any>({
     alignItems: "center",
     justifyContent: "center",
   },
+  loadingContainerZipCode: {
+    height: 0,
+    position: "absolute",
+    right: 20,
+    top: 683
+  },
   input: {
     marginBottom: 20,
     padding: Platform.OS === "ios" ? 15 : 10,
@@ -65,6 +71,21 @@ const styles = StyleSheet.create<any>({
     fontSize: 14,
     color: "red",
     marginBottom: 15,
+  },
+  passwordReqView: {
+    backgroundColor: colors.secondary,
+    padding: 20,
+    width: "100%",
+    borderRadius: 10,
+    marginBottom: 20
+  },
+  passwordReqTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10
+  },
+  passwordReq: {
+    fontSize: 14,
   },
 });
 

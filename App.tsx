@@ -70,7 +70,7 @@ const AppNavigation = () => {
               tabBarIcon: ({ focused }) => {
                 let iconName;
 
-                if (route.name === "Home") {
+                if (route.name === "Início") {
                   iconName = focused
                     ? require("./assets/HomeFocused.png")
                     : require("./assets/Home.png");
@@ -91,7 +91,7 @@ const AppNavigation = () => {
             })}
           >
             <Tab.Screen
-              name="Home"
+              name="Início"
               component={HomeScreen}
               options={{ headerShown: false }}
             />
