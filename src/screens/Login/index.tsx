@@ -86,7 +86,7 @@ const LoginScreen = ({ navigation }: any) => {
                   )}
                   <View style={styles.rowDirectionView}>
                     <Text style={styles.forgotPass}>Esqueceu sua senha?</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("Senha")}>
                       <Text style={styles.clickHere}>Clique aqui</Text>
                     </TouchableOpacity>
                   </View>

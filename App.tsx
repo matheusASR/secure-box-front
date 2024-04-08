@@ -16,6 +16,7 @@ import { InUseProvider } from "./src/providers/inUseContext";
 import { colors } from "./src/styles";
 import { Image } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
+import ForgotPasswordScreen from "./src/screens/ForgotPassword";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -119,6 +120,7 @@ const AppNavigation = () => {
           >
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Cadastro" component={RegisterScreen} />
+            <Stack.Screen name="Senha" component={ForgotPasswordScreen} />
           </Stack.Navigator>
         </ScreenPatternStack>
       )}
