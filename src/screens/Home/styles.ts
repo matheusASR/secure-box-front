@@ -33,10 +33,21 @@ const styles = StyleSheet.create<any>({
     padding: 20,
     gap: 20,
   },
+  contentContainer: {
+    flexGrow: 1,
+    marginTop: 30,
+    paddingHorizontal: 30,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
+  },
+  titleLocal: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginTop: 30,
+    textAlign: "center"
   },
   titleCageCard: {
     fontSize: 18,
@@ -78,7 +89,7 @@ const styles = StyleSheet.create<any>({
     textAlign: "center",
     marginTop: -14,
   },
-  cageListCard: {
+  localCard: {
     backgroundColor: "white",
     height: 100,
     width: "100%",
@@ -86,18 +97,26 @@ const styles = StyleSheet.create<any>({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    borderRadius: 10,
+    borderWidth: 1
   },
   cageListScroll: {
     marginTop: 20,
   },
-  cageCardImage: {
+  localImage: {
     width: 90,
     height: 90,
+    marginLeft: 40
   },
   textCardView: {
-    width: "60%",
+    width: "75%",
     flexDirection: "column",
-    gap: 10,
+    alignItems: "center"
+  },
+  localText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10
   },
 });
 

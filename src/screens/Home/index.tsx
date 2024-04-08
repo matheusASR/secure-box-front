@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { HomeContext } from "../../providers/homeContext";
 import CageList from "../../components/Home/CageList";
 import styles from "./styles";
@@ -58,20 +58,21 @@ const HomeScreen = ({ navigation }: any) => {
       ) : (
         <>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Início</Text>
+            <Text style={styles.headerTitle}>Selecione um local:</Text>
           </View>
-          <View style={styles.container}>
-            <Image
-              source={require("../../../assets/QRcode.png")}
-              style={styles.buttonImage}
-            />
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setIsCameraOpen(true)}
-            >
-              <Text style={styles.buttonText}>Acessar gaiola pelo QR code</Text>
+          <ScrollView contentContainerStyle={styles.contentContainer}>
+            <TouchableOpacity style={styles.localCard} onPress={() => setIsCameraOpen(true)}>
+              <Image
+                style={styles.localImage}
+                source={require("../../../assets/ShoppingCentro.jpg")}
+              />
+              <View style={styles.textCardView}>
+                <Text style={styles.localText}>Shopping Centro</Text>
+                <Text>Rua Rubião Junior, 84</Text>
+                <Text>São José dos Campos</Text>
+              </View>
             </TouchableOpacity>
-          </View>
+          </ScrollView>
         </>
       )}
     </>

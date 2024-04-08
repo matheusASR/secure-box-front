@@ -17,7 +17,7 @@ interface LoginProviderProps {
 }
 
 const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
-  const [logged, setLogged] = useState<any>(false);
+  const [logged, setLogged] = useState<any>(true);
   const [loading, setLoading] = useState<boolean>(false)
 
   const generateToastConfig = (message: any) => {
