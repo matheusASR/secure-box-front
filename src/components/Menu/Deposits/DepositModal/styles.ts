@@ -116,6 +116,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 20
   },
+  loadingContainer: {
+    height: 300,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   copyCodeBtnText: {
     color: "white",
     fontWeight: "bold",

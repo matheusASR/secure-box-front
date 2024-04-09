@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         padding: 20,
         elevation: 5,
         width: "90%",
-        maxHeight: "60%",
+        maxHeight: "65%",
       },
       title: {
         fontSize: 16,

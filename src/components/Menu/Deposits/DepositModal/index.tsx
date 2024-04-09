@@ -10,12 +10,14 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import styles from "./styles";
 import Toast from "react-native-root-toast";
 import { api } from "../../../../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import QRCode from "react-native-qrcode-svg";
+import { colors } from "../../../../styles";
 
 const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -23,6 +25,8 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   const [qrCodePix, setQrCodePix] = useState<any>(false);
   const [pixCode, setPixCode] = useState("");
   const [defineValue, setDefineValue] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   let defaultPaymentMethod: any = null;
 
   if (user.paymentMethods.length > 0) {
@@ -75,6 +79,7 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   };
 
   const deposit = async () => {
+    console.log(selectedPaymentMethod);
     const price = replaceCommaWithDot(depositValue);
     if (price < 5) {
       const [message, toastConfig] = generateToastConfig(
@@ -85,7 +90,7 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
 
     if (selectedPaymentMethod === "PIX") {
       const value = Number(price);
-      generatePixCode(value);
+      generatePixCode();
       setQrCodePix(true);
     } else {
       const payload = {
@@ -114,22 +119,26 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     }
   };
 
-  const generatePixCode = (value: any) => {
-    const chavePix = "48124536821";
-
-    const pixData = {
-      chavePix,
-      valor: value.toFixed(2),
-      descricao: "Depósito SECBOX.",
-      nomeRecebedor: "Matheus Rego",
-    };
-    const pixUrl = `https://api.example.com/pix?chave=${
-      pixData.chavePix
-    }&valor=${pixData.valor}&desc=${encodeURIComponent(
-      pixData.descricao
-    )}&nome=${encodeURIComponent(pixData.nomeRecebedor)}`;
-
-    setPixCode(pixUrl);
+  const generatePixCode = async () => {
+    setIsLoading(true);
+    try {
+      const token = await AsyncStorage.getItem("@secbox:TOKEN");
+      const responsePix = await api.post(`/pix/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (responsePix.status === 201) {
+        setPixCode(responsePix.data.qrcode);
+      }
+    } catch (error: any) {
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao gerar cobrança pix: ${error.response.data.message}`
+      );
+      Toast.show(message, toastConfig);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const depositPix = async () => {
@@ -160,9 +169,7 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     }
   };
 
-  const copyTextToClipboard = () => {
-    
-  };
+  const copyTextToClipboard = () => {};
 
   return (
     <Modal
@@ -189,8 +196,22 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
                       <Text style={styles.closeHeaderBtnText}>X</Text>
                     </TouchableOpacity>
                   </View>
-                  <QRCode value={pixCode} size={200} />
-                  <Text style={styles.qrCodeText}>{pixCode}</Text>
+                  {isLoading && (
+                    <>
+                      <View style={styles.loadingContainer}>
+                        <ActivityIndicator
+                          size="large"
+                          color={colors.primary}
+                        />
+                      </View>
+                    </>
+                  )}
+                  {pixCode && (
+                    <>
+                      <QRCode value={pixCode} size={200} />
+                      <Text style={styles.qrCodeText}>{pixCode}</Text>
+                    </>
+                  )}
                   <TouchableOpacity
                     style={styles.copyCodeBtn}
                     onPress={copyTextToClipboard}

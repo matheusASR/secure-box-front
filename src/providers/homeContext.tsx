@@ -11,8 +11,8 @@ interface HomeContextType {
   setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   handleCloseModal: () => void;
   handleStartAllocation: (cageId: any) => void;
-  isCameraOpen: boolean;
-  setIsCameraOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isLocalOpen: boolean;
+  setIsLocalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   selectedCage: any;
   setSelectedCage: React.Dispatch<React.SetStateAction<any>>;
 }
@@ -22,7 +22,7 @@ const HomeContext = createContext<HomeContextType>({} as HomeContextType);
 const HomeProvider = ({ children }: any) => {
   const [cages, setCages] = useState<any>([]);
   const [isModalVisible, setIsModalVisible] = useState<any>(false);
-  const [isCameraOpen, setIsCameraOpen] = useState<any>(false);
+  const [isLocalOpen, setIsLocalOpen] = useState<any>(false);
   const [selectedCage, setSelectedCage] = useState<any>({});
 
   const generateToastConfig = (message: any) => {
@@ -112,8 +112,8 @@ const HomeProvider = ({ children }: any) => {
         handleCloseModal,
         handleStartAllocation,
         selectedCage,
-        isCameraOpen,
-        setIsCameraOpen,
+        isLocalOpen,
+        setIsLocalOpen,
         setSelectedCage,
       }}
     >

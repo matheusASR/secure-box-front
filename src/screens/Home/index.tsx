@@ -8,7 +8,7 @@ import { LoginContext } from "../../providers/loginContext";
 import Toast from "react-native-root-toast";
 
 const HomeScreen = ({ navigation }: any) => {
-  const { isCameraOpen, setIsCameraOpen } = useContext<any>(HomeContext);
+  const { isLocalOpen, setIsLocalOpen } = useContext<any>(HomeContext);
   const { setLogged } = useContext(LoginContext);
 
   useEffect(() => {
@@ -39,12 +39,12 @@ const HomeScreen = ({ navigation }: any) => {
 
   return (
     <>
-      {isCameraOpen ? (
+      {isLocalOpen ? (
         <>
           <View style={styles.header}>
             <TouchableOpacity
               style={styles.backBtn}
-              onPress={() => setIsCameraOpen(false)}
+              onPress={() => setIsLocalOpen(false)}
             >
               <Image
                 style={styles.backBtnImage}
@@ -61,7 +61,7 @@ const HomeScreen = ({ navigation }: any) => {
             <Text style={styles.headerTitle}>Selecione um local:</Text>
           </View>
           <ScrollView contentContainerStyle={styles.contentContainer}>
-            <TouchableOpacity style={styles.localCard} onPress={() => setIsCameraOpen(true)}>
+            <TouchableOpacity style={styles.localCard} onPress={() => setIsLocalOpen(true)}>
               <Image
                 style={styles.localImage}
                 source={require("../../../assets/ShoppingCentro.jpg")}
