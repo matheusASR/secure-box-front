@@ -79,7 +79,6 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   };
 
   const deposit = async () => {
-    console.log(selectedPaymentMethod);
     const price = replaceCommaWithDot(depositValue);
     if (price < 5) {
       const [message, toastConfig] = generateToastConfig(

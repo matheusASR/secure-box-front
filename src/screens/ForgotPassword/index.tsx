@@ -119,7 +119,7 @@ const ForgotPasswordScreen = () => {
                 />
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => loginAlt}
+                  onPress={() => loginAlt()}
                 >
                   <Text style={styles.buttonText}>Entrar</Text>
                 </TouchableOpacity>
