@@ -45,6 +45,7 @@ const styles = StyleSheet.create<any>({
     backgroundColor: "white",
     width: "100%"
   },
+  
 });
 
 export default styles;
