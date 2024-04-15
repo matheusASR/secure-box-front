@@ -18,7 +18,7 @@ import { api } from "../../../../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import QRCode from "react-native-qrcode-svg";
 import { colors } from "../../../../styles";
-// import Clipboard from '@react-native-clipboard/clipboard';
+import * as Clipboard from "expo-clipboard"
 
 const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -122,10 +122,15 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   const generatePixCode = async () => {
     setIsLoading(true);
     try {
+      const price = replaceCommaWithDot(depositValue);
+      const payload = {
+        value: price, 
+      };
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const responsePix = await api.post(`/generatepix/`, {
+      const responsePix = await api.post("/generatepix", {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", 
         },
       });
       if (responsePix.status === 201) {
@@ -140,6 +145,7 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
       setIsLoading(false);
     }
   };
+  
 
   const depositPix = async () => {
     const price = replaceCommaWithDot(depositValue);
@@ -169,10 +175,10 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     }
   };
 
-  const copyTextToClipboard = () => {
-    // Clipboard.setString(pixCode);
-    // const [message, toastConfig] = generateToastConfig('Código PIX copiado para a área de transferência!');
-    // Toast.show(message, toastConfig);
+  const copyTextToClipboard = async () => {
+    await Clipboard.setStringAsync(pixCode);
+    const [message, toastConfig] = generateToastConfig('Código PIX copiado para a área de transferência!');
+    Toast.show(message, toastConfig);
   };
 
   return (
