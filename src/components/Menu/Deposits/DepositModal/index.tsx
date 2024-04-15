@@ -18,6 +18,7 @@ import { api } from "../../../../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import QRCode from "react-native-qrcode-svg";
 import { colors } from "../../../../styles";
+// import Clipboard from '@react-native-clipboard/clipboard';
 
 const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -168,7 +169,11 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     }
   };
 
-  const copyTextToClipboard = () => {};
+  const copyTextToClipboard = () => {
+    // Clipboard.setString(pixCode);
+    // const [message, toastConfig] = generateToastConfig('Código PIX copiado para a área de transferência!');
+    // Toast.show(message, toastConfig);
+  };
 
   return (
     <Modal

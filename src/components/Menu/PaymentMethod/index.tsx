@@ -203,7 +203,7 @@ const PaymentMethod = () => {
             source={require("../../../../assets/BackBtn.png")}
           />
         </TouchableOpacity>
-        <Text style={styles.title}>Forma de Pagamento</Text>
+        <Text style={styles.title}>Formas de Pagamento</Text>
       </View>
       <View style={styles.paymentMethodContainer}>
         {paymentMethods.length > 0 ? (
