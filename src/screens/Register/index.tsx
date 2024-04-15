@@ -51,8 +51,9 @@ const RegisterScreen = ({ navigation }: any) => {
     setIsLoadingZipCode(true);
     try {
       const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-      const { logradouro, localidade, uf } = response.data;
+      const { logradouro, bairro, localidade, uf } = response.data;
       setValue("address.street", logradouro);
+      setValue("address.neighborhood", bairro); // Adicionando o bairro
       setValue("address.city", localidade);
       setValue("address.state", uf);
     } catch (error: any) {
@@ -64,6 +65,7 @@ const RegisterScreen = ({ navigation }: any) => {
       setIsLoadingZipCode(false);
     }
   };
+
 
   const onSubmit = async (data: any) => {
     data.email = data.email.toLowerCase();
@@ -339,6 +341,25 @@ const RegisterScreen = ({ navigation }: any) => {
                     {errors.address?.number && (
                       <Text style={styles.errorText}>
                         {errors.address.number.message}
+                      </Text>
+                    )}
+                    <Controller
+                      control={control}
+                      render={({ field }: any) => (
+                        <TextInput
+                          placeholder="Bairro*"
+                          style={styles.input}
+                          onChangeText={field.onChange}
+                          value={field.value}
+                        />
+                      )}
+                      name="address.neighborhood"
+                      rules={{ required: true }}
+                      defaultValue=""
+                    />
+                    {errors.address?.neighborhood && (
+                      <Text style={styles.errorText}>
+                        {errors.address.neighborhood.message}
                       </Text>
                     )}
                     <Controller

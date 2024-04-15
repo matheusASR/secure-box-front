@@ -14,6 +14,7 @@ export const registerFormSchema = yup.object().shape({
     zipCode: yup.string().required("CEP é obrigatório"),
     street: yup.string().required("Rua/Avenida é obrigatória"),
     number: yup.string().required("Número é obrigatório"),
+    neighborhood: yup.string().required("Bairro é obrigatório"),
     city: yup.string().required("Cidade é obrigatória"),
     state: yup.string().required("Estado é obrigatório"),
     complement: yup.string().nullable(),

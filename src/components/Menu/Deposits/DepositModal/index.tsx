@@ -122,7 +122,7 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     setIsLoading(true);
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const responsePix = await api.post(`/pix/`, {
+      const responsePix = await api.post(`/generatepix/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
