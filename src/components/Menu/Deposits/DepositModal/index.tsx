@@ -25,6 +25,7 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   const [depositValue, setDepositValue] = useState<any>();
   const [qrCodePix, setQrCodePix] = useState<any>(false);
   const [pixCode, setPixCode] = useState("");
+  const [txid, setTxid] = useState("");
   const [defineValue, setDefineValue] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -135,6 +136,7 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
       });
       if (responsePix.status === 201) {
         setPixCode(responsePix.data.qrcode);
+        setTxid(responsePix.data.txid)
       }
     } catch (error: any) {
       const [message, toastConfig] = generateToastConfig(
@@ -180,6 +182,33 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     const [message, toastConfig] = generateToastConfig('Código PIX copiado para a área de transferência!');
     Toast.show(message, toastConfig);
   };
+
+  const verifyPix = async () => {
+    const payload = {
+      txid: txid
+    };
+    try {
+      const token = await AsyncStorage.getItem("@secbox:TOKEN");
+      const response = await api.post(`/verifyPix/`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        depositPix()
+      } else {
+        const [message, toastConfig] = generateToastConfig(
+          `O PIX ainda não foi realizado!`
+        );
+        Toast.show(message, toastConfig);
+      }
+    } catch (error: any) {
+      const [message, toastConfig] = generateToastConfig(
+        `Ocorreu um erro ao verificar depósito: ${error.response.data.message}`
+      );
+      Toast.show(message, toastConfig);
+    }
+  }
 
   return (
     <Modal
@@ -232,7 +261,7 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.alreadyPaidBtn}
-                    onPress={depositPix}
+                    onPress={verifyPix}
                   >
                     <Text style={styles.alreadyPaidBtnText}>Já paguei!</Text>
                   </TouchableOpacity>
