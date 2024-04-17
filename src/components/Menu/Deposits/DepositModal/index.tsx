@@ -125,8 +125,17 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     setIsLoading(true);
     try {
       const price = replaceCommaWithDot(depositValue);
+      const priceToFixed = Number(price).toFixed(2)
+      const priceToFixedString = priceToFixed.toString()
       const payload = {
-        value: price,
+        calendario: {
+          expiracao: 3600,
+        },
+        valor: {
+          original: priceToFixedString,
+        },
+        chave: "2b720e07-d74a-42b8-ba94-cfa71bc9ca8d",
+        solicitacaoPagador: "Cobrança dos serviços prestados.",
       };
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
       const responsePix = await api.post("/generatepix", payload, {
@@ -144,6 +153,7 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
         `Ocorreu um erro ao gerar cobrança pix: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
+      console.log(error.response.data.message)
     } finally {
       setIsLoading(false);
     }
