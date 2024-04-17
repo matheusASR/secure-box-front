@@ -18,16 +18,17 @@ import { api } from "../../../../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import QRCode from "react-native-qrcode-svg";
 import { colors } from "../../../../styles";
-import * as Clipboard from "expo-clipboard"
+import * as Clipboard from "expo-clipboard";
 
 const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  const [depositValue, setDepositValue] = useState<any>();
+  const [depositValue, setDepositValue] = useState<any>("");
   const [qrCodePix, setQrCodePix] = useState<any>(false);
   const [pixCode, setPixCode] = useState("");
   const [txid, setTxid] = useState("");
   const [defineValue, setDefineValue] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingVerify, setIsLoadingVerify] = useState(false);
 
   let defaultPaymentMethod: any = null;
 
@@ -125,18 +126,18 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     try {
       const price = replaceCommaWithDot(depositValue);
       const payload = {
-        value: price, 
+        value: price,
       };
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const responsePix = await api.post("/generatepix", {
+      const responsePix = await api.post("/generatepix", payload, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", 
+          "Content-Type": "application/json",
         },
       });
       if (responsePix.status === 201) {
         setPixCode(responsePix.data.qrcode);
-        setTxid(responsePix.data.txid)
+        setTxid(responsePix.data.txid);
       }
     } catch (error: any) {
       const [message, toastConfig] = generateToastConfig(
@@ -147,7 +148,6 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
       setIsLoading(false);
     }
   };
-  
 
   const depositPix = async () => {
     const price = replaceCommaWithDot(depositValue);
@@ -179,14 +179,17 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
 
   const copyTextToClipboard = async () => {
     await Clipboard.setStringAsync(pixCode);
-    const [message, toastConfig] = generateToastConfig('Código PIX copiado para a área de transferência!');
+    const [message, toastConfig] = generateToastConfig(
+      "Código PIX copiado para a área de transferência!"
+    );
     Toast.show(message, toastConfig);
   };
 
   const verifyPix = async () => {
     const payload = {
-      txid: txid
+      txid: txid,
     };
+    setIsLoadingVerify(true);
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
       const response = await api.post(`/verifyPix/`, payload, {
@@ -194,11 +197,11 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (response.status === 200) {
-        depositPix()
+      if (response.data.found === true) {
+        depositPix();
       } else {
         const [message, toastConfig] = generateToastConfig(
-          `O PIX ainda não foi realizado!`
+          "O PIX ainda não foi realizado!"
         );
         Toast.show(message, toastConfig);
       }
@@ -207,8 +210,10 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
         `Ocorreu um erro ao verificar depósito: ${error.response.data.message}`
       );
       Toast.show(message, toastConfig);
+    } finally {
+      setIsLoadingVerify(false);
     }
-  }
+  };
 
   return (
     <Modal
@@ -225,47 +230,53 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
           <View style={styles.modalView}>
             {qrCodePix ? (
               <>
-                <View style={styles.qrCodePixView}>
-                  <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Código PIX:</Text>
+                {isLoadingVerify ? (
+                  <View style={styles.loadingVerifyContainer}>
+                    <ActivityIndicator size="large" color={colors.primary} />
+                  </View>
+                ) : (
+                  <View style={styles.qrCodePixView}>
+                    <View style={styles.header}>
+                      <Text style={styles.headerTitle}>Código PIX:</Text>
+                      <TouchableOpacity
+                        style={styles.closeHeaderBtn}
+                        onPress={onClose}
+                      >
+                        <Text style={styles.closeHeaderBtnText}>X</Text>
+                      </TouchableOpacity>
+                    </View>
+                    {isLoading && (
+                      <>
+                        <View style={styles.loadingContainer}>
+                          <ActivityIndicator
+                            size="large"
+                            color={colors.primary}
+                          />
+                        </View>
+                      </>
+                    )}
+                    {pixCode && (
+                      <>
+                        <QRCode value={pixCode} size={200} />
+                        <Text style={styles.qrCodeText}>{pixCode}</Text>
+                      </>
+                    )}
                     <TouchableOpacity
-                      style={styles.closeHeaderBtn}
-                      onPress={onClose}
+                      style={styles.copyCodeBtn}
+                      onPress={copyTextToClipboard}
                     >
-                      <Text style={styles.closeHeaderBtnText}>X</Text>
+                      <Text style={styles.copyCodeBtnText}>
+                        Copiar código PIX
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.alreadyPaidBtn}
+                      onPress={verifyPix}
+                    >
+                      <Text style={styles.alreadyPaidBtnText}>Já paguei!</Text>
                     </TouchableOpacity>
                   </View>
-                  {isLoading && (
-                    <>
-                      <View style={styles.loadingContainer}>
-                        <ActivityIndicator
-                          size="large"
-                          color={colors.primary}
-                        />
-                      </View>
-                    </>
-                  )}
-                  {pixCode && (
-                    <>
-                      <QRCode value={pixCode} size={200} />
-                      <Text style={styles.qrCodeText}>{pixCode}</Text>
-                    </>
-                  )}
-                  <TouchableOpacity
-                    style={styles.copyCodeBtn}
-                    onPress={copyTextToClipboard}
-                  >
-                    <Text style={styles.copyCodeBtnText}>
-                      Copiar código PIX
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.alreadyPaidBtn}
-                    onPress={verifyPix}
-                  >
-                    <Text style={styles.alreadyPaidBtnText}>Já paguei!</Text>
-                  </TouchableOpacity>
-                </View>
+                )}
               </>
             ) : (
               <>

@@ -121,6 +121,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  loadingVerifyContainer: {
+    height: 530,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   copyCodeBtnText: {
     color: "white",
     fontWeight: "bold",
