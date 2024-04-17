@@ -101,6 +101,7 @@ const EditProfileModal = ({ isVisible, onClose, user }: any) => {
                 value={cel}
                 onChangeText={setCel}
                 style={styles.input}
+                maxLength={11}
               />
 
               <Text style={styles.label}>Data de Nascimento:</Text>
@@ -109,6 +110,7 @@ const EditProfileModal = ({ isVisible, onClose, user }: any) => {
                 value={birthdate}
                 onChangeText={setBirthdate}
                 style={styles.input}
+                maxLength={10}
               />
             </View>
             <View style={styles.viewBtns}>

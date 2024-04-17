@@ -45,7 +45,19 @@ const styles = StyleSheet.create<any>({
     backgroundColor: "white",
     width: "100%"
   },
-  
+  buttonAlt: {
+    backgroundColor: colors.secondary,
+    paddingVertical: 12,
+    borderRadius: 5,
+    marginTop: 10,
+    width: "90%",
+  },
+  buttonTextAlt: {
+    color: colors.primary,
+    fontSize: 16,
+    textAlign: "center",
+    fontWeight: "bold"
+  },
 });
 
 export default styles;

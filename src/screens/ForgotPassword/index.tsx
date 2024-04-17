@@ -123,6 +123,12 @@ const ForgotPasswordScreen = () => {
                 >
                   <Text style={styles.buttonText}>Entrar</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonAlt}
+                  onPress={handleSendCode}
+                >
+                  <Text style={styles.buttonTextAlt}>Não recebi o código!</Text>
+                </TouchableOpacity>
               </>
             ) : (
               <>
