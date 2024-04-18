@@ -43,7 +43,7 @@ const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
         await AsyncStorage.setItem("@secbox:TOKEN", response.data.token);
         setLogged(true);
         const [message, toastConfig] = generateToastConfig(
-          "Login realizado com sucesso! Você será redirecionado."
+          "Login realizado com sucesso!"
         );
         Toast.show(message, toastConfig);
       }

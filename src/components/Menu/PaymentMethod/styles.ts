@@ -85,6 +85,12 @@ const styles = StyleSheet.create({
     top: 20,
     right: 20,
   },
+  notAvailable: {
+    width: "80%",
+    fontSize: 17,
+    color: "gray",
+    textAlign: "center",
+  },
   removeCardBttnText: {
     fontSize: 16,
     

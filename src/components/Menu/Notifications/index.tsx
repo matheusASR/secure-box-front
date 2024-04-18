@@ -20,7 +20,11 @@ const Notifications = () => {
         </TouchableOpacity>
         <Text style={styles.title}>Notificações</Text>
       </View>
-      <View></View>
+      <View style={styles.noContent}>
+        <Text style={styles.noNotificationsYet}>
+          Nenhuma notificação até o momento.
+        </Text>
+      </View>
     </>
   );
 };

@@ -22,6 +22,18 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
+  noContent: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  noNotificationsYet: {
+    width: "80%",
+    fontSize: 17,
+    color: "gray",
+    textAlign: "center",
+  },
 });
 
 export default styles;

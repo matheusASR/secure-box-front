@@ -59,12 +59,12 @@ const PaymentMethod = () => {
 
   const toggleRemovePaymentMethodModal = (PMID: any) => {
     setRemovePMModalVisible(!removePMModalVisible);
-    setPaymentMethodId(PMID)
+    setPaymentMethodId(PMID);
   };
 
   const togglePatchPaymentMethodModal = (PMID: any) => {
     setPatchPMModalVisible(!patchPMModalVisible);
-    setPaymentMethodId(PMID)
+    setPaymentMethodId(PMID);
   };
 
   const addPaymentMethod = async (data: any) => {
@@ -120,7 +120,7 @@ const PaymentMethod = () => {
           delay: 0,
         });
         getUserPaymentMethods();
-        setRemovePMModalVisible(false)
+        setRemovePMModalVisible(false);
       }
     } catch (error: any) {
       Toast.show(
@@ -134,7 +134,7 @@ const PaymentMethod = () => {
           delay: 0,
         }
       );
-      setRemovePMModalVisible(false)
+      setRemovePMModalVisible(false);
     }
   };
 
@@ -144,15 +144,11 @@ const PaymentMethod = () => {
     };
     try {
       const token = await AsyncStorage.getItem("@secbox:TOKEN");
-      const response = await api.patch(
-        `/paymentMethods/${id}/`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.patch(`/paymentMethods/${id}/`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.status === 200) {
         Toast.show("Método de pagamento definido como padrão!", {
           duration: Toast.durations.SHORT,
@@ -163,7 +159,7 @@ const PaymentMethod = () => {
           delay: 0,
         });
         getUserPaymentMethods();
-        setPatchPMModalVisible(false)
+        setPatchPMModalVisible(false);
       }
     } catch (error: any) {
       Toast.show(
@@ -177,7 +173,7 @@ const PaymentMethod = () => {
           delay: 0,
         }
       );
-      setPatchPMModalVisible(false)
+      setPatchPMModalVisible(false);
     }
   };
 
@@ -206,7 +202,10 @@ const PaymentMethod = () => {
         <Text style={styles.title}>Formas de Pagamento</Text>
       </View>
       <View style={styles.paymentMethodContainer}>
-        {paymentMethods.length > 0 ? (
+          <Text style={styles.notAvailable}>
+            Função ainda não disponível.
+          </Text>
+        {/* {paymentMethods.length > 0 ? (
           <>
             {paymentMethods.map((paymentMethod: any, index: any) => (
               <View key={index} style={styles.paymentMethodCard}>
@@ -264,9 +263,9 @@ const PaymentMethod = () => {
               Adicionar Cartão de Crédito/Débito
             </Text>
           </TouchableOpacity>
-        )}
+        )} */}
       </View>
-      <PaymentMethodModal
+      {/* <PaymentMethodModal
         isVisible={paymentMethodModalVisible}
         onClose={togglePaymentMethodModal}
         addPaymentMethod={addPaymentMethod}
@@ -282,7 +281,7 @@ const PaymentMethod = () => {
         onClose={togglePatchPaymentMethodModal}
         patternPaymentMethod={patternPaymentMethod}
         paymentMethodId={paymentMethodId}
-      />
+      /> */}
     </>
   );
 };
