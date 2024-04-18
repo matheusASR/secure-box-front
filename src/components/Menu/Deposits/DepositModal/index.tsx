@@ -354,34 +354,6 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
                         />
                         <Text style={styles.optionBtnText}>PIX</Text>
                       </TouchableOpacity>
-                      {defaultPaymentMethod ? (
-                        <TouchableOpacity
-                          style={[
-                            styles.optionBtn,
-                            selectedPaymentMethod === "PADRÃO" &&
-                              styles.selectedOptionBtn,
-                          ]}
-                          onPress={() => handlePaymentMethodSelect("PADRÃO")}
-                        >
-                          <Image
-                            style={styles.optionBtnImage}
-                            source={require("../../../../../assets/PaymentMethods.png")}
-                          />
-                          <Text style={styles.optionBtnText}>PADRÃO</Text>
-                        </TouchableOpacity>
-                      ) : (
-                        <TouchableOpacity
-                          style={styles.addPaymentMethodBtn}
-                          onPress={() => {
-                            onClose();
-                            navigation.navigate("PaymentMethods");
-                          }}
-                        >
-                          <Text style={styles.addPaymentMethodBtnText}>
-                            Adicionar forma de pagamento
-                          </Text>
-                        </TouchableOpacity>
-                      )}
                     </View>
                     <View style={styles.viewBtns}>
                       <TouchableOpacity

@@ -112,16 +112,6 @@ const MainMenu = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("PaymentMethods")}
-        >
-          <Image
-            source={require("../../../../assets/PaymentMethods.png")}
-            style={styles.buttonImage}
-          />
-          <Text style={styles.buttonText}>Formas de Pagamento</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
           onPress={() => navigation.navigate("Deposits")}
         >
           <Image

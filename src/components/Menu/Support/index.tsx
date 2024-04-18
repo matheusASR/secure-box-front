@@ -7,7 +7,7 @@ const Support = () => {
   const navigation: any = useNavigation();
 
   const handleEmailPress = () => {
-    Linking.openURL("mailto:matheusau2004@gmail.com");
+    Linking.openURL("mailto:appsecbox@gmail.com");
   };
 
   const handleWhatsappPress = () => {
@@ -36,7 +36,7 @@ const Support = () => {
             source={require("../../../../assets/Email.png")}
             style={styles.buttonImage}
           />
-          <Text style={styles.buttonText}>matheusau2004@gmail.com</Text>
+          <Text style={styles.buttonText}>appsecbox@gmail.com</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleWhatsappPress}>
           <Image
