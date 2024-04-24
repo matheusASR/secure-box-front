@@ -91,7 +91,6 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
     }
 
     if (selectedPaymentMethod === "PIX") {
-      const value = Number(price);
       generatePixCode();
       setQrCodePix(true);
     } else {

@@ -22,6 +22,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
+  loadingContainer: {
+    height: 500,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default styles;
