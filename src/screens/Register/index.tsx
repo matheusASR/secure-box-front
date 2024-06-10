@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Switch,
 } from "react-native";
 import styles from "./styles";
 import { useForm, Controller } from "react-hook-form";
@@ -24,6 +25,7 @@ import axios from "axios";
 const RegisterScreen = ({ navigation }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingZipCode, setIsLoadingZipCode] = useState<boolean>(false);
+  const [accepted, setAccepted] = useState<boolean>(false);
   const {
     control,
     setValue,
@@ -66,31 +68,37 @@ const RegisterScreen = ({ navigation }: any) => {
     }
   };
 
-
   const onSubmit = async (data: any) => {
-    data.email = data.email.toLowerCase();
-    setIsLoading(true);
-    try {
-      const response = await api.post("/users", data);
-      if (response.status === 201) {
+    if (accepted) {
+      data.email = data.email.toLowerCase();
+      setIsLoading(true);
+      try {
+        const response = await api.post("/users", data);
+        if (response.status === 201) {
+          const [message, toastConfig] = generateToastConfig(
+            "Cadastro realizado com sucesso! Você será redirecionado."
+          );
+          Toast.show(message, toastConfig);
+          navigation.navigate("Login");
+        } else {
+          const [message, toastConfig] = generateToastConfig(
+            "Erro ao cadastrar usuário. Verifique os dados e tente novamente."
+          );
+          Toast.show(message, toastConfig);
+        }
+      } catch (error: any) {
         const [message, toastConfig] = generateToastConfig(
-          "Cadastro realizado com sucesso! Você será redirecionado."
+          `Ocorreu um erro ao cadastrar o usuário: ${error.response.data.message}`
         );
         Toast.show(message, toastConfig);
-        navigation.navigate("Login");
-      } else {
-        const [message, toastConfig] = generateToastConfig(
-          "Erro ao cadastrar usuário. Verifique os dados e tente novamente."
-        );
-        Toast.show(message, toastConfig);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error: any) {
+    } else {
       const [message, toastConfig] = generateToastConfig(
-        `Ocorreu um erro ao cadastrar o usuário: ${error.response.data.message}`
+        `Aceite os termos e condições de uso para prosseguir!`
       );
       Toast.show(message, toastConfig);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -419,6 +427,24 @@ const RegisterScreen = ({ navigation }: any) => {
                         {errors.address.complement.message}
                       </Text>
                     )}
+                    <View style={styles.termsAccept}>
+                      <Switch
+                        value={accepted}
+                        onValueChange={setAccepted}
+                        trackColor={{ false: "#767577", true: "#81b0ff" }}
+                        thumbColor={accepted ? colors.primary : "#f4f3f4"}
+                      />
+                      <View style={styles.termsAcceptView}>
+                        <Text style={styles.acceptText}>Eu aceito os</Text>
+                        <TouchableOpacity
+                          onPress={() => navigation.navigate("Termos")}
+                        >
+                          <Text style={styles.linkText}>
+                            Termos e Condições de Uso
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
                     <TouchableOpacity
                       style={styles.button}
                       onPress={handleSubmit(onSubmit)}

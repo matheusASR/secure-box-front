@@ -16,6 +16,17 @@ const styles = StyleSheet.create<any>({
   inputContainer: {
     width: "100%",
   },
+  termsAccept: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+    flexDirection: "row",
+    paddingBottom: 20
+  },
+  acceptText: {
+    fontSize: 14,
+  },
   loadingContainer: {
     height: 500,
     alignItems: "center",
@@ -87,6 +98,17 @@ const styles = StyleSheet.create<any>({
   passwordReq: {
     fontSize: 14,
   },
+  linkText: {
+    color: colors.primary,
+    textDecorationLine: 'underline',
+  },
+  termsAcceptView: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: 3
+  }
 });
 
 export default styles;
