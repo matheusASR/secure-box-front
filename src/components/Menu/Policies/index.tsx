@@ -34,7 +34,7 @@ const Policies = () => {
         </View>
       )}
       <WebView
-        source={{ uri: 'https://secbox-policies.vercel.app/SECBOX-%20POL%C3%8DTICA%20GERAL%20DE%20PRIVACIDADE%20E%20PROTE%C3%87%C3%83O%20DE%20DADOS.pdf' }}
+        source={{ uri: 'https://secbox-policies.vercel.app/SECBOX-%20POLÍTICA%20GERAL%20DE%20PRIVACIDADE%20E%20PROTEÇÃO%20DE%20DADOS%20(1).pdf' }}
         style={{ flex: 1 }}
         onLoadEnd={handleLoadEnd} // Chama a função quando o PDF termina de carregar
       />
