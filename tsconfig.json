@@ -9,9 +9,10 @@
     "moduleResolution": "node",
     "esModuleInterop": true
   },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
-  "extends": "expo/tsconfig.base"
+  "exclude": ["node_modules", "dist"],
+  "paths": {
+    "@env": ["env.d.ts"]
+  },
+  "extends": "expo/tsconfig.base",
+  "include": ["src", "env.d.ts"]
 }

@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_BASE_URL } from "@env";
 
 export const api = axios.create({
-    baseURL: "https://www.secbox.online/",
-    timeout: 6000
-})
+  baseURL: API_BASE_URL,
+  timeout: 6000
+});
