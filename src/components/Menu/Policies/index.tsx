@@ -9,7 +9,6 @@ const Policies = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLoadEnd = () => {
-    // Quando o PDF terminar de carregar, define isLoading como false
     setIsLoading(false);
   };
 
@@ -28,15 +27,14 @@ const Policies = () => {
         <Text style={styles.title}>Políticas de Privacidade</Text>
       </View>
       {isLoading && (
-        // Mostra o indicador de carregamento enquanto isLoading for true
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
       <WebView
-        source={{ uri: 'https://secbox-policies.vercel.app/SECBOX-%20POLÍTICA%20GERAL%20DE%20PRIVACIDADE%20E%20PROTEÇÃO%20DE%20DADOS%20(1).pdf' }}
+        source={{ uri: 'https://drive.google.com/viewerng/viewer?embedded=true&url=https://secbox-policies.vercel.app/SECBOX-%20POLÍTICA%20GERAL%20DE%20PRIVACIDADE%20E%20PROTEÇÃO%20DE%20DADOS%20(1).pdf' }}
         style={{ flex: 1 }}
-        onLoadEnd={handleLoadEnd} // Chama a função quando o PDF termina de carregar
+        onLoadEnd={handleLoadEnd} 
       />
     </>
   );

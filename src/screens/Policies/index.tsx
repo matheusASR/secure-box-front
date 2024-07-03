@@ -3,7 +3,7 @@ import { View, ActivityIndicator } from "react-native";
 import { WebView } from 'react-native-webview';
 import styles from "./styles";
 
-const TermsScreen = () => {
+const PoliciesScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLoadEnd = () => {
@@ -18,12 +18,12 @@ const TermsScreen = () => {
         </View>
       )}
       <WebView
-        source={{ uri: 'https://drive.google.com/viewerng/viewer?embedded=true&url=https://secbox-terms.vercel.app/SECBOX-%20TERMOS%20E%20CONDIÇÕES%20DE%20USO%20(1).pdf' }}
+        source={{ uri: 'https://drive.google.com/viewerng/viewer?embedded=true&url=https://secbox-policies.vercel.app/SECBOX-%20POLÍTICA%20GERAL%20DE%20PRIVACIDADE%20E%20PROTEÇÃO%20DE%20DADOS%20(1).pdf' }}
         style={{ flex: 1 }}
-        onLoadEnd={handleLoadEnd} 
+        onLoadEnd={handleLoadEnd}
       />
     </>
   );
 };
 
-export default TermsScreen;
+export default PoliciesScreen;

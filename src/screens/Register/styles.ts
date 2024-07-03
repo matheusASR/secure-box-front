@@ -21,8 +21,8 @@ const styles = StyleSheet.create<any>({
     display: "flex",
     alignItems: "center",
     justifyContent: "space-around",
-    flexDirection: "row",
-    paddingBottom: 20
+    paddingBottom: 20,
+    flexDirection: "row"
   },
   acceptText: {
     fontSize: 14,
@@ -36,7 +36,7 @@ const styles = StyleSheet.create<any>({
     height: 0,
     position: "absolute",
     right: 20,
-    top: 683
+    top: 683,
   },
   input: {
     marginBottom: 20,
@@ -88,27 +88,30 @@ const styles = StyleSheet.create<any>({
     padding: 20,
     width: "100%",
     borderRadius: 10,
-    marginBottom: 20
+    marginBottom: 20,
   },
   passwordReqTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10
+    marginBottom: 10,
   },
   passwordReq: {
     fontSize: 14,
   },
   linkText: {
     color: colors.primary,
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
   },
   termsAcceptView: {
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    gap: 3,
+    
+  },
+  termsAcceptViewAlt: {
+    display: "flex",
     flexDirection: "row",
     gap: 3
-  }
+  },
 });
 
 export default styles;

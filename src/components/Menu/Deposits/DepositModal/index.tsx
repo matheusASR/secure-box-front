@@ -19,6 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import QRCode from "react-native-qrcode-svg";
 import { colors } from "../../../../styles";
 import * as Clipboard from "expo-clipboard";
+import { TOKEN_ADMIN } from "@env";
 
 const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -100,10 +101,9 @@ const DepositModal = ({ isVisible, onClose, user, navigation }: any) => {
         type: selectedPaymentMethod,
       };
       try {
-        const token = await AsyncStorage.getItem("@secbox:TOKEN");
         await api.post(`/payments/${user.id}`, payload, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${TOKEN_ADMIN}`,
           },
         });
         const [message, toastConfig] = generateToastConfig(

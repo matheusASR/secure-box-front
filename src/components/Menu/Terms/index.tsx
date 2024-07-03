@@ -32,7 +32,7 @@ const Terms = () => {
         </View>
       )}
       <WebView
-        source={{ uri: 'https://secbox-terms.vercel.app/SECBOX-%20TERMOS%20E%20CONDIÇÕES%20DE%20USO%20(1).pdf' }}
+        source={{ uri: 'https://drive.google.com/viewerng/viewer?embedded=true&url=https://secbox-terms.vercel.app/SECBOX-%20TERMOS%20E%20CONDIÇÕES%20DE%20USO%20(1).pdf' }}
         style={{ flex: 1 }}
         onLoadEnd={handleLoadEnd} 
       />

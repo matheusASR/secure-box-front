@@ -435,14 +435,28 @@ const RegisterScreen = ({ navigation }: any) => {
                         thumbColor={accepted ? colors.primary : "#f4f3f4"}
                       />
                       <View style={styles.termsAcceptView}>
-                        <Text style={styles.acceptText}>Eu aceito os</Text>
-                        <TouchableOpacity
-                          onPress={() => navigation.navigate("Termos")}
-                        >
-                          <Text style={styles.linkText}>
-                            Termos e Condições de Uso
+                        <View style={styles.termsAcceptViewAlt}>
+                          <Text style={styles.acceptText}>
+                            Eu concordo com os
                           </Text>
-                        </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => navigation.navigate("Termos")}
+                          >
+                            <Text style={styles.linkText}>
+                              Termos de Uso
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={styles.termsAcceptViewAlt}>
+                          <Text style={styles.acceptText}>e as</Text>
+                          <TouchableOpacity
+                            onPress={() => navigation.navigate("Politicas")}
+                          >
+                            <Text style={styles.linkText}>
+                              Políticas de Privacidade
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
                     <TouchableOpacity
