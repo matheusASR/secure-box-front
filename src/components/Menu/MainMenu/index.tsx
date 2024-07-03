@@ -148,7 +148,7 @@ const MainMenu = () => {
             source={require("../../../../assets/Terms.png")}
             style={styles.buttonImage}
           />
-          <Text style={styles.buttonText}>Política de Privacidade</Text>
+          <Text style={styles.buttonText}>Políticas de Privacidade</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
